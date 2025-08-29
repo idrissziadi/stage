@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF URL Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            direction: rtl;
+        }
+        .test-container {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .test-link {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .test-link:hover {
+            background: #0056b3;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .info {
+            background: #cce7ff;
+            color: #004085;
+            border: 1px solid #99d3ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>اختبار عرض ملفات PDF</h1>
+    
+    <div class="status info">
+        <strong>ملاحظة:</strong> تأكد من تشغيل الخادم الخلفي على المنفذ 3000 قبل اختبار الروابط<br>
+        فتح وحدة تحكم المطور (Developer Console) لرؤية رسائل التنقيح (Debug Messages)
+    </div>
+
+    <div class="test-container">
+        <h2>اختبار الملفات الموجودة</h2>
+        <p>اختبر الروابط التالية للتأكد من عمل عرض PDF:</p>
+        
+        <div>
+            <h3>ملف PDF تجريبي - الملف المشكلة فيه:</h3>
+            <a href="http://localhost:3000/upload/cours/cours-1756341827975-565469752.pdf" 
+               target="_blank" 
+               class="test-link">
+                عرض الملف المشكلة فيه
+            </a>
+            <p style="font-size: 12px; color: #666; margin: 5px 0;">Direct URL: upload/cours/cours-1756341827975-565469752.pdf</p>
+        </div>
+
+        <div>
+            <h3>ملف PDF تجريبي 1 (مسار كامل):</h3>
+            <a href="http://localhost:3000/upload/cours/cours-1756341073471-709283895.pdf" 
+               target="_blank" 
+               class="test-link">
+                عرض PDF الأول
+            </a>
+            <p style="font-size: 12px; color: #666; margin: 5px 0;">Path: upload/cours/cours-1756341073471-709283895.pdf</p>
+        </div>
+
+        <div>
+            <h3>ملف PDF تجريبي 2 (مسار كامل):</h3>
+            <a href="http://localhost:3000/upload/cours/cours-1756341827975-565469752.pdf" 
+               target="_blank" 
+               class="test-link">
+                عرض PDF الثاني
+            </a>
+            <p style="font-size: 12px; color: #666; margin: 5px 0;">Path: upload/cours/cours-1756341827975-565469752.pdf</p>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>اختبار مسار خاطئ</h2>
+        <p>هذا الرابط يجب أن يعطي خطأ 404:</p>
+        <a href="http://localhost:3000/uploads/cours/test.pdf" 
+           target="_blank" 
+           class="test-link">
+            اختبار مسار خاطئ (مع 's')
+        </a>
+    </div>
+
+    <div class="status success">
+        <strong>إذا كانت الروابط تعمل:</strong>
+        <ul>
+            <li>تم إصلاح مشكلة عرض PDF بنجاح</li>
+            <li>يمكنك الآن عرض ملفات PDF من لوحة تحكم الأستاذ</li>
+            <li>الوظائف في CoursManagement و ModuleOverview تعمل بشكل صحيح</li>
+        </ul>
+    </div>
+
+    <script>
+        // Updated test function to handle both cases
+        function getFileUrl(filePath, fileType = 'cours') {
+            // Normalize the file path (replace backslashes with forward slashes)
+            const normalizedPath = filePath.replace(/\\/g, '/');
+            
+            console.log('getFileUrl - Input:', filePath);
+            console.log('getFileUrl - Normalized:', normalizedPath);
+            
+            // If the filePath already includes the upload directory, use it as is
+            if (normalizedPath.startsWith('upload/')) {
+                const result = `http://localhost:3000/${normalizedPath}`;
+                console.log('getFileUrl - Full path detected, result:', result);
+                return result;
+            }
+            
+            // Otherwise, construct the full path
+            const result = `http://localhost:3000/upload/${fileType}/${normalizedPath}`;
+            console.log('getFileUrl - Filename only detected, result:', result);
+            return result;
+        }
+
+        // Log test URLs to console
+        console.log('=== Testing PDF URL Construction ===');
+        
+        // Test the problematic file
+        console.log('\n--- Testing the problematic file ---');
+        const problematicFile = 'upload/cours/cours-1756341827975-565469752.pdf';
+        const result1 = getFileUrl(problematicFile);
+        console.log(`Final URL: ${result1}`);
+        
+        // Test with Windows backslashes (potential issue)
+        console.log('\n--- Testing with Windows backslashes ---');
+        const windowsPath = 'upload\\cours\\cours-1756341827975-565469752.pdf';
+        const result2 = getFileUrl(windowsPath);
+        console.log(`Final URL: ${result2}`);
+        
+        console.log('\n--- Testing filename only ---');
+        const filenameOnly = 'cours-1756341827975-565469752.pdf';
+        const result3 = getFileUrl(filenameOnly, 'cours');
+        console.log(`Final URL: ${result3}`);
+        
+        // Verify all results point to the same URL
+        const expectedUrl = 'http://localhost:3000/upload/cours/cours-1756341827975-565469752.pdf';
+        console.log('\n=== Verification ===');
+        console.log(`Expected: ${expectedUrl}`);
+        console.log(`Result 1 matches: ${result1 === expectedUrl ? '✅' : '❌'} (${result1})`);
+        console.log(`Result 2 matches: ${result2 === expectedUrl ? '✅' : '❌'} (${result2})`);
+        console.log(`Result 3 matches: ${result3 === expectedUrl ? '✅' : '❌'} (${result3})`);
+        
+        // Check for double path issue
+        const hasDoubleUpload = result1.includes('/upload/cours/upload/cours/');
+        console.log(`\nDouble path issue detected: ${hasDoubleUpload ? '❌ YES (BAD)' : '✅ NO (GOOD)'}`);
+    </script>
+</body>
+</html>

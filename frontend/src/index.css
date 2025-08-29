@@ -1,0 +1,341 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* TaskMaster Theme Colors */
+    --background: 216 50% 98%; /* #FAFBFC */
+    --foreground: 217 32% 17%; /* #1F2937 */
+
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 217 32% 17%; /* #1F2937 */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 217 32% 17%;
+
+    /* Primary colors - Indigo theme */
+    --primary: 232 94% 67%; /* #6366F1 */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
+    --primary-light: 233 84% 75%; /* #818CF8 */
+    --primary-dark: 234 89% 58%; /* #4F46E5 */
+
+    /* Secondary colors - Purple theme */
+    --secondary: 261 83% 68%; /* #8B5CF6 */
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 262 83% 78%; /* #A78BFA */
+    --secondary-dark: 263 85% 59%; /* #7C3AED */
+
+    --muted: 220 14% 96%; /* #F3F4F6 */
+    --muted-foreground: 220 9% 46%; /* #6B7280 */
+
+    --accent: 232 94% 67%; /* Using primary as accent */
+    --accent-foreground: 0 0% 100%;
+
+    /* Status colors */
+    --destructive: 0 84% 60%; /* #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+    --success: 158 64% 52%; /* #10B981 */
+    --warning: 38 92% 50%; /* #F59E0B */
+    --info: 221 83% 53%; /* #3B82F6 */
+
+    /* Neutral palette */
+    --neutral-50: 220 14% 98%; /* #F9FAFB */
+    --neutral-100: 220 14% 96%; /* #F3F4F6 */
+    --neutral-200: 220 13% 91%; /* #E5E7EB */
+    --neutral-300: 212 14% 83%; /* #D1D5DB */
+    --neutral-400: 218 11% 65%; /* #9CA3AF */
+    --neutral-500: 220 9% 46%; /* #6B7280 */
+    --neutral-600: 215 14% 34%; /* #4B5563 */
+    --neutral-700: 215 25% 27%; /* #374151 */
+    --neutral-800: 217 33% 17%; /* #1F2937 */
+    --neutral-900: 222 84% 5%; /* #111827 */
+
+    --border: 220 13% 91%; /* #E5E7EB */
+    --input: 220 13% 91%;
+    --ring: 232 94% 67%; /* Primary color */
+
+    --radius: 0.5rem;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(232 94% 67%) 0%, hsl(261 83% 68%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(220 14% 96%) 0%, hsl(0 0% 100%) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 232 94% 67%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 217 32% 17%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 232 94% 67%;
+  }
+
+  .dark {
+    --background: 222 84% 5%; /* #111827 */
+    --foreground: 220 14% 96%; /* #F3F4F6 */
+
+    --card: 217 33% 17%; /* #1F2937 */
+    --card-foreground: 220 14% 96%;
+
+    --popover: 217 33% 17%;
+    --popover-foreground: 220 14% 96%;
+
+    --primary: 232 94% 67%; /* Keep same primary in dark mode */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 261 83% 68%; /* Keep same secondary in dark mode */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 215 25% 27%; /* #374151 */
+    --muted-foreground: 220 9% 46%; /* #6B7280 */
+
+    --accent: 232 94% 67%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 63% 31%; /* Darker red for dark mode */
+    --destructive-foreground: 220 14% 96%;
+
+    --border: 215 25% 27%; /* #374151 */
+    --input: 215 25% 27%;
+    --ring: 232 94% 67%;
+
+    --sidebar-background: 222 84% 5%;
+    --sidebar-foreground: 220 14% 96%;
+    --sidebar-primary: 232 94% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 25% 27%;
+    --sidebar-accent-foreground: 220 14% 96%;
+    --sidebar-border: 215 25% 27%;
+    --sidebar-ring: 232 94% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    direction: rtl;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Cairo', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    direction: rtl;
+    text-align: right;
+  }
+
+  /* Arabic Typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cairo', 'Noto Sans Arabic', sans-serif;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  p, span, div {
+    font-family: 'Cairo', 'Noto Sans Arabic', sans-serif;
+    line-height: 1.6;
+  }
+
+  /* Input and Form Elements RTL */
+  input, textarea, select {
+    text-align: right;
+    direction: rtl;
+  }
+
+  input[type="email"], input[type="url"] {
+    direction: ltr;
+    text-align: left;
+  }
+
+  /* Button RTL adjustments */
+  button {
+    font-family: 'Cairo', 'Noto Sans Arabic', sans-serif;
+  }
+
+  /* Icon positioning for RTL */
+  .rtl-icon-left {
+    margin-right: 0.5rem;
+    margin-left: 0;
+  }
+
+  .rtl-icon-right {
+    margin-left: 0.5rem;
+    margin-right: 0;
+  }
+
+  /* Custom scrollbar for RTL */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+
+  /* RTL Flexbox utilities */
+  .flex-rtl {
+    @apply flex flex-row-reverse;
+  }
+
+  .items-start-rtl {
+    @apply items-end;
+  }
+
+  .items-end-rtl {
+    @apply items-start;
+  }
+
+  .text-left-rtl {
+    @apply text-right;
+  }
+
+  .text-right-rtl {
+    @apply text-left;
+  }
+
+  .text-start-rtl {
+    @apply text-right;
+  }
+
+  .text-end-rtl {
+    @apply text-left;
+  }
+
+  /* Border utilities for RTL */
+  .border-s-rtl {
+    border-right-width: 1px;
+    border-left-width: 0;
+  }
+
+  .border-e-rtl {
+    border-left-width: 1px;
+    border-right-width: 0;
+  }
+
+  /* Card and container RTL spacing */
+  .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+    margin-right: calc(var(--tw-space-x) * var(--tw-space-x-reverse));
+    margin-left: calc(var(--tw-space-x) * calc(1 - var(--tw-space-x-reverse)));
+  }
+
+  /* Toast RTL positioning */
+  .toast-rtl {
+    right: auto !important;
+    left: 1rem !important;
+  }
+
+  /* Dropdown menu RTL */
+  .dropdown-rtl {
+    right: 0;
+    left: auto;
+  }
+
+  /* Navigation RTL */
+  .nav-rtl {
+    @apply flex flex-row-reverse;
+  }
+
+  /* Table RTL */
+  .table-rtl {
+    direction: rtl;
+  }
+
+  .table-rtl th:first-child {
+    @apply rounded-tr-lg rounded-tl-none;
+  }
+
+  .table-rtl th:last-child {
+    @apply rounded-tl-lg rounded-tr-none;
+  }
+
+  /* Form labels RTL */
+  .form-label-rtl {
+    @apply text-right block mb-2;
+  }
+
+  /* Badge RTL */
+  .badge-rtl {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  }
+
+  /* Sidebar RTL */
+  .sidebar-rtl {
+    right: 0;
+    left: auto;
+    border-left: 1px solid hsl(var(--border));
+    border-right: none;
+  }
+
+  /* Animation adjustments for RTL */
+  @keyframes slide-in-rtl {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .animate-slide-in-rtl {
+    animation: slide-in-rtl 0.3s ease-out;
+  }
+
+  /* Dialog RTL */
+  .dialog-rtl {
+    @apply text-right;
+  }
+
+  /* Grid RTL for Arabic layouts */
+  .grid-rtl {
+    direction: rtl;
+  }
+
+  /* Responsive Arabic text */
+  @media (max-width: 768px) {
+    body {
+      font-size: 0.9rem;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+    }
+    
+    h2 {
+      font-size: 1.25rem;
+    }
+  }
+
+  /* Print styles for Arabic */
+  @media print {
+    body {
+      direction: rtl;
+      font-family: 'Cairo', 'Noto Sans Arabic', sans-serif;
+    }
+  }
+}
