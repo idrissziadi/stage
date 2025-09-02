@@ -42,9 +42,17 @@ app.use(cors({
 // Servir les fichiers statiques
 app.use('/upload', express.static('upload'));
 
+// Import de la configuration
+const { APP_CONFIG } = require('./config/app');
+
 // Test route
 app.get('/', (req, res) => {
-  res.send('API du ministère de la formation fonctionne ✅');
+  res.json({
+    message: `${APP_CONFIG.name.ar} - API du ministère de la formation fonctionne ✅`,
+    app: APP_CONFIG.name,
+    version: APP_CONFIG.version,
+    ministry: APP_CONFIG.ministry.ar
+  });
 });
 
 // Swagger UI
@@ -127,10 +135,12 @@ const startServer = async () => {
     }
 
     // Démarrage du serveur
-    const PORT = process.env.PORT || 3001;
+    const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
-      console.log(`Serveur démarré sur le port ${PORT} 🚀`);
-      console.log(`Documentation API disponible sur http://localhost:${PORT}/api-docs`);
+      console.log(`🚀 ${APP_CONFIG.name.ar} - Serveur démarré sur le port ${PORT}`);
+      console.log(`📚 Documentation API disponible sur http://localhost:${PORT}/api-docs`);
+      console.log(`🏛️ ${APP_CONFIG.ministry.ar}`);
+      console.log(`✨ Version: ${APP_CONFIG.version}`);
     });
   } catch (error) {
     console.error('Erreur lors de la connexion ou de la synchronisation :', error);
