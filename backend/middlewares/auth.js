@@ -15,14 +15,26 @@ async function isTokenBlacklisted(token) {
 
 async function isAuth(req, res, next) {
   try {
+    // Essayer de récupérer le token depuis l'header Authorization
+    let token = null;
     const authHeader = req.headers.authorization || '';
-    if (!authHeader.startsWith('Bearer ')) {
+    
+    if (authHeader.startsWith('Bearer ')) {
+      token = authHeader.slice(7);
+    }
+    // Sinon essayer de récupérer le token depuis l'URL (pour les PDFs)
+    else if (req.query.token) {
+      token = req.query.token;
+    }
+    
+    if (!token) {
       return res.status(401).json({ message: 'Authorization Bearer requis' });
     }
-    const token = authHeader.slice(7);
+    
     if (await isTokenBlacklisted(token)) {
       return res.status(401).json({ message: 'Token expiré ou révoqué' });
     }
+    
     try {
       const payload = jwt.verify(token, JWT_SECRET);
       req.user = payload;

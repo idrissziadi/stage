@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -54,10 +54,13 @@ import {
   UserCheck
 } from 'lucide-react';
 import EtablissementOverview from '@/components/etablissement/EtablissementOverview';
-import { UserManagement, MemoireManagement, OffreManagement } from '@/components/etablissement';
+import UserManagement from '@/components/etablissement/UserManagement';
+import MemoireManagement from '@/components/etablissement/MemoireManagement';
+import OffreManagement from '@/components/etablissement/OffreManagement';
 import NotificationCenter from '@/components/enseignant/NotificationCenter';
 import UserGuide from '@/components/enseignant/UserGuide';
 import MinistryFooter from '@/components/layout/MinistryFooter';
+
 
 const EtablissementFormationDashboard = () => {
   const { user, userProfile, signOut } = useAuthApi();
@@ -332,6 +335,10 @@ const EtablissementFormationDashboard = () => {
                     <Download className="mr-2 h-4 w-4" />
                     <span>تصدير البيانات</span>
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab('help')} className="font-arabic">
+                    <HelpCircle className="mr-2 h-4 w-4" />
+                    <span>المساعدة والدعم</span>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setIsLogoutConfirmOpen(true)} className="font-arabic text-red-600">
                     <LogOut className="mr-2 h-4 w-4" />
@@ -372,6 +379,8 @@ const EtablissementFormationDashboard = () => {
             <EtablissementOverview onTabChange={setActiveTab} />
           </TabsContent>
 
+
+
           <TabsContent value="users">
             <UserManagement />
           </TabsContent>
@@ -382,6 +391,10 @@ const EtablissementFormationDashboard = () => {
 
           <TabsContent value="offres">
             <OffreManagement />
+          </TabsContent>
+
+          <TabsContent value="help">
+            <UserGuide />
           </TabsContent>
         </Tabs>
       </div>

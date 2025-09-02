@@ -9,11 +9,11 @@ const Diplome = sequelize.define('Diplome', {
     autoIncrement: true
   },
   designation_fr: {
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(255),
     allowNull: false
   },
   designation_ar: {
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(255),
     allowNull: true
   },
   niveau: {

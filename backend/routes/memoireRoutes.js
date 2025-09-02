@@ -200,6 +200,31 @@ router.put('/:id_memoire/upload', isAuth, upload.single('fichierpdf'), MemoireCo
 
 /**
  * @swagger
+ * /memoire/pdf/{filename}:
+ *   get:
+ *     summary: Servir un fichier PDF de mémoire
+ *     tags: [Memoire]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: filename
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Nom du fichier PDF
+ *     responses:
+ *       200:
+ *         description: Fichier PDF
+ *       401:
+ *         description: Non authentifié
+ *       404:
+ *         description: Fichier non trouvé
+ */
+router.get('/pdf/:filename', isAuth, MemoireController.servePDF);
+
+/**
+ * @swagger
  * /memoire/{id_memoire}:
  *   delete:
  *     summary: Supprimer un mémoire
@@ -449,4 +474,5 @@ router.put('/validate/:id_memoire', isAuth, MemoireController.validateMemoireByE
 router.get('/colleagues/:id_stagiaire', isAuth, MemoireController.getAcceptedMemoiresByOffers);
 
 module.exports = router;
+
 

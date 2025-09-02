@@ -20,7 +20,7 @@ const ModuleController = {
     try {
       const { id_enseignant } = req.params;
       
-      console.log('Getting modules for enseignant ID:', id_enseignant);
+      console.log('🔍 Getting modules for enseignant ID:', id_enseignant);
       
       // Récupérer les modules enseignés par cet enseignant
       const ensModules = await EnsModule.findAll({
@@ -34,16 +34,24 @@ const ModuleController = {
         ]
       });
 
-      console.log('Found ensModules:', ensModules.length);
+      console.log('📊 Found ensModules:', ensModules.length);
+      console.log('📊 ensModules data:', JSON.stringify(ensModules, null, 2));
 
-      // Extraire les modules
-      const modules = ensModules.map(em => em.module);
+      // Extraire les modules et filtrer les valeurs null
+      const modules = ensModules
+        .map(em => em.module)
+        .filter(module => module !== null && module !== undefined);
       
-      console.log('Extracted modules:', modules.length);
+      console.log('🎯 Extracted modules:', modules.length);
+      console.log('🎯 modules data:', JSON.stringify(modules, null, 2));
       
-      return res.json(modules);
+      // Ensure we always return an array, even if empty
+      const response = { data: Array.isArray(modules) ? modules : [] };
+      console.log('📤 Final response:', JSON.stringify(response, null, 2));
+      
+      return res.json(response);
     } catch (error) {
-      console.error('Error in getModulesByEnseignant:', error);
+      console.error('❌ Error in getModulesByEnseignant:', error);
       return res.status(500).json({ message: 'Erreur serveur', error: error.message });
     }
   },
@@ -61,6 +69,20 @@ const ModuleController = {
       return res.json(module);
     } catch (error) {
       return res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
+  },
+
+  // Get modules count
+  async getModulesCount(req, res) {
+    try {
+      const count = await Module.count();
+      return res.json({ count });
+    } catch (error) {
+      console.error('Error counting modules:', error);
+      return res.status(500).json({ 
+        message: 'Erreur serveur lors du comptage des modules', 
+        error: error.message 
+      });
     }
   }
 };

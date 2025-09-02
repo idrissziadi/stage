@@ -28,23 +28,23 @@ const Grade = sequelize.define('Grade', {
     comment: 'Code unique du grade'
   },
   designation_fr: {
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(255),
     allowNull: true,
     validate: {
       len: {
-        args: [0, 100],
-        msg: 'La désignation française ne peut pas dépasser 100 caractères'
+        args: [0, 255],
+        msg: 'La désignation française ne peut pas dépasser 255 caractères'
       }
     },
     comment: 'Désignation du grade en français'
   },
   designation_ar: {
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(255),
     allowNull: true,
     validate: {
       len: {
-        args: [0, 100],
-        msg: 'La désignation arabe ne peut pas dépasser 100 caractères'
+        args: [0, 255],
+        msg: 'La désignation arabe ne peut pas dépasser 255 caractères'
       }
     },
     comment: 'Désignation du grade en arabe'

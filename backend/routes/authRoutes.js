@@ -194,6 +194,130 @@ router.post('/signup', AuthController.signup);
 
 /**
  * @swagger
+ * /auth/signup/etablissement-formation:
+ *   post:
+ *     summary: Créer un établissement de formation avec stagiaire et inscription automatiques
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [username, password, nom_fr, nom_ar]
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: Nom d'utilisateur pour l'établissement
+ *               password:
+ *                 type: string
+ *                 description: Mot de passe pour l'établissement
+ *               nom_fr:
+ *                 type: string
+ *                 description: Nom de l'établissement en français
+ *               nom_ar:
+ *                 type: string
+ *                 description: Nom de l'établissement en arabe
+ *               adresse_fr:
+ *                 type: string
+ *                 description: Adresse de l'établissement en français
+ *               adresse_ar:
+ *                 type: string
+ *                 description: Adresse de l'établissement en arabe
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: Email de l'établissement
+ *               telephone:
+ *                 type: string
+ *                 description: Téléphone de l'établissement
+ *               stagiaire_nom_fr:
+ *                 type: string
+ *                 description: Nom du stagiaire en français
+ *               stagiaire_nom_ar:
+ *                 type: string
+ *                 description: Nom du stagiaire en arabe
+ *               stagiaire_prenom_fr:
+ *                 type: string
+ *                 description: Prénom du stagiaire en français
+ *               stagiaire_prenom_ar:
+ *                 type: string
+ *                 description: Prénom du stagiaire en arabe
+ *               stagiaire_date_naissance:
+ *                 type: string
+ *                 format: date
+ *                 description: Date de naissance du stagiaire
+ *               stagiaire_email:
+ *                 type: string
+ *                 format: email
+ *                 description: Email du stagiaire
+ *               stagiaire_telephone:
+ *                 type: string
+ *                 description: Téléphone du stagiaire
+ *               id_specialite:
+ *                 type: integer
+ *                 description: ID de la spécialité pour l'offre (optionnel)
+ *               id_diplome:
+ *                 type: integer
+ *                 description: ID du diplôme pour l'offre (optionnel)
+ *               id_mode:
+ *                 type: integer
+ *                 description: ID du mode de formation pour l'offre (optionnel)
+ *     responses:
+ *       201:
+ *         description: Établissement de formation créé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 etablissement:
+ *                   type: object
+ *                   properties:
+ *                     id_etab_formation:
+ *                       type: integer
+ *                     code:
+ *                       type: string
+ *                     nom_fr:
+ *                       type: string
+ *                     nom_ar:
+ *                       type: string
+ *                 stagiaire:
+ *                   type: object
+ *                   properties:
+ *                     id_stagiaire:
+ *                       type: integer
+ *                     nom_fr:
+ *                       type: string
+ *                     prenom_fr:
+ *                       type: string
+ *                 offre:
+ *                   type: object
+ *                   properties:
+ *                     id_offre:
+ *                       type: integer
+ *                     designation:
+ *                       type: string
+ *                 inscription:
+ *                   type: object
+ *                   properties:
+ *                     id_inscription:
+ *                       type: integer
+ *                     statut:
+ *                       type: string
+ *       400:
+ *         description: Requête invalide
+ *       409:
+ *         description: Nom d'utilisateur ou email déjà pris
+ *       500:
+ *         description: Erreur serveur
+ */
+router.post('/signup/etablissement-formation', AuthController.signupEtablissementFormation);
+
+/**
+ * @swagger
  * /auth/password-reset/initiate:
  *   post:
  *     summary: Initier la réinitialisation de mot de passe

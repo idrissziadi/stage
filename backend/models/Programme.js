@@ -42,8 +42,10 @@ const Programme = sequelize.define('Programme', {
     allowNull: false
   }
 }, {
+  sequelize,
+  modelName: 'Programme',
   tableName: 'Programme',
-  timestamps: false
+  timestamps: true
 });
 
 module.exports = Programme;

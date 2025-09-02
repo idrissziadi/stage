@@ -4,6 +4,8 @@ const Enseignant = require('../models/Enseignant');
 const Inscription = require('../models/Inscription');
 const EtablissementFormation = require('../models/EtablissementFormation');
 const { Op } = require('sequelize');
+const path = require('path');
+const fs = require('fs');
 
 const MemoireController = {
   // Récupérer tous les mémoires d'un stagiaire
@@ -592,8 +594,76 @@ const MemoireController = {
     } catch (error) {
       return res.status(500).json({ message: 'Erreur serveur', error: error.message });
     }
+  },
+
+  // Servir un fichier PDF de mémoire
+  async servePDF(req, res) {
+    try {
+      const { filename } = req.params;
+      
+      if (!filename) {
+        return res.status(400).json({ message: 'Nom de fichier requis' });
+      }
+
+      const filePath = path.join(__dirname, '../upload/memoires', filename);
+      
+      // Vérifier que le fichier existe
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ message: 'Fichier non trouvé' });
+      }
+
+      // Vérifier que l'utilisateur a accès au mémoire
+      const memoire = await Memoire.findOne({
+        where: { fichierpdf: filename },
+        include: [
+          {
+            model: Stagiaire,
+            as: 'stagiaire',
+            attributes: ['nom_fr', 'prenom_fr']
+          },
+          {
+            model: Enseignant,
+            as: 'enseignant',
+            attributes: ['nom_fr', 'prenom_fr']
+          }
+        ]
+      });
+
+      if (!memoire) {
+        return res.status(404).json({ message: 'Mémoire non trouvé' });
+      }
+
+      // Vérifier les permissions selon le rôle de l'utilisateur
+      const userRole = req.user.role;
+      
+      if (userRole === 'Stagiaire') {
+        // Les stagiaires peuvent voir les mémoires validés de leurs collègues
+        if (memoire.status !== 'مقبول') {
+          return res.status(403).json({ message: 'Accès refusé - Mémoire non validé' });
+        }
+      } else if (userRole === 'Enseignant') {
+        // Les enseignants peuvent voir tous les mémoires validés
+        if (memoire.status !== 'مقبول') {
+          return res.status(403).json({ message: 'Accès refusé - Mémoire non validé' });
+        }
+      }
+      // Les autres rôles (EtablissementNationale, EtablissementRegionale) ont accès complet
+
+      // Servir le fichier PDF
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+      res.setHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+      res.setHeader('Expires', '-1');
+      res.setHeader('Pragma', 'no-cache');
+      
+      res.sendFile(filePath);
+    } catch (error) {
+      console.error('Erreur servePDF memoire:', error);
+      return res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
   }
 };
 
 module.exports = MemoireController;
+
 

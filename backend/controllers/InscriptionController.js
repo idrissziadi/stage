@@ -127,3 +127,4 @@ const InscriptionController = {
 };
 
 module.exports = InscriptionController;
+

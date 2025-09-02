@@ -26,14 +26,31 @@ import {
   RefreshCw
 } from 'lucide-react';
 
+// Utility function to format dates with better handling
+import { formatDate } from '@/utils/formatDate';
+
+// Utility functions for language validation
+const isArabicText = (text: string): boolean => {
+  // Arabic Unicode range: U+0600-U+06FF, U+0750-U+077F, U+08A0-U+08FF, U+FB50-U+FDFF, U+FE70-U+FEFF
+  const arabicRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+  return arabicRegex.test(text);
+};
+
+const isFrenchText = (text: string): boolean => {
+  // French characters: à, â, ç, é, è, ê, ë, î, ï, ô, ù, û, ü, ÿ, œ, æ
+  // Plus standard Latin characters
+  const frenchRegex = /^[a-zA-Zàâçéèêëîïôùûüÿœæ\s\-'()]+$/;
+  return frenchRegex.test(text) && text.trim().length > 0;
+};
+
 interface Memoire {
-  id_memoire: string;
+  id_memoire: number;
   titre_fr?: string;
   titre_ar?: string;
   fichierpdf?: string;
   status: string;
-  created_at: string;
-  updated_at?: string;
+  createdAt: string;
+  updatedAt?: string;
   observation?: string;
   enseignant?: {
     nom_fr: string;
@@ -52,7 +69,6 @@ const MonMemoire = () => {
   // Form state
   const [titreAr, setTitreAr] = useState('');
   const [titreFr, setTitreFr] = useState('');
-  const [observation, setObservation] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -69,11 +85,10 @@ const MonMemoire = () => {
       const response = await apiService.getMemoireByStagiaire(userProfile.id_stagiaire);
       
       if (response.data) {
-        const memoireData = response.data;
+        const memoireData = response.data as Memoire;
         setMemoire(memoireData);
         setTitreAr(memoireData.titre_ar || '');
         setTitreFr(memoireData.titre_fr || '');
-        setObservation(memoireData.observation || '');
       } else {
         setMemoire(null);
       }
@@ -138,6 +153,26 @@ const MonMemoire = () => {
       return;
     }
 
+    // Validate Arabic title
+    if (!isArabicText(titreAr)) {
+      toast({
+        title: 'خطأ',
+        description: 'يجب أن يكون العنوان بالعربية مكتوباً باللغة العربية فقط',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    // Validate French title if provided
+    if (titreFr.trim() && !isFrenchText(titreFr)) {
+      toast({
+        title: 'خطأ',
+        description: 'يجب أن يكون العنوان بالفرنسية مكتوباً باللغة الفرنسية فقط',
+        variant: 'destructive'
+      });
+      return;
+    }
+
     // Check if memoire can be modified
     if (memoire.status === 'مقبول' || memoire.status === 'مرفوض') {
       toast({
@@ -152,7 +187,7 @@ const MonMemoire = () => {
       setSaving(true);
 
       // Use the new detailed workflow API
-      const updateData = {
+      const updateData: any = {
         titre_ar: titreAr,
         titre_fr: titreFr
       };
@@ -170,7 +205,7 @@ const MonMemoire = () => {
         throw new Error(response.error.message || 'فشل في حفظ المذكرة');
       }
 
-      setMemoire(response.data.memoire);
+      setMemoire((response.data as any).memoire);
       setSelectedFile(null);
       
       toast({
@@ -429,7 +464,7 @@ const MonMemoire = () => {
           <CardTitle className="font-arabic">معلومات المذكرة</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Basic Information */}
+                    {/* Basic Information */}
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <Label htmlFor="titre-ar" className="font-arabic">العنوان بالعربية *</Label>
@@ -439,8 +474,17 @@ const MonMemoire = () => {
                 onChange={(e) => setTitreAr(e.target.value)}
                 disabled={!isEditing || memoire.status === 'مقبول'}
                 placeholder="أدخل عنوان المذكرة بالعربية"
-                className="mt-1"
+                className={`mt-1 ${isEditing && !isArabicText(titreAr) && titreAr.trim() ? 'border-red-500 focus:border-red-500' : ''}`}
               />
+              {isEditing && !isArabicText(titreAr) && titreAr.trim() && (
+                <p className="text-xs text-red-500 mt-1 font-arabic flex items-center gap-1">
+                  <AlertTriangle className="w-3 h-3" />
+                  يجب أن يكون العنوان بالعربية مكتوباً باللغة العربية فقط
+                </p>
+              )}
+              <p className="text-xs text-gray-500 mt-1 font-arabic">
+                مثال: دراسة تأثير التكنولوجيا على التعليم في المغرب
+              </p>
             </div>
             <div>
               <Label htmlFor="titre-fr" className="font-arabic">العنوان بالفرنسية</Label>
@@ -450,8 +494,17 @@ const MonMemoire = () => {
                 onChange={(e) => setTitreFr(e.target.value)}
                 disabled={!isEditing || memoire.status === 'مقبول'}
                 placeholder="Titre en français (optionnel)"
-                className="mt-1"
+                className={`mt-1 ${isEditing && titreFr.trim() && !isFrenchText(titreFr) ? 'border-red-500 focus:border-red-500' : ''}`}
               />
+              {isEditing && titreFr.trim() && !isFrenchText(titreFr) && (
+                <p className="text-xs text-red-500 mt-1 font-arabic flex items-center gap-1">
+                  <AlertTriangle className="w-3 h-3" />
+                  يجب أن يكون العنوان بالفرنسية مكتوباً باللغة الفرنسية فقط
+                </p>
+              )}
+              <p className="text-xs text-gray-500 mt-1 font-arabic">
+                مثال: Étude de l'impact de la technologie sur l'éducation au Maroc
+              </p>
             </div>
           </div>
 
@@ -469,20 +522,19 @@ const MonMemoire = () => {
           )}
 
           {/* Summary/Observation */}
-          <div>
-            <Label htmlFor="observation" className="font-arabic">
-              الملخص أو الوصف
-            </Label>
-            <Textarea
-              id="observation"
-              value={observation}
-              onChange={(e) => setObservation(e.target.value)}
-              disabled={!isEditing || memoire.status === 'مقبول'}
-              placeholder="أدخل ملخص أو وصف للمذكرة..."
-              rows={4}
-              className="mt-1"
-            />
-          </div>
+          {/* Only show existing observations from enseignant in read-only mode */}
+          {memoire.observation && (
+            <div>
+              <Label className="font-arabic text-blue-700">
+                ملاحظات المشرف
+              </Label>
+              <div className="mt-1 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800 font-arabic">
+                  {memoire.observation}
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* File Upload */}
           {isEditing && memoire.status !== 'مقبول' && (
@@ -542,13 +594,13 @@ const MonMemoire = () => {
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Calendar className="w-4 h-4" />
               <span className="font-medium">تاريخ الإنشاء:</span>
-              <span>{new Date(memoire.created_at).toLocaleDateString('ar-DZ')}</span>
+              <span>{formatDate(memoire.createdAt)}</span>
             </div>
-            {memoire.updated_at && (
+            {memoire.updatedAt && (
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Clock className="w-4 h-4" />
                 <span className="font-medium">آخر تحديث:</span>
-                <span>{new Date(memoire.updated_at).toLocaleDateString('ar-DZ')}</span>
+                <span>{formatDate(memoire.updatedAt)}</span>
               </div>
             )}
           </div>
@@ -558,7 +610,7 @@ const MonMemoire = () => {
             <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
               <Button
                 onClick={handleSave}
-                disabled={saving || !titreAr.trim()}
+                disabled={saving || !titreAr.trim() || !isArabicText(titreAr) || (titreFr.trim() && !isFrenchText(titreFr))}
                 className="bg-orange-600 hover:bg-orange-700"
               >
                 {saving ? (
@@ -579,7 +631,7 @@ const MonMemoire = () => {
                   setIsEditing(false);
                   setTitreAr(memoire.titre_ar || '');
                   setTitreFr(memoire.titre_fr || '');
-                  setObservation(memoire.observation || '');
+                  // setObservation removed as it's not needed
                   setSelectedFile(null);
                 }}
               >
@@ -599,6 +651,8 @@ const MonMemoire = () => {
               <h4 className="font-medium text-blue-900 mb-1 font-arabic">تعليمات مهمة</h4>
               <ul className="text-sm text-blue-800 space-y-1 font-arabic">
                 <li>• تأكد من صحة العنوان قبل الحفظ</li>
+                <li>• <strong>العنوان بالعربية:</strong> يجب أن يكون مكتوباً باللغة العربية فقط</li>
+                <li>• <strong>العنوان بالفرنسية:</strong> يجب أن يكون مكتوباً باللغة الفرنسية فقط (اختياري)</li>
                 <li>• يجب أن يكون ملف المذكرة بصيغة PDF فقط</li>
                 <li>• حجم الملف يجب أن يكون أقل من 10 ميجابايت</li>
                 <li>• بعد قبول المذكرة لا يمكن تعديلها</li>

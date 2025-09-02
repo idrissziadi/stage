@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useAuthApi } from '@/hooks/useAuthApi';
 import { apiService, getFileUrl } from '@/services/api';
+import { 
+  formatDateToArabic, 
+  formatRelativeDateToArabic, 
+  formatApprovalDateToArabic,
+  formatCourseDateToArabic
+} from '@/utils/arabicDateFormatter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -8,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useToast } from '@/components/ui/use-toast';
+import CourseMemoirePDFViewer from '@/components/ui/course-memoire-pdf-viewer';
 import { 
   Users, 
   FileText, 
@@ -41,6 +48,7 @@ interface Course {
   titre_ar: string;
   status: string;
   created_at: string;
+  updatedAt?: string;
   fichierpdf?: string;
   observation?: string;
   module?: {
@@ -62,6 +70,8 @@ const CollaborativeCourses = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [moduleFilter, setModuleFilter] = useState('all');
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
 
   useEffect(() => {
     if (userProfile?.id_enseignant) {
@@ -94,16 +104,8 @@ const CollaborativeCourses = () => {
   };
 
   const handleViewPDF = (course: Course) => {
-    if (course.fichierpdf) {
-      const pdfUrl = getFileUrl(course.fichierpdf, 'cours');
-      window.open(pdfUrl, '_blank');
-    } else {
-      toast({
-        title: 'خطأ',
-        description: 'لا يوجد ملف PDF لهذا الدرس',
-        variant: 'destructive'
-      });
-    }
+    setSelectedCourse(course);
+    setIsPdfViewerOpen(true);
   };
 
   const handleDownloadPDF = async (course: Course) => {
@@ -148,6 +150,11 @@ const CollaborativeCourses = () => {
     }
   };
 
+  const handleClosePDF = () => {
+    setIsPdfViewerOpen(false);
+    setSelectedCourse(null);
+  };
+
   // Helper function to generate user initials for avatar
   const getUserInitials = (firstName?: string, lastName?: string) => {
     if (!firstName && !lastName) return 'AS';
@@ -156,56 +163,30 @@ const CollaborativeCourses = () => {
     return `${first}${last}` || 'AS';
   };
 
-  // Helper function to get time ago
-  const getTimeAgo = (dateString: string) => {
-    if (!dateString || dateString === 'Invalid Date') {
-      return 'غير محدد';
-    }
-    
-    const date = new Date(dateString);
-    
-    // Check if date is valid
-    if (isNaN(date.getTime())) {
-      return 'غير محدد';
-    }
-    
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    if (diffInSeconds < 60) return 'منذ لحظات';
-    if (diffInSeconds < 3600) return `منذ ${Math.floor(diffInSeconds / 60)} دقيقة`;
-    if (diffInSeconds < 86400) return `منذ ${Math.floor(diffInSeconds / 3600)} ساعة`;
-    if (diffInSeconds < 604800) return `منذ ${Math.floor(diffInSeconds / 86400)} يوم`;
-    
-    try {
-      return date.toLocaleDateString('ar-DZ');
-    } catch (error) {
-      return 'غير محدد';
-    }
+  // Helper function to get time ago - using utility function
+  const getTimeAgoSafe = (dateString: string) => {
+    return formatRelativeDateToArabic(dateString);
   };
 
-  // Helper function to safely format approval date
-  const formatApprovalDate = (course: Course) => {
-    const dateToUse = course.created_at;
-    
-    if (!dateToUse || dateToUse === 'Invalid Date') {
-      return 'غير محدد';
-    }
-    
-    const date = new Date(dateToUse);
-    
-    if (isNaN(date.getTime())) {
-      return 'غير محدد';
-    }
-    
-    try {
-      return date.toLocaleDateString('ar-DZ');
-    } catch (error) {
-      return 'غير محدد';
-    }
+  // Helper function to safely format approval date - using utility function
+  const formatApprovalDateSafe = (course: Course) => {
+    // Use formatCourseDateToArabic to match memoires format
+    const result = formatCourseDateToArabic(course);
+    console.log('formatCourseDateToArabic result:', {
+      courseId: course.id_cours,
+      updatedAt: course.updatedAt,
+      created_at: course.created_at,
+      result: result
+    });
+    return result;
   };
 
   const getModuleStats = () => {
+    // Safety check: ensure modules is an array
+    if (!Array.isArray(modules) || modules.length === 0) {
+      return [];
+    }
+    
     const stats = modules.map(module => {
       const moduleCourses = courses.filter(course => course.id_module === module.id_module);
       return {
@@ -263,7 +244,7 @@ const CollaborativeCourses = () => {
               <BookOpen className="w-8 h-8 text-blue-500" />
               <div>
                 <p className="text-sm font-medium text-gray-600 font-arabic">المواد المشتركة</p>
-                <p className="text-2xl font-bold text-blue-700">{modules.length}</p>
+                <p className="text-2xl font-bold text-blue-700">{Array.isArray(modules) ? modules.length : 0}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -293,7 +274,7 @@ const CollaborativeCourses = () => {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {moduleStats.map((stat) => (
+            {Array.isArray(moduleStats) && moduleStats.map((stat) => (
               <div key={stat.module.id_module} className="border border-gray-200 rounded-lg p-4">
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex-1">
@@ -336,7 +317,7 @@ const CollaborativeCourses = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">جميع المواد</SelectItem>
-                {modules.map(module => (
+                {Array.isArray(modules) && modules.map(module => (
                   <SelectItem key={module.id_module} value={module.id_module.toString()}>
                     {module.designation_ar || module.designation_fr} ({module.code_module})
                   </SelectItem>
@@ -399,15 +380,15 @@ const CollaborativeCourses = () => {
                               زميل
                             </Badge>
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                            <Clock className="w-4 h-4" />
-                            <span className="font-arabic">{getTimeAgo(course.created_at)}</span>
-                            <span className="mx-1">•</span>
-                            <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-xs">
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              معتمد
-                            </Badge>
-                          </div>
+                                                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                             <Clock className="w-4 h-4" />
+                             <span className="font-arabic">{getTimeAgoSafe(course.updatedAt || course.created_at)}</span>
+                             <span className="mx-1">•</span>
+                             <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-xs">
+                               <CheckCircle className="w-3 h-3 mr-1" />
+                               معتمد
+                             </Badge>
+                           </div>
                         </div>
                       </div>
                       
@@ -478,7 +459,7 @@ const CollaborativeCourses = () => {
                         <div>
                           <span className="font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ الاعتماد:</span>
                           <p className="text-gray-900 dark:text-white font-medium font-arabic">
-                            {formatApprovalDate(course)}
+                            {formatApprovalDateSafe(course)}
                           </p>
                         </div>
                       </div>
@@ -553,6 +534,17 @@ const CollaborativeCourses = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* PDF Viewer */}
+      {selectedCourse && (
+        <CourseMemoirePDFViewer
+          isOpen={isPdfViewerOpen}
+          onClose={handleClosePDF}
+          item={selectedCourse}
+          type="cours"
+          userRole="Enseignant"
+        />
+      )}
     </div>
   );
 };

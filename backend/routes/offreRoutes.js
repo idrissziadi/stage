@@ -138,3 +138,4 @@ router.put('/:id_offre', isAuth, OffreController.updateOffre);
 router.delete('/:id_offre', isAuth, OffreController.deleteOffre);
 
 module.exports = router;
+

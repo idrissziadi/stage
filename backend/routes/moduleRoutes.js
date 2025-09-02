@@ -49,6 +49,31 @@ router.get('/', isAuth, ModuleController.getAllModules);
  */
 router.get('/enseignant/:id_enseignant', isAuth, isEnseignant, ModuleController.getModulesByEnseignant);
 
+// Récupérer le nombre de modules
+router.get('/count', isAuth, ModuleController.getModulesCount);
+
+// Récupérer les modules par spécialité
+router.get('/specialite/:id_specialite', isAuth, async (req, res) => {
+  try {
+    const { id_specialite } = req.params;
+    const Module = require('../models/Module');
+    
+    const modules = await Module.findAll({
+      where: { id_specialite: parseInt(id_specialite) },
+      attributes: ['id_module', 'designation_fr', 'designation_ar', 'code_module', 'id_specialite'],
+      order: [['designation_fr', 'ASC']]
+    });
+
+    return res.json({
+      data: modules,
+      total: modules.length
+    });
+  } catch (error) {
+    console.error('Error fetching modules by specialite:', error);
+    return res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+});
+
 /**
  * @swagger
  * /module/{id_module}:

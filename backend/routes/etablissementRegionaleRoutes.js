@@ -12,6 +12,50 @@ const { isAuth } = require('../middlewares/auth');
 
 /**
  * @swagger
+ * /etablissement-regionale:
+ *   get:
+ *     summary: Récupérer tous les établissements régionaux
+ *     tags: [EtablissementRegionale]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des établissements régionaux
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id_etab_regionale:
+ *                         type: integer
+ *                       nom_fr:
+ *                         type: string
+ *                       nom_ar:
+ *                         type: string
+ *                       code:
+ *                         type: string
+ *                       adresse:
+ *                         type: string
+ *                       telephone:
+ *                         type: string
+ *                       email:
+ *                         type: string
+ *       403:
+ *         description: Accès refusé
+ *       500:
+ *         description: Erreur serveur
+ */
+router.get('/', isAuth, EtablissementRegionaleController.getAllRegionalEstablishments);
+
+/**
+ * @swagger
  * /etablissement-regionale/dashboard:
  *   get:
  *     summary: Récupérer les statistiques du tableau de bord
@@ -253,13 +297,16 @@ router.put('/cours/:id_cours/status', isAuth, EtablissementRegionaleController.u
  *         description: Programme créé avec succès
  *       400:
  *         description: Données invalides
- *       403:
- *         description: Accès refusé
  *       404:
  *         description: Module introuvable
  */
 router.get('/programmes', isAuth, EtablissementRegionaleController.getProgrammes);
 router.post('/programmes', isAuth, EtablissementRegionaleController.createProgramme);
+router.put('/programmes/:id', isAuth, EtablissementRegionaleController.updateProgramme);
+router.delete('/programmes/:id', isAuth, EtablissementRegionaleController.deleteProgramme);
+
+// Update programme status (for national establishment validation)
+router.patch('/programmes/:id/status', isAuth, EtablissementRegionaleController.updateProgrammeStatus);
 
 /**
  * @swagger

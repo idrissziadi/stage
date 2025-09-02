@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuthApi } from '@/hooks/useAuthApi';
 import { apiService, getFileUrl } from '@/services/api';
+import { formatDateToArabic, formatRelativeDateToArabic } from '@/utils/arabicDateFormatter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
+import CourseMemoirePDFViewer from '@/components/ui/course-memoire-pdf-viewer';
 import { 
   Users, 
   FileText, 
@@ -29,13 +31,13 @@ import {
 } from 'lucide-react';
 
 interface Memoire {
-  id_memoire: string;
-  titre_fr: string;
-  titre_ar: string;
+  id_memoire: number;
+  titre_fr?: string;
+  titre_ar?: string;
   fichierpdf?: string;
   status: string;
-  created_at: string;
-  updated_at?: string;
+  createdAt: string;
+  updatedAt?: string;
   observation?: string;
   stagiaire?: {
     nom_fr: string;
@@ -68,6 +70,8 @@ const CollaborativeMemoires = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [specialiteFilter, setSpecialiteFilter] = useState('all');
+  const [selectedMemoire, setSelectedMemoire] = useState<Memoire | null>(null);
+  const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
 
   useEffect(() => {
     if (userProfile?.id_stagiaire) {
@@ -89,7 +93,28 @@ const CollaborativeMemoires = () => {
         // 404 means no accepted memoires, which is fine
         setMemoires([]);
       } else {
-        setMemoires(memoiresResponse.data || []);
+        // Transform the data to match our interface
+        const transformedMemoires = (memoiresResponse.data as any[] || []).map((memoire: any) => ({
+          id_memoire: memoire.id_memoire,
+          titre_fr: memoire.titre_fr,
+          titre_ar: memoire.titre_ar,
+          fichierpdf: memoire.fichierpdf,
+          status: memoire.status,
+          observation: memoire.observation,
+          createdAt: memoire.createdAt || memoire.created_at,
+          updatedAt: memoire.updatedAt || memoire.updated_at,
+          stagiaire: memoire.stagiaire,
+          enseignant: memoire.enseignant
+        }));
+        // Debug: Log the date format
+        if (transformedMemoires.length > 0) {
+          console.log('Collaborative memoires date format:', {
+            createdAt: transformedMemoires[0].createdAt,
+            updatedAt: transformedMemoires[0].updatedAt,
+            type: typeof transformedMemoires[0].createdAt
+          });
+        }
+        setMemoires(transformedMemoires);
       }
       
       // Get stagiaire's inscriptions to display specializations
@@ -109,16 +134,8 @@ const CollaborativeMemoires = () => {
   };
 
   const handleViewPDF = (memoire: Memoire) => {
-    if (memoire.fichierpdf) {
-      const pdfUrl = getFileUrl(memoire.fichierpdf, 'memoires');
-      window.open(pdfUrl, '_blank');
-    } else {
-      toast({
-        title: 'خطأ',
-        description: 'لا يوجد ملف PDF لهذه المذكرة',
-        variant: 'destructive'
-      });
-    }
+    setSelectedMemoire(memoire);
+    setIsPdfViewerOpen(true);
   };
 
   const handleDownloadPDF = async (memoire: Memoire) => {
@@ -163,6 +180,11 @@ const CollaborativeMemoires = () => {
     }
   };
 
+  const handleClosePDF = () => {
+    setIsPdfViewerOpen(false);
+    setSelectedMemoire(null);
+  };
+
   const getSpecialiteStats = () => {
     // Get unique specializations from inscriptions
     const specialites = inscriptions.reduce((acc: any[], inscription) => {
@@ -194,52 +216,36 @@ const CollaborativeMemoires = () => {
 
   // Helper function to get time ago
   const getTimeAgo = (dateString: string) => {
-    if (!dateString || dateString === 'Invalid Date') {
-      return 'غير محدد';
-    }
-    
-    const date = new Date(dateString);
-    
-    // Check if date is valid
-    if (isNaN(date.getTime())) {
-      return 'غير محدد';
-    }
-    
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    if (diffInSeconds < 60) return 'منذ لحظات';
-    if (diffInSeconds < 3600) return `منذ ${Math.floor(diffInSeconds / 60)} دقيقة`;
-    if (diffInSeconds < 86400) return `منذ ${Math.floor(diffInSeconds / 3600)} ساعة`;
-    if (diffInSeconds < 604800) return `منذ ${Math.floor(diffInSeconds / 86400)} يوم`;
-    
-    try {
-      return date.toLocaleDateString('ar-DZ');
-    } catch (error) {
-      return 'غير محدد';
-    }
+    return formatRelativeDateToArabic(dateString);
   };
 
-  // Helper function to safely format approval date
+  // Helper function to safely format approval date with better handling
   const formatApprovalDate = (memoire: Memoire) => {
-    // Try updated_at first (approval date), then created_at as fallback
-    const dateToUse = memoire.updated_at || memoire.created_at;
+    // Try updatedAt first (approval date), then createdAt as fallback
+    const dateToUse = memoire.updatedAt || memoire.createdAt;
     
-    if (!dateToUse || dateToUse === 'Invalid Date') {
+    // Additional validation for date strings
+    if (!dateToUse || 
+        dateToUse === 'null' || 
+        dateToUse === 'undefined' || 
+        dateToUse === 'Invalid Date' ||
+        dateToUse === '') {
       return 'غير محدد';
     }
     
-    const date = new Date(dateToUse);
-    
-    if (isNaN(date.getTime())) {
+    // Check if it's a valid date string
+    const testDate = new Date(dateToUse);
+    if (isNaN(testDate.getTime())) {
+      console.warn('Invalid date format in memoire:', {
+        id: memoire.id_memoire,
+        dateToUse,
+        createdAt: memoire.createdAt,
+        updatedAt: memoire.updatedAt
+      });
       return 'غير محدد';
     }
     
-    try {
-      return date.toLocaleDateString('ar-DZ');
-    } catch (error) {
-      return 'غير محدد';
-    }
+    return formatDateToArabic(dateToUse);
   };
 
   const filteredMemoires = memoires.filter(memoire => {
@@ -415,7 +421,7 @@ const CollaborativeMemoires = () => {
                           </div>
                           <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                             <Clock className="w-4 h-4" />
-                            <span className="font-arabic">{getTimeAgo(memoire.created_at)}</span>
+                            <span className="font-arabic">{getTimeAgo(memoire.createdAt)}</span>
                             <span className="mx-1">•</span>
                             <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-xs">
                               <CheckCircle className="w-3 h-3 mr-1" />
@@ -555,6 +561,21 @@ const CollaborativeMemoires = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* PDF Viewer */}
+      {selectedMemoire && (
+        <CourseMemoirePDFViewer
+          isOpen={isPdfViewerOpen}
+          onClose={handleClosePDF}
+          item={{
+            ...selectedMemoire,
+            titre_fr: selectedMemoire.titre_fr || '',
+            created_at: selectedMemoire.createdAt
+          }}
+          type="memoire"
+          userRole="Stagiaire"
+        />
+      )}
     </div>
   );
 };

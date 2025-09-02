@@ -5,6 +5,7 @@ const Compte = require('../models/Compte');
 const Stagiaire = require('../models/Stagiaire');
 const Enseignant = require('../models/Enseignant');
 const EtablissementFormation = require('../models/EtablissementFormation');
+const EtablissementRegionale = require('../models/EtablissementRegionale');
 const TokenBlacklist = require('../models/TokenBlacklist');
 const crypto = require('crypto');
 
@@ -44,7 +45,45 @@ const AuthController = {
         return res.status(401).json({ message: 'Identifiants invalides' });
       }
 
-      const token = signToken({ id_compte: compte.id_compte, role: compte.role, username: compte.username });
+      // Payload de base
+      let tokenPayload = { 
+        id_compte: compte.id_compte, 
+        role: compte.role, 
+        username: compte.username 
+      };
+
+      // Ajouter l'ID spécifique selon le rôle
+      if (compte.role === 'EtablissementRegionale') {
+        const etablissement = await EtablissementRegionale.findOne({ 
+          where: { compte_id: compte.id_compte } 
+        });
+        if (etablissement) {
+          tokenPayload.id_etab_regionale = etablissement.id_etab_regionale;
+        }
+      } else if (compte.role === 'Enseignant') {
+        const enseignant = await Enseignant.findOne({ 
+          where: { compte_id: compte.id_compte } 
+        });
+        if (enseignant) {
+          tokenPayload.id_enseignant = enseignant.id_enseignant;
+        }
+      } else if (compte.role === 'EtablissementFormation') {
+        const etablissement = await EtablissementFormation.findOne({ 
+          where: { compte_id: compte.id_compte } 
+        });
+        if (etablissement) {
+          tokenPayload.id_etab_formation = etablissement.id_etab_formation;
+        }
+      } else if (compte.role === 'Stagiaire') {
+        const stagiaire = await Stagiaire.findOne({ 
+          where: { compte_id: compte.id_compte } 
+        });
+        if (stagiaire) {
+          tokenPayload.id_stagiaire = stagiaire.id_stagiaire;
+        }
+      }
+
+      const token = signToken(tokenPayload);
       return res.json({ role: compte.role, token });
     } catch (error) {
       return res.status(500).json({ message: 'Erreur serveur', error: error.message });
@@ -374,6 +413,181 @@ const AuthController = {
       });
     } catch (error) {
       return res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
+  },
+
+  // Nouvelle méthode pour créer un établissement de formation avec stagiaire et inscription automatiques
+  async signupEtablissementFormation(req, res) {
+    try {
+      const { 
+        username, 
+        password, 
+        nom_fr, 
+        nom_ar, 
+        adresse_fr, 
+        adresse_ar, 
+        email, 
+        telephone,
+        // Données du stagiaire
+        stagiaire_nom_fr,
+        stagiaire_nom_ar,
+        stagiaire_prenom_fr,
+        stagiaire_prenom_ar,
+        stagiaire_date_naissance,
+        stagiaire_email,
+        stagiaire_telephone,
+        // Données de l'offre (optionnelles, on utilisera la première disponible si non fournies)
+        id_specialite,
+        id_diplome,
+        id_mode
+      } = req.body;
+
+      // Validation des champs obligatoires
+      if (!username || !password || !nom_fr || !nom_ar) {
+        return res.status(400).json({ 
+          message: 'username, password, nom_fr, nom_ar sont requis' 
+        });
+      }
+
+      // Vérifier si le nom d'utilisateur existe déjà
+      const exists = await Compte.findOne({ where: { username } });
+      if (exists) {
+        return res.status(409).json({ message: 'Nom d\'utilisateur déjà pris' });
+      }
+
+      // Vérifier si l'email de l'établissement existe déjà
+      if (email) {
+        const emailExists = await EtablissementFormation.findOne({ where: { email } });
+        if (emailExists) {
+          return res.status(409).json({ message: 'Cet email est déjà utilisé par un autre établissement' });
+        }
+      }
+
+      // Vérifier si l'email du stagiaire existe déjà
+      if (stagiaire_email) {
+        const stagiaireEmailExists = await Stagiaire.findOne({ where: { email: stagiaire_email } });
+        if (stagiaireEmailExists) {
+          return res.status(409).json({ message: 'Cet email est déjà utilisé par un autre stagiaire' });
+        }
+      }
+
+      // Créer le compte
+      const hashed = await bcrypt.hash(password, BCRYPT_ROUNDS);
+      const newCompte = await Compte.create({ 
+        username, 
+        password: hashed, 
+        role: 'EtablissementFormation' 
+      });
+
+      // Créer l'établissement de formation
+      const etablissement = await EtablissementFormation.create({
+        code: username.toUpperCase().substring(0, 10), // Code basé sur le username
+        nom_fr,
+        nom_ar,
+        adresse_fr: adresse_fr || null,
+        adresse_ar: adresse_ar || null,
+        email: email || null,
+        telephone: telephone || null,
+        compte_id: newCompte.id_compte
+      });
+
+      // Créer le stagiaire
+      const stagiaire = await Stagiaire.create({
+        nom_fr: stagiaire_nom_fr || 'Stagiaire',
+        nom_ar: stagiaire_nom_ar || 'متدرب',
+        prenom_fr: stagiaire_prenom_fr || 'Par défaut',
+        prenom_ar: stagiaire_prenom_ar || 'افتراضي',
+        date_naissance: stagiaire_date_naissance || null,
+        email: stagiaire_email || null,
+        telephone: stagiaire_telephone || null,
+        compte_id: null // Pas de compte pour ce stagiaire par défaut
+      });
+
+      // Trouver une offre disponible pour cet établissement
+      let offre = null;
+      
+      if (id_specialite && id_diplome && id_mode) {
+        // Utiliser les paramètres fournis
+        offre = await Offre.findOne({
+          where: {
+            id_specialite: parseInt(id_specialite),
+            id_diplome: parseInt(id_diplome),
+            id_mode: parseInt(id_mode),
+            statut: 'active'
+          }
+        });
+      }
+
+      // Si aucune offre spécifique trouvée, chercher la première offre active de l'établissement
+      if (!offre) {
+        offre = await Offre.findOne({
+          where: {
+            id_etab_formation: etablissement.id_etab_formation,
+            statut: 'active'
+          }
+        });
+      }
+
+      // Si toujours aucune offre trouvée, créer une offre par défaut
+      if (!offre) {
+        // Récupérer les premières valeurs disponibles pour créer une offre par défaut
+        const specialite = await Specialite.findOne();
+        const diplome = await Diplome.findOne();
+        const modeFormation = await Mode_Formation.findOne();
+
+        if (specialite && diplome && modeFormation) {
+          offre = await Offre.create({
+            id_specialite: specialite.id_specialite,
+            id_etab_formation: etablissement.id_etab_formation,
+            id_diplome: diplome.id_diplome,
+            id_mode: modeFormation.id_mode,
+            statut: 'active',
+            date_debut: new Date(),
+            date_fin: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // +1 an
+          });
+        }
+      }
+
+      // Créer l'inscription du stagiaire à l'offre
+      let inscription = null;
+      if (offre) {
+        inscription = await Inscription.create({
+          id_stagiaire: stagiaire.id_stagiaire,
+          id_offre: offre.id_offre,
+          date_inscription: new Date(),
+          statut: 'en_attente'
+        });
+      }
+
+      return res.status(201).json({
+        message: 'Établissement de formation créé avec succès avec stagiaire et inscription',
+        etablissement: {
+          id_etab_formation: etablissement.id_etab_formation,
+          code: etablissement.code,
+          nom_fr: etablissement.nom_fr,
+          nom_ar: etablissement.nom_ar
+        },
+        stagiaire: {
+          id_stagiaire: stagiaire.id_stagiaire,
+          nom_fr: stagiaire.nom_fr,
+          prenom_fr: stagiaire.prenom_fr
+        },
+        offre: offre ? {
+          id_offre: offre.id_offre,
+          designation: offre.designation_fr
+        } : null,
+        inscription: inscription ? {
+          id_inscription: inscription.id_inscription,
+          statut: inscription.statut
+        } : null
+      });
+
+    } catch (error) {
+      console.error('Erreur lors de la création de l\'établissement de formation:', error);
+      return res.status(500).json({ 
+        message: 'Erreur serveur lors de la création de l\'établissement de formation', 
+        error: error.message 
+      });
     }
   }
 };

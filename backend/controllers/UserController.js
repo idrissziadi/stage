@@ -3,6 +3,8 @@ const Compte = require('../models/Compte');
 const Stagiaire = require('../models/Stagiaire');
 const Enseignant = require('../models/Enseignant');
 const EtablissementFormation = require('../models/EtablissementFormation');
+const EtablissementRegionale = require('../models/EtablissementRegionale');
+const EtablissementNationale = require('../models/EtablissementNationale');
 const Grade = require('../models/Grade');
 
 const UserController = {
@@ -61,6 +63,18 @@ const UserController = {
           const etabFormation = await EtablissementFormation.findOne({ where: { compte_id: id_compte } });
           if (etabFormation) {
             profileData = { ...profileData, ...etabFormation.toJSON() };
+          }
+          break;
+        case 'EtablissementRegionale':
+          const etabRegionale = await EtablissementRegionale.findOne({ where: { compte_id: id_compte } });
+          if (etabRegionale) {
+            profileData = { ...profileData, ...etabRegionale.toJSON() };
+          }
+          break;
+        case 'EtablissementNationale':
+          const etabNationale = await EtablissementNationale.findOne({ where: { compte_id: id_compte } });
+          if (etabNationale) {
+            profileData = { ...profileData, ...etabNationale.toJSON() };
           }
           break;
       }
@@ -138,6 +152,12 @@ const UserController = {
         case 'EtablissementFormation':
           await EtablissementFormation.update(updateData, { where: { compte_id: id_compte } });
           break;
+        case 'EtablissementRegionale':
+          await EtablissementRegionale.update(updateData, { where: { compte_id: id_compte } });
+          break;
+        case 'EtablissementNationale':
+          await EtablissementNationale.update(updateData, { where: { compte_id: id_compte } });
+          break;
       }
 
       return res.json({ message: 'Profil mis à jour avec succès' });
@@ -148,4 +168,5 @@ const UserController = {
 };
 
 module.exports = UserController;
+
 

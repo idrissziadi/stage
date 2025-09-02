@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useAuthApi } from '@/hooks/useAuthApi';
 import { apiService, getFileUrl } from '@/services/api';
+import { 
+  formatDateToArabic, 
+  formatRelativeDateToArabic, 
+  formatApprovalDateToArabic,
+  formatCourseDateToArabic
+} from '@/utils/arabicDateFormatter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
+import CourseMemoirePDFViewer from '@/components/ui/course-memoire-pdf-viewer';
 import { 
   BookOpen, 
   FileText, 
@@ -58,6 +65,8 @@ const StagiaireRelatedCourses = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [moduleFilter, setModuleFilter] = useState('all');
   const [specialiteFilter, setSpecialiteFilter] = useState('all');
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
 
   useEffect(() => {
     if (userProfile?.id_stagiaire) {
@@ -101,16 +110,8 @@ const StagiaireRelatedCourses = () => {
   };
 
   const handleViewPDF = (course: Course) => {
-    if (course.fichierpdf) {
-      const pdfUrl = getFileUrl(course.fichierpdf, 'cours');
-      window.open(pdfUrl, '_blank');
-    } else {
-      toast({
-        title: 'خطأ',
-        description: 'لا يوجد ملف PDF لهذا الدرس',
-        variant: 'destructive'
-      });
-    }
+    setSelectedCourse(course);
+    setIsPdfViewerOpen(true);
   };
 
   const handleDownloadPDF = async (course: Course) => {
@@ -153,6 +154,11 @@ const StagiaireRelatedCourses = () => {
         variant: 'destructive'
       });
     }
+  };
+
+  const handleClosePDF = () => {
+    setIsPdfViewerOpen(false);
+    setSelectedCourse(null);
   };
 
   const getSpecialiteStats = () => {
@@ -221,6 +227,11 @@ const StagiaireRelatedCourses = () => {
     
     console.log('Module stats result:', moduleStats);
     return moduleStats;
+  };
+
+  // Helper function to format course dates robustly
+  const formatCourseDateSafe = (course: Course) => {
+    return formatCourseDateToArabic(course);
   };
 
   const filteredCourses = courses.filter(course => {
@@ -459,7 +470,7 @@ const StagiaireRelatedCourses = () => {
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
                           <span className="font-medium">تاريخ الاعتماد:</span> 
-                          {new Date(course.created_at).toLocaleDateString('ar-DZ')}
+                          {formatCourseDateSafe(course)}
                         </div>
                       </div>
                       
@@ -487,6 +498,7 @@ const StagiaireRelatedCourses = () => {
                             className="text-blue-600 border-blue-200 hover:bg-blue-50"
                           >
                             <Eye className="w-4 h-4" />
+                            عرض
                           </Button>
                           <Button 
                             size="sm" 
@@ -496,6 +508,7 @@ const StagiaireRelatedCourses = () => {
                             className="text-green-600 border-green-200 hover:bg-green-50"
                           >
                             <Download className="w-4 h-4" />
+                            تحميل
                           </Button>
                         </>
                       )}
@@ -507,6 +520,17 @@ const StagiaireRelatedCourses = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* PDF Viewer */}
+      {selectedCourse && (
+        <CourseMemoirePDFViewer
+          isOpen={isPdfViewerOpen}
+          onClose={handleClosePDF}
+          item={selectedCourse}
+          type="cours"
+          userRole="Stagiaire"
+        />
+      )}
     </div>
   );
 };

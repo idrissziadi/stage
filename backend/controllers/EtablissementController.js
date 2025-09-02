@@ -4,6 +4,7 @@ const Compte = require('../models/Compte');
 const Enseignant = require('../models/Enseignant');
 const Stagiaire = require('../models/Stagiaire');
 const EtablissementFormation = require('../models/EtablissementFormation');
+const EtablissementRegionale = require('../models/EtablissementRegionale');
 const Grade = require('../models/Grade');
 const Offre = require('../models/Offre');
 const Memoire = require('../models/Memoire');
@@ -73,6 +74,99 @@ const EtablissementController = {
 
     } catch (error) {
       console.error('Error fetching enseignants:', error);
+      return res.status(500).json({ 
+        message: 'Erreur serveur lors de la récupération des enseignants', 
+        error: error.message 
+      });
+    }
+  },
+
+  // Get all enseignants for a regional establishment
+  async getEnseignantsByEtablissementRegional(req, res) {
+    try {
+      const { id_etab_regionale } = req.params;
+      const { search, limit = 50, offset = 0 } = req.query;
+
+      // Verify that the requesting user belongs to this regional establishment
+      const compte = await Compte.findByPk(req.user.id_compte);
+      const etablissementRegional = await EtablissementRegionale.findOne({ 
+        where: { compte_id: req.user.id_compte } 
+      });
+      
+      if (!etablissementRegional || etablissementRegional.id_etab_regionale !== parseInt(id_etab_regionale)) {
+        return res.status(403).json({ 
+          message: 'Accès refusé: vous ne pouvez accéder qu\'aux données de votre établissement régional' 
+        });
+      }
+
+      // Get all enseignants from establishments under this regional establishment
+      // First, get all EtablissementFormation under this regional establishment
+      const etablissementsFormation = await EtablissementFormation.findAll({
+        where: { id_etab_regionale: parseInt(id_etab_regionale) },
+        attributes: ['id_etab_formation']
+      });
+
+      if (etablissementsFormation.length === 0) {
+        return res.json({
+          enseignants: [],
+          total: 0,
+          limit: parseInt(limit),
+          offset: parseInt(offset)
+        });
+      }
+
+      const etabFormationIds = etablissementsFormation.map(etab => etab.id_etab_formation);
+
+      let whereClause = { 
+        id_etab_formation: { [Op.in]: etabFormationIds } 
+      };
+      
+      if (search) {
+        whereClause = {
+          ...whereClause,
+          [Op.or]: [
+            { nom_fr: { [Op.iLike]: `%${search}%` } },
+            { prenom_fr: { [Op.iLike]: `%${search}%` } },
+            { nom_ar: { [Op.iLike]: `%${search}%` } },
+            { prenom_ar: { [Op.iLike]: `%${search}%` } },
+            { email: { [Op.iLike]: `%${search}%` } }
+          ]
+        };
+      }
+
+      const enseignants = await Enseignant.findAndCountAll({
+        where: whereClause,
+        include: [
+          {
+            model: Grade,
+            as: 'grade',
+            attributes: ['id_grade', 'designation_fr', 'designation_ar', 'code_grade']
+          },
+          {
+            model: EtablissementFormation,
+            as: 'etablissementFormation',
+            attributes: ['id_etab_formation', 'nom_fr', 'nom_ar', 'code']
+          },
+          {
+            model: Compte,
+            as: 'Compte',
+            attributes: ['id_compte', 'username', 'role', 'createdAt']
+          }
+        ],
+        limit: parseInt(limit),
+        offset: parseInt(offset),
+        order: [['nom_fr', 'ASC'], ['prenom_fr', 'ASC']]
+      });
+
+      return res.json({
+        enseignants: enseignants.rows,
+        total: enseignants.count,
+        limit: parseInt(limit),
+        offset: parseInt(offset)
+      });
+
+    } catch (error) {
+      console.error('Error fetching enseignants for regional establishment:', error);
       return res.status(500).json({ 
         message: 'Erreur serveur lors de la récupération des enseignants', 
         error: error.message 
@@ -287,15 +381,18 @@ const EtablissementController = {
   async createStagiaire(req, res) {
     try {
       const { 
-        username, 
-        password, 
         nom_fr, 
         prenom_fr, 
         nom_ar, 
         prenom_ar, 
         email, 
         telephone, 
-        date_naissance 
+        date_naissance,
+        // Champs optionnels pour le compte
+        username,
+        password,
+        // Champs optionnels pour l'inscription
+        id_offre
       } = req.body;
 
       // Verify that the requesting user is from an establishment
@@ -310,17 +407,9 @@ const EtablissementController = {
       }
 
       // Validate required fields
-      if (!username || !password || !nom_fr || !prenom_fr) {
+      if (!nom_fr || !prenom_fr) {
         return res.status(400).json({ 
-          message: 'Les champs username, password, nom_fr et prenom_fr sont obligatoires' 
-        });
-      }
-
-      // Check if username already exists
-      const existingCompte = await Compte.findOne({ where: { username } });
-      if (existingCompte) {
-        return res.status(400).json({ 
-          message: 'Ce nom d\'utilisateur existe déjà' 
+          message: 'Les champs nom_fr et prenom_fr sont obligatoires' 
         });
       }
 
@@ -334,27 +423,68 @@ const EtablissementController = {
         }
       }
 
-      // Hash password
-      const hashedPassword = await bcrypt.hash(password, 12);
+      // Check if username already exists (if provided)
+      if (username) {
+        const existingCompte = await Compte.findOne({ where: { username } });
+        if (existingCompte) {
+          return res.status(400).json({ 
+            message: 'Ce nom d\'utilisateur existe déjà' 
+          });
+        }
+      }
 
-      // Create account
-      const compte = await Compte.create({
-        username,
-        password: hashedPassword,
-        role: 'Stagiaire'
-      });
+      let compte = null;
+      let stagiaire = null;
+
+      // Create account if username and password are provided
+      if (username && password) {
+        const hashedPassword = await bcrypt.hash(password, 12);
+        compte = await Compte.create({
+          username,
+          password: hashedPassword,
+          role: 'Stagiaire'
+        });
+      }
 
       // Create stagiaire profile
-      const stagiaire = await Stagiaire.create({
+      stagiaire = await Stagiaire.create({
         nom_fr,
         prenom_fr,
-        nom_ar,
-        prenom_ar,
-        email,
-        telephone,
-        date_naissance,
-        compte_id: compte.id_compte
+        nom_ar: nom_ar || null,
+        prenom_ar: prenom_ar || null,
+        email: email || null,
+        telephone: telephone || null,
+        date_naissance: date_naissance || null,
+        compte_id: compte ? compte.id_compte : null
       });
+
+      // Inscrire le stagiaire à l'offre si spécifiée
+      let inscription = null;
+      if (id_offre) {
+        // Vérifier que l'offre appartient à cet établissement
+        const offre = await Offre.findOne({
+          where: { 
+            id_offre: parseInt(id_offre),
+            id_etab_formation: etablissement.id_etab_formation
+          }
+        });
+
+        if (offre) {
+          // Vérifier qu'il n'y a pas déjà une inscription
+          const existingInscription = await Inscription.findOne({
+            where: { id_stagiaire: stagiaire.id_stagiaire, id_offre: parseInt(id_offre) }
+          });
+
+          if (!existingInscription) {
+            inscription = await Inscription.create({
+              id_stagiaire: stagiaire.id_stagiaire,
+              id_offre: parseInt(id_offre),
+              date_inscription: new Date(),
+              statut: 'en_attente'
+            });
+          }
+        }
+      }
 
       // Return created stagiaire with relations
       const createdStagiaire = await Stagiaire.findByPk(stagiaire.id_stagiaire, {
@@ -362,20 +492,242 @@ const EtablissementController = {
           {
             model: Compte,
             as: 'Compte',
-            attributes: ['id_compte', 'username', 'role', 'createdAt']
+            attributes: compte ? ['id_compte', 'username', 'role', 'createdAt'] : []
           }
         ]
       });
 
       return res.status(201).json({
         message: 'Stagiaire créé avec succès',
-        stagiaire: createdStagiaire
+        stagiaire: createdStagiaire,
+        compte: compte ? {
+          id_compte: compte.id_compte,
+          username: compte.username,
+          role: compte.role
+        } : null,
+        inscription: inscription ? {
+          id_inscription: inscription.id_inscription,
+          statut: inscription.statut,
+          date_inscription: inscription.date_inscription
+        } : null
       });
 
     } catch (error) {
       console.error('Error creating stagiaire:', error);
       return res.status(500).json({ 
         message: 'Erreur serveur lors de la création du stagiaire', 
+        error: error.message 
+      });
+    }
+  },
+
+  // Inscrire un stagiaire existant à une offre
+  async inscrireStagiaire(req, res) {
+    try {
+      const { id_stagiaire } = req.params;
+      const { id_offre } = req.body;
+
+      // Verify that the requesting user is from an establishment
+      const etablissement = await EtablissementFormation.findOne({ 
+        where: { compte_id: req.user.id_compte } 
+      });
+      
+      if (!etablissement) {
+        return res.status(403).json({ 
+          message: 'Accès refusé: seules les institutions peuvent inscrire des stagiaires' 
+        });
+      }
+
+      // Validate required fields
+      if (!id_offre) {
+        return res.status(400).json({ 
+          message: 'L\'ID de l\'offre est obligatoire' 
+        });
+      }
+
+      // Find the stagiaire
+      const stagiaire = await Stagiaire.findByPk(id_stagiaire);
+      if (!stagiaire) {
+        return res.status(404).json({ message: 'Stagiaire introuvable' });
+      }
+
+      // Vérifier que l'offre appartient à cet établissement
+      const offre = await Offre.findOne({
+        where: { 
+          id_offre: parseInt(id_offre),
+          id_etab_formation: etablissement.id_etab_formation
+        },
+        include: [
+          {
+            model: Specialite,
+            as: 'specialite',
+            attributes: ['designation_fr', 'designation_ar']
+          },
+          {
+            model: Diplome,
+            as: 'diplome',
+            attributes: ['designation_fr', 'designation_ar']
+          }
+        ]
+      });
+
+      if (!offre) {
+        return res.status(404).json({ 
+          message: 'Offre introuvable ou n\'appartient pas à votre établissement' 
+        });
+      }
+
+      // Vérifier qu'il n'y a pas déjà une inscription
+      const existingInscription = await Inscription.findOne({
+        where: { id_stagiaire: parseInt(id_stagiaire), id_offre: parseInt(id_offre) }
+      });
+
+      if (existingInscription) {
+        return res.status(409).json({ 
+          message: 'Ce stagiaire est déjà inscrit à cette offre' 
+        });
+      }
+
+      // Créer l'inscription
+      const inscription = await Inscription.create({
+        id_stagiaire: parseInt(id_stagiaire),
+        id_offre: parseInt(id_offre),
+        date_inscription: new Date(),
+        statut: 'en_attente'
+      });
+
+      // Return inscription with relations
+      const createdInscription = await Inscription.findByPk(inscription.id_inscription, {
+        include: [
+          {
+            model: Stagiaire,
+            as: 'stagiaire',
+            attributes: ['id_stagiaire', 'nom_fr', 'prenom_fr', 'nom_ar', 'prenom_ar']
+          },
+          {
+            model: Offre,
+            as: 'offre',
+            attributes: ['id_offre'],
+            include: [
+              {
+                model: Specialite,
+                as: 'specialite',
+                attributes: ['designation_fr', 'designation_ar']
+              },
+              {
+                model: Diplome,
+                as: 'diplome',
+                attributes: ['designation_fr', 'designation_ar']
+              }
+            ]
+          }
+        ]
+      });
+
+      return res.status(201).json({
+        message: 'Stagiaire inscrit avec succès à l\'offre',
+        inscription: createdInscription
+      });
+
+    } catch (error) {
+      console.error('Error inscrire stagiaire:', error);
+      return res.status(500).json({ 
+        message: 'Erreur serveur lors de l\'inscription du stagiaire', 
+        error: error.message 
+      });
+    }
+  },
+
+  // Inscrire plusieurs stagiaires à une offre
+  async inscrireStagiairesEnMasse(req, res) {
+    try {
+      const { id_offre, stagiaire_ids } = req.body;
+
+      // Verify that the requesting user is from an establishment
+      const etablissement = await EtablissementFormation.findOne({ 
+        where: { compte_id: req.user.id_compte } 
+      });
+      
+      if (!etablissement) {
+        return res.status(403).json({ 
+          message: 'Accès refusé: seules les institutions peuvent inscrire des stagiaires' 
+        });
+      }
+
+      // Validate required fields
+      if (!id_offre || !Array.isArray(stagiaire_ids) || stagiaire_ids.length === 0) {
+        return res.status(400).json({ 
+          message: 'L\'ID de l\'offre et la liste des IDs de stagiaires sont obligatoires' 
+        });
+      }
+
+      // Vérifier que l'offre appartient à cet établissement
+      const offre = await Offre.findOne({
+        where: { 
+          id_offre: parseInt(id_offre),
+          id_etab_formation: etablissement.id_etab_formation
+        }
+      });
+
+      if (!offre) {
+        return res.status(404).json({ 
+          message: 'Offre introuvable ou n\'appartient pas à votre établissement' 
+        });
+      }
+
+      // Vérifier que tous les stagiaires existent
+      const stagiaires = await Stagiaire.findAll({
+        where: { id_stagiaire: { [Op.in]: stagiaire_ids.map(id => parseInt(id)) } }
+      });
+
+      if (stagiaires.length !== stagiaire_ids.length) {
+        return res.status(400).json({ 
+          message: 'Certains stagiaires n\'existent pas' 
+        });
+      }
+
+      // Vérifier les inscriptions existantes
+      const existingInscriptions = await Inscription.findAll({
+        where: { 
+          id_stagiaire: { [Op.in]: stagiaire_ids.map(id => parseInt(id)) },
+          id_offre: parseInt(id_offre)
+        }
+      });
+
+      const existingStagiaireIds = existingInscriptions.map(ins => ins.id_stagiaire);
+      const newStagiaireIds = stagiaire_ids
+        .map(id => parseInt(id))
+        .filter(id => !existingStagiaireIds.includes(id));
+
+      if (newStagiaireIds.length === 0) {
+        return res.status(409).json({ 
+          message: 'Tous ces stagiaires sont déjà inscrits à cette offre' 
+        });
+      }
+
+      // Créer les inscriptions
+      const inscriptions = await Promise.all(
+        newStagiaireIds.map(stagiaireId =>
+          Inscription.create({
+            id_stagiaire: stagiaireId,
+            id_offre: parseInt(id_offre),
+            date_inscription: new Date(),
+            statut: 'en_attente'
+          })
+        )
+      );
+
+      return res.status(201).json({
+        message: `${inscriptions.length} stagiaire(s) inscrit(s) avec succès`,
+        inscriptions_crees: inscriptions.length,
+        inscriptions_existantes: existingInscriptions.length,
+        total_stagiaires: stagiaire_ids.length
+      });
+
+    } catch (error) {
+      console.error('Error inscrire stagiaires en masse:', error);
+      return res.status(500).json({ 
+        message: 'Erreur serveur lors de l\'inscription en masse', 
         error: error.message 
       });
     }

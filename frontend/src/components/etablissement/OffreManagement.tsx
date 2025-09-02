@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuthApi } from '@/hooks/useAuthApi';
 import { apiService } from '@/services/api';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -140,9 +140,11 @@ const OffreManagement = () => {
         });
         setSpecialites([]);
       } else {
-        // Handle response structure - could be { specialites: [] } or direct array
-        const specialitesData = specialitesResponse.data?.specialites || specialitesResponse.data || [];
-        setSpecialites(specialitesData);
+        // Handle response structure - should be { data: [] }
+        const specialitesData = specialitesResponse.data?.data || [];
+        console.log('Specialites response:', specialitesResponse);
+        console.log('Specialites data:', specialitesData);
+        setSpecialites(Array.isArray(specialitesData) ? specialitesData : []);
       }
       
       // Handle diplomes
@@ -155,9 +157,11 @@ const OffreManagement = () => {
         });
         setDiplomes([]);
       } else {
-        // Handle response structure - could be { diplomes: [] } or direct array
-        const diplomesData = diplomesResponse.data?.diplomes || diplomesResponse.data || [];
-        setDiplomes(diplomesData);
+        // Handle response structure - should be { data: [] }
+        const diplomesData = diplomesResponse.data?.data || [];
+        console.log('Diplomes response:', diplomesResponse);
+        console.log('Diplomes data:', diplomesData);
+        setDiplomes(Array.isArray(diplomesData) ? diplomesData : []);
       }
       
       // Handle modesFormation
@@ -170,9 +174,11 @@ const OffreManagement = () => {
         });
         setModesFormation([]);
       } else {
-        // Handle response structure - could be { modeFormations: [] } or direct array
-        const modesFormationData = modesFormationResponse.data?.modeFormations || modesFormationResponse.data || [];
-        setModesFormation(modesFormationData);
+        // Handle response structure - should be { data: [] }
+        const modesFormationData = modesFormationResponse.data?.data || [];
+        console.log('ModesFormation response:', modesFormationResponse);
+        console.log('ModesFormation data:', modesFormationData);
+        setModesFormation(Array.isArray(modesFormationData) ? modesFormationData : []);
       }
       
       // Handle offres
@@ -467,16 +473,23 @@ const OffreManagement = () => {
                   <Select
                     value={offreForm.id_specialite}
                     onValueChange={(value) => setOffreForm({ ...offreForm, id_specialite: value })}
+                    disabled={loading}
                   >
                     <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder="اختر التخصص" />
+                      <SelectValue placeholder={loading ? "جاري التحميل..." : "اختر التخصص"} />
                     </SelectTrigger>
                     <SelectContent>
-                      {specialites.map((specialite) => (
-                        <SelectItem key={specialite.id_specialite} value={specialite.id_specialite.toString()}>
-                          {specialite.designation_ar || specialite.designation_fr}
-                        </SelectItem>
-                      ))}
+                      {loading ? (
+                        <SelectItem value="" disabled>جاري التحميل...</SelectItem>
+                      ) : Array.isArray(specialites) && specialites.length > 0 ? (
+                        specialites.map((specialite) => (
+                          <SelectItem key={specialite.id_specialite} value={specialite.id_specialite.toString()}>
+                            {specialite.designation_ar || specialite.designation_fr}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="" disabled>لا توجد تخصصات متاحة</SelectItem>
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
@@ -487,16 +500,23 @@ const OffreManagement = () => {
                   <Select
                     value={offreForm.id_diplome}
                     onValueChange={(value) => setOffreForm({ ...offreForm, id_diplome: value })}
+                    disabled={loading}
                   >
                     <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder="اختر الشهادة" />
+                      <SelectValue placeholder={loading ? "جاري التحميل..." : "اختر الشهادة"} />
                     </SelectTrigger>
                     <SelectContent>
-                      {diplomes.map((diplome) => (
-                        <SelectItem key={diplome.id_diplome} value={diplome.id_diplome.toString()}>
-                          {diplome.designation_ar || diplome.designation_fr}
-                        </SelectItem>
-                      ))}
+                      {loading ? (
+                        <SelectItem value="" disabled>جاري التحميل...</SelectItem>
+                      ) : Array.isArray(diplomes) && diplomes.length > 0 ? (
+                        diplomes.map((diplome) => (
+                          <SelectItem key={diplome.id_diplome} value={diplome.id_diplome.toString()}>
+                            {diplome.designation_ar || diplome.designation_fr}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="" disabled>لا توجد شهادات متاحة</SelectItem>
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
@@ -507,16 +527,23 @@ const OffreManagement = () => {
                   <Select
                     value={offreForm.id_mode}
                     onValueChange={(value) => setOffreForm({ ...offreForm, id_mode: value })}
+                    disabled={loading}
                   >
                     <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder="اختر طريقة التكوين" />
+                      <SelectValue placeholder={loading ? "جاري التحميل..." : "اختر طريقة التكوين"} />
                     </SelectTrigger>
                     <SelectContent>
-                      {modesFormation.map((mode) => (
-                        <SelectItem key={mode.id_mode} value={mode.id_mode.toString()}>
-                          {mode.designation_ar || mode.designation_fr}
-                        </SelectItem>
-                      ))}
+                      {loading ? (
+                        <SelectItem value="" disabled>جاري التحميل...</SelectItem>
+                      ) : Array.isArray(modesFormation) && modesFormation.length > 0 ? (
+                        modesFormation.map((mode) => (
+                          <SelectItem key={mode.id_mode} value={mode.id_mode.toString()}>
+                            {mode.designation_ar || mode.designation_fr}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="" disabled>لا توجد طرق تكوين متاحة</SelectItem>
+                      )}
                     </SelectContent>
                   </Select>
                 </div>

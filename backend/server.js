@@ -79,6 +79,14 @@ app.use('/inscription', inscriptionRoutes);
 const moduleRoutes = require('./routes/moduleRoutes');
 app.use('/module', moduleRoutes);
 
+// Routes spécialité
+const specialiteRoutes = require('./routes/specialiteRoutes');
+app.use('/specialite', specialiteRoutes);
+
+// Routes branche
+const brancheRoutes = require('./routes/brancheRoutes');
+app.use('/branche', brancheRoutes);
+
 // Routes programme
 const programmeRoutes = require('./routes/programmeRoutes');
 app.use('/programme', programmeRoutes);
@@ -89,7 +97,11 @@ app.use('/etablissement', etablissementRoutes);
 
 // Routes établissement régionale
 const etablissementRegionaleRoutes = require('./routes/etablissementRegionaleRoutes');
-app.use('/etablissement-regionale', etablissementRegionaleRoutes);
+app.use('/api/etablissement-regionale', etablissementRegionaleRoutes);
+
+// Routes assignation module-enseignant
+const ensModuleRoutes = require('./routes/ensModuleRoutes');
+app.use('/ens-module', ensModuleRoutes);
 
 // Routes auxiliary (grades, specialites, diplomes, etc.)
 const auxiliaryRoutes = require('./routes/auxiliaryRoutes');

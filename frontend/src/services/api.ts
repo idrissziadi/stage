@@ -42,7 +42,7 @@ class ApiService {
     this.token = null;
   }
 
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     const url = `${API_BASE_URL}${endpoint}`;
     
     const headers: HeadersInit = {};
@@ -150,8 +150,50 @@ class ApiService {
     return this.request('/cours');
   }
 
+  async getAllCoursByModules(status?: string, search?: string, limit?: number, offset?: number): Promise<ApiResponse> {
+    const params = new URLSearchParams();
+    if (status && status !== 'all') params.append('status', status);
+    if (search) params.append('search', search);
+    if (limit) params.append('limit', limit.toString());
+    if (offset) params.append('offset', offset.toString());
+    
+    const queryString = params.toString();
+    const endpoint = `/cours/by-modules${queryString ? `?${queryString}` : ''}`;
+    return this.request(endpoint);
+  }
+
   async getCoursByEnseignant(id_enseignant: string): Promise<ApiResponse> {
     return this.request(`/cours/enseignant/${id_enseignant}`);
+  }
+
+  async getCoursByEtablissementRegionale(id_etab_regionale: string): Promise<ApiResponse> {
+    return this.request(`/cours/etablissement/${id_etab_regionale}`);
+  }
+
+  async getBranches(): Promise<ApiResponse> {
+    return this.request('/branche');
+  }
+
+  async getSpecialitesByBranche(id_branche: number): Promise<ApiResponse> {
+    return this.request(`/specialite/branche/${id_branche}`);
+  }
+
+  async updateCoursStatus(id_cours: number, status: string): Promise<ApiResponse> {
+    return this.request(`/cours/${id_cours}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    });
+  }
+
+  async updateCoursRegional(id_cours: number, data: { status?: string; observation?: string }): Promise<ApiResponse> {
+    return this.request(`/cours/${id_cours}/regional`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async getProgrammesByEtablissementRegionale(id_etab_regionale: string): Promise<ApiResponse> {
+    return this.request(`/programmes/etablissement/${id_etab_regionale}`);
   }
 
   async createCours(coursData: any): Promise<ApiResponse> {
@@ -163,6 +205,15 @@ class ApiService {
 
   async createCoursWithFile(formData: FormData): Promise<ApiResponse> {
     return this.request('/cours/upload', {
+      method: 'POST',
+      body: formData,
+      // Ne pas définir Content-Type pour FormData, il sera automatiquement défini
+    });
+  }
+
+  // Créer un programme avec upload de fichier PDF
+  async createProgrammeWithUpload(formData: FormData): Promise<ApiResponse> {
+    return this.request('/programme', {
       method: 'POST',
       body: formData,
       // Ne pas définir Content-Type pour FormData, il sera automatiquement défini
@@ -294,6 +345,14 @@ class ApiService {
     return this.request(`/module/enseignant/${id_enseignant}`);
   }
 
+  async getModules(): Promise<ApiResponse> {
+    return this.request('/module');
+  }
+
+  async getModulesBySpecialite(id_specialite: number): Promise<ApiResponse> {
+    return this.request(`/module/specialite/${id_specialite}`);
+  }
+
   // Offre endpoints
   async getAllOffres(): Promise<ApiResponse> {
     return this.request('/offre');
@@ -361,6 +420,17 @@ class ApiService {
     
     const queryString = params.toString();
     const endpoint = `/etablissement/${id_etab_formation}/enseignants${queryString ? `?${queryString}` : ''}`;
+    return this.request(endpoint);
+  }
+
+  async getEnseignantsByEtablissementRegional(id_etab_regionale: number, search?: string, limit?: number, offset?: number): Promise<ApiResponse> {
+    const params = new URLSearchParams();
+    if (search) params.append('search', search);
+    if (limit) params.append('limit', limit.toString());
+    if (offset) params.append('offset', offset.toString());
+    
+    const queryString = params.toString();
+    const endpoint = `/etablissement/regional/${id_etab_regionale}/enseignants${queryString ? `?${queryString}` : ''}`;
     return this.request(endpoint);
   }
 
@@ -567,6 +637,44 @@ class ApiService {
   // 6. STAGIAIRE: Get accepted memoires from colleagues
   async getAcceptedMemoiresByOffers(id_stagiaire: number) {
     return this.request(`/memoire/colleagues/${id_stagiaire}`);
+  }
+
+  // ==============================================
+  // MODULE ASSIGNMENT MANAGEMENT METHODS
+  // ==============================================
+
+  // Récupérer les modules disponibles pour un enseignant
+  async getAvailableModulesForEnseignant(id_enseignant: number): Promise<ApiResponse> {
+    return this.request(`/ens-module/enseignant/${id_enseignant}/modules-disponibles`);
+  }
+
+  // Assigner des modules à un enseignant
+  async assignModulesToEnseignant(id_enseignant: number, data: {
+    modules: number[];
+    annee_scolaire: string;
+    semestre?: string;
+  }): Promise<ApiResponse> {
+    return this.request(`/ens-module/enseignant/${id_enseignant}/assigner`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Récupérer les modules assignés à un enseignant
+  async getModulesByEnseignant(id_enseignant: number, annee_scolaire?: string): Promise<ApiResponse> {
+    const params = new URLSearchParams();
+    if (annee_scolaire) params.append('annee_scolaire', annee_scolaire);
+    
+    const queryString = params.toString();
+    const endpoint = `/ens-module/enseignant/${id_enseignant}/modules${queryString ? `?${queryString}` : ''}`;
+    return this.request(endpoint);
+  }
+
+  // Retirer un module d'un enseignant
+  async removeModuleFromEnseignant(id_enseignant: number, id_module: number, annee_scolaire: string): Promise<ApiResponse> {
+    return this.request(`/ens-module/enseignant/${id_enseignant}/module/${id_module}/${annee_scolaire}`, {
+      method: 'DELETE',
+    });
   }
 }
 

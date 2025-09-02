@@ -1,4 +1,3 @@
-// models/Stagiaire.js
 
 
 const { DataTypes } = require('sequelize');

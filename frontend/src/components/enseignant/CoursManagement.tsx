@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useAuthApi } from '@/hooks/useAuthApi';
 import { apiService, getFileUrl } from '@/services/api';
+import { 
+  formatDateToArabic, 
+  formatRelativeDateToArabic, 
+  formatApprovalDateToArabic,
+  formatCourseDateToArabic
+} from '@/utils/arabicDateFormatter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -79,11 +85,36 @@ const CoursManagement = () => {
       
       // Fetch courses
       const coursesResponse = await apiService.getCoursByEnseignant(userProfile.id_enseignant);
-      setCourses(coursesResponse.data || []);
+      setCourses(coursesResponse.data || coursesResponse || []);
       
-      // Fetch modules
+      // Fetch modules assigned to this enseignant
       const modulesResponse = await apiService.getModulesByEnseignant(userProfile.id_enseignant);
-      setModules(modulesResponse.data || []);
+      console.log('Modules response:', modulesResponse);
+      
+      let modulesData = [];
+      
+      if (modulesResponse.data && modulesResponse.data.modules_by_year) {
+        // Extract all modules from all years
+        Object.values(modulesResponse.data.modules_by_year).forEach(yearModules => {
+          if (Array.isArray(yearModules)) {
+            modulesData = [...modulesData, ...yearModules];
+          }
+        });
+      } else if (Array.isArray(modulesResponse.data)) {
+        modulesData = modulesResponse.data;
+      } else if (Array.isArray(modulesResponse)) {
+        modulesData = modulesResponse;
+      }
+      
+      console.log('Processed modules data:', modulesData);
+      
+      // Ensure modules is always an array
+      if (Array.isArray(modulesData)) {
+        setModules(modulesData);
+      } else {
+        console.warn('Modules response is not an array:', modulesData);
+        setModules([]);
+      }
       
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -92,6 +123,9 @@ const CoursManagement = () => {
         description: 'فشل في تحميل البيانات',
         variant: 'destructive'
       });
+      // Set empty arrays on error
+      setCourses([]);
+      setModules([]);
     } finally {
       setLoading(false);
     }
@@ -116,7 +150,7 @@ const CoursManagement = () => {
       formData.append('titre_ar', uploadForm.titre_ar);
       formData.append('id_module', uploadForm.id_module);
       formData.append('id_enseignant', userProfile.id_enseignant.toString());
-      formData.append('file', uploadForm.file);
+      formData.append('fichierpdf', uploadForm.file);
 
       const response = await apiService.createCoursWithFile(formData);
       
@@ -274,6 +308,11 @@ const CoursManagement = () => {
     return matchesSearch && matchesStatus;
   });
 
+  // Helper function to format course dates robustly
+  const formatCourseDateSafe = (course: Course) => {
+    return formatCourseDateToArabic(course);
+  };
+
   if (loading) {
     return (
       <div className="text-center py-12">
@@ -376,6 +415,20 @@ const CoursManagement = () => {
                 <DialogHeader>
                   <DialogTitle>رفع درس جديد</DialogTitle>
                 </DialogHeader>
+                
+                {/* Debug info */}
+                <div className="mb-4 p-2 bg-gray-100 rounded text-xs">
+                  <p>Debug: Modules count: {Array.isArray(modules) ? modules.length : 'Not an array'}</p>
+                  <p>Loading: {loading ? 'Yes' : 'No'}</p>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    onClick={() => fetchData()}
+                    className="mt-2"
+                  >
+                    Refresh Data
+                  </Button>
+                </div>
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -391,16 +444,35 @@ const CoursManagement = () => {
                       <Label htmlFor="module">المادة *</Label>
                       <Select value={uploadForm.id_module} onValueChange={(value) => setUploadForm({...uploadForm, id_module: value})}>
                         <SelectTrigger>
-                          <SelectValue placeholder="اختر المادة" />
+                          <SelectValue placeholder={loading ? "جاري التحميل..." : "اختر المادة"} />
                         </SelectTrigger>
                         <SelectContent>
-                          {modules.map(module => (
-                            <SelectItem key={module.id_module} value={module.id_module.toString()}>
-                              {module.designation_ar || module.designation_fr} ({module.code_module})
+                          {loading ? (
+                            <SelectItem value="loading" disabled>
+                              جاري تحميل المواد...
                             </SelectItem>
-                          ))}
+                          ) : Array.isArray(modules) && modules.length > 0 ? (
+                            modules.map(module => (
+                              <SelectItem key={module.id_module} value={module.id_module.toString()}>
+                                {module.designation_ar || module.designation_fr} ({module.code_module})
+                              </SelectItem>
+                            ))
+                          ) : (
+                            <SelectItem value="no-modules" disabled>
+                              لا توجد مواد متاحة
+                            </SelectItem>
+                          )}
                         </SelectContent>
                       </Select>
+                      {loading ? (
+                        <p className="text-xs text-gray-500 mt-1">
+                          جاري تحميل المواد...
+                        </p>
+                      ) : Array.isArray(modules) && modules.length === 0 && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          لا توجد مواد مخصصة لك حالياً. يرجى الاتصال بإدارة المؤسسة.
+                        </p>
+                      )}
                     </div>
                   </div>
                   
@@ -497,7 +569,7 @@ const CoursManagement = () => {
                         {course.module && (
                           <p><span className="font-medium">المادة:</span> {course.module.designation_ar || course.module.designation_fr}</p>
                         )}
-                        <p><span className="font-medium">تاريخ الرفع:</span> {new Date(course.created_at).toLocaleDateString('ar-DZ')}</p>
+                        <p><span className="font-medium">تاريخ الرفع:</span> {formatCourseDateSafe(course)}</p>
                         {course.titre_fr && course.titre_ar && (
                           <p><span className="font-medium">بالفرنسية:</span> {course.titre_fr}</p>
                         )}

@@ -17,6 +17,7 @@ interface AuthContextType {
   userProfile: any;
   validateSession: () => Promise<boolean>;
   refreshToken: () => Promise<boolean>;
+  request: (url: string, options?: any) => Promise<any>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -208,6 +209,22 @@ export const AuthApiProvider = ({ children }: { children: React.ReactNode }) => 
     }
   };
 
+  const request = async (url: string, options: any = {}) => {
+    try {
+      // Convert 'data' property to 'body' for apiService
+      if (options.data && !options.body) {
+        options.body = JSON.stringify(options.data);
+        delete options.data;
+      }
+      
+      const response = await apiService.request(url, options);
+      return response.data;
+    } catch (error) {
+      console.error('Request failed:', error);
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -217,10 +234,12 @@ export const AuthApiProvider = ({ children }: { children: React.ReactNode }) => 
       signOut,
       userProfile,
       validateSession,
-      refreshToken
+      refreshToken,
+      request
     }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
 

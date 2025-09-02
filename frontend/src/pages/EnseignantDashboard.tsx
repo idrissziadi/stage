@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthApi } from '@/hooks/useAuthApi';
 import { apiService } from '@/services/api';
+import { formatDate } from '@/utils/formatDate';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -62,6 +63,7 @@ import {
 } from 'lucide-react';
 // Component imports
 import ProgrammeView from '@/components/enseignant/ProgrammeView';
+import ProgrammeConsultation from '@/components/enseignant/ProgrammeConsultation';
 import CoursManagement from '@/components/enseignant/CoursManagement';
 import ModuleOverview from '@/components/enseignant/ModuleOverview';
 import MemoireSupervision from '@/components/enseignant/MemoireSupervision';
@@ -299,7 +301,30 @@ const EnseignantDashboard = () => {
       
       // Fetch modules
       const modulesResponse = await apiService.getModulesByEnseignant(userProfile.id_enseignant);
-      const modules = modulesResponse.data || [];
+      console.log('🔍 Modules Response:', modulesResponse);
+      console.log('🔍 Modules Response Type:', typeof modulesResponse);
+      console.log('🔍 Modules Response Keys:', Object.keys(modulesResponse || {}));
+      console.log('🔍 Full Modules Response:', JSON.stringify(modulesResponse, null, 2));
+      
+      // Ensure modules is always an array
+      let modules = [];
+      if (modulesResponse && modulesResponse.data) {
+        if (Array.isArray(modulesResponse.data)) {
+          modules = modulesResponse.data;
+        } else if (typeof modulesResponse.data === 'object') {
+          // If data is an object, try to extract modules from it
+          console.log('🔍 modulesResponse.data is object, checking for modules property');
+          if (modulesResponse.data.modules && Array.isArray(modulesResponse.data.modules)) {
+            modules = modulesResponse.data.modules;
+          } else if (modulesResponse.data.data && Array.isArray(modulesResponse.data.data)) {
+            modules = modulesResponse.data.data;
+          }
+        }
+      }
+      
+      console.log('🔍 Final modules array:', modules);
+      console.log('🔍 Modules Length:', modules.length);
+      console.log('🔍 Is Array:', Array.isArray(modules));
       
       // Fetch memoires (if available)
       let memoires = [];
@@ -319,6 +344,8 @@ const EnseignantDashboard = () => {
         modulesEnseignes: modules.length
       };
       
+      console.log('🔍 Calculated Stats:', newStats);
+      console.log('🔍 Modules count for stats:', modules.length);
       setStats(newStats);
       
       // Generate recent activities from courses
@@ -458,7 +485,7 @@ const EnseignantDashboard = () => {
 
       <div className="container mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full rtl">
-          <TabsList className="grid w-full grid-cols-5 mb-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <TabsList className="grid w-full grid-cols-6 mb-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
             <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 font-arabic">
               <BarChart3 className="w-4 h-4" />
               نظرة عامة
@@ -474,6 +501,10 @@ const EnseignantDashboard = () => {
             <TabsTrigger value="modules" className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 font-arabic">
               <BookOpen className="w-4 h-4" />
               المواد
+            </TabsTrigger>
+            <TabsTrigger value="programmes" className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 font-arabic">
+              <FileText className="w-4 h-4" />
+              البرامج
             </TabsTrigger>
             <TabsTrigger value="memoires" className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 font-arabic">
               <FileText className="w-4 h-4" />
@@ -589,11 +620,7 @@ const EnseignantDashboard = () => {
                         <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ الميلاد</p>
                         <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
                           {userProfile?.date_naissance 
-                            ? new Date(userProfile.date_naissance).toLocaleDateString('ar-DZ', {
-                                year: 'numeric',
-                                month: 'long', 
-                                day: 'numeric'
-                              })
+                            ? formatDate(userProfile.date_naissance)
                             : 'غير محدد'
                           }
                         </p>
@@ -643,13 +670,7 @@ const EnseignantDashboard = () => {
                         <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ إنشاء الحساب</p>
                         <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
                           {userProfile?.created_at 
-                            ? new Date(userProfile.created_at).toLocaleDateString('ar-DZ', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })
+                            ? formatDate(userProfile.created_at)
                             : 'غير محدد'
                           }
                         </p>
@@ -762,13 +783,7 @@ const EnseignantDashboard = () => {
                           <p className="font-medium text-gray-900 dark:text-white">{activity.title}</p>
                           <p className="text-sm text-gray-600 dark:text-gray-400">{activity.description}</p>
                           <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                            {new Date(activity.date).toLocaleDateString('ar-DZ', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
+                                                        {formatDate(activity.date)}
                           </p>
                         </div>
                         {activity.status && (
@@ -790,8 +805,6 @@ const EnseignantDashboard = () => {
                 )}
               </CardContent>
             </Card>
-
-
           </TabsContent>
 
           <TabsContent value="cours">
@@ -804,6 +817,10 @@ const EnseignantDashboard = () => {
 
           <TabsContent value="modules">
             <ModuleOverview />
+          </TabsContent>
+
+          <TabsContent value="programmes">
+            <ProgrammeView />
           </TabsContent>
 
           <TabsContent value="memoires">
@@ -858,11 +875,7 @@ const EnseignantDashboard = () => {
                         <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ الميلاد</label>
                         <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
                           {userProfile?.date_naissance 
-                            ? new Date(userProfile.date_naissance).toLocaleDateString('ar-DZ', {
-                                year: 'numeric',
-                                month: 'long', 
-                                day: 'numeric'
-                              })
+                            ? formatDate(userProfile.date_naissance)
                             : 'غير محدد'
                           }
                           {userProfile?.date_naissance && (
@@ -948,32 +961,20 @@ const EnseignantDashboard = () => {
                         <div>
                           <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ إنشاء الحساب</label>
                           <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
-                            {userProfile?.created_at 
-                              ? new Date(userProfile.created_at).toLocaleDateString('ar-DZ', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric',
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })
-                              : 'غير محدد'
-                            }
+                                                      {userProfile?.created_at 
+                            ? formatDate(userProfile.created_at)
+                            : 'غير محدد'
+                          }
                           </p>
                         </div>
                         
                         <div>
                           <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">آخر تحديث</label>
                           <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
-                            {userProfile?.updated_at 
-                              ? new Date(userProfile.updated_at).toLocaleDateString('ar-DZ', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric',
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })
-                              : 'غير محدد'
-                            }
+                                                      {userProfile?.updated_at 
+                            ? formatDate(userProfile.updated_at)
+                            : 'غير محدد'
+                          }
                           </p>
                         </div>
                       </div>

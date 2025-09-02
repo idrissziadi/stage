@@ -1,76 +1,61 @@
 const express = require('express');
 const router = express.Router();
-
 const ProgrammeController = require('../controllers/ProgrammeController');
-const { isAuth, isEnseignant } = require('../middlewares/auth');
+const { isAuth, isRegional, isNational, isEnseignant } = require('../middlewares/auth');
 
-/**
- * @swagger
- * tags:
- *   name: Programmes
- *   description: Gestion des programmes
- */
+// Routes publiques (avec authentification de base)
 
-/**
- * @swagger
- * /programme:
- *   get:
- *     summary: Récupérer tous les programmes
- *     tags: [Programmes]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Liste des programmes
- *       401:
- *         description: Non authentifié
- */
+// Récupérer tous les programmes (pour admin/supervision)
 router.get('/', isAuth, ProgrammeController.getAllProgrammes);
 
-/**
- * @swagger
- * /programme/enseignant/{id_enseignant}:
- *   get:
- *     summary: Récupérer les programmes pour les modules enseignés par un enseignant
- *     tags: [Programmes]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id_enseignant
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Programmes de l'enseignant
- *       401:
- *         description: Non authentifié
- */
+// Récupérer programmes par statut
+router.get('/status/:status', isAuth, ProgrammeController.getProgrammesByStatus);
+
+// Récupérer programmes d'un établissement régional
+router.get('/etablissement/:id_etab_regionale', isAuth, ProgrammeController.getProgrammesByEtablissementRegional);
+
+// Récupérer programmes pour un enseignant (validés uniquement)
 router.get('/enseignant/:id_enseignant', isAuth, isEnseignant, ProgrammeController.getProgrammesByEnseignant);
 
-/**
- * @swagger
- * /programme/{id_programme}:
- *   get:
- *     summary: Récupérer un programme par ID
- *     tags: [Programmes]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id_programme
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Programme trouvé
- *       401:
- *         description: Non authentifié
- *       404:
- *         description: Programme introuvable
- */
-router.get('/:id_programme', isAuth, ProgrammeController.getProgrammeById);
+// Servir les fichiers PDF
+router.get('/pdf/:filename', isAuth, ProgrammeController.servePDF);
+
+// Statistiques des programmes
+router.get('/stats', isAuth, ProgrammeController.getProgrammeStats);
+
+// Compter les institutions qui ont soumis des programmes
+router.get('/institutions-count', isAuth, isNational, ProgrammeController.getInstitutionsWithProgrammesCount);
+
+// Activités récentes
+router.get('/recent-activities', isAuth, ProgrammeController.getRecentActivities);
+
+// Routes pour établissement régional
+
+// Créer un nouveau programme (avec upload)
+router.post('/', 
+  isAuth, 
+  isRegional, 
+  ProgrammeController.uploadPDF,
+  ProgrammeController.createProgramme
+);
+
+// Mettre à jour un programme (avec upload optionnel)
+router.put('/:id', 
+  isAuth, 
+  isRegional, 
+  ProgrammeController.uploadPDF,
+  ProgrammeController.updateProgramme
+);
+
+// Supprimer un programme
+router.delete('/:id', isAuth, isRegional, ProgrammeController.deleteProgramme);
+
+// Routes pour établissement national
+
+// Valider un programme
+router.post('/:id/validate', isAuth, isNational, ProgrammeController.validateProgramme);
+
+// Refuser un programme
+router.post('/:id/reject', isAuth, isNational, ProgrammeController.rejectProgramme);
 
 module.exports = router;

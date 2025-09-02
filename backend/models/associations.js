@@ -132,7 +132,7 @@ function setupAssociations() {
   // =========================
   // Programme relations
   // =========================
-  Programme.belongsTo(EtablissementRegionale, { foreignKey: 'id_etab_regionale', as: 'etablissementregionale', ...cascadeOptions });
+  Programme.belongsTo(EtablissementRegionale, { foreignKey: 'id_etab_regionale', as: 'etablissementRegionale', ...cascadeOptions });
   EtablissementRegionale.hasMany(Programme, { foreignKey: 'id_etab_regionale', as: 'programmes', ...cascadeOptions });
 
   Programme.belongsTo(Module, { foreignKey: 'id_module', as: 'module', ...cascadeOptions });

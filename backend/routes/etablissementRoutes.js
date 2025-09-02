@@ -65,6 +65,42 @@ router.get('/:id_etab_formation/enseignants', isAuth, EtablissementController.ge
 
 /**
  * @swagger
+ * /etablissement-regional/{id_etab_regionale}/enseignants:
+ *   get:
+ *     summary: Récupérer tous les enseignants d'un établissement régional
+ *     tags: [Etablissement]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id_etab_regionale
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 50
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *     responses:
+ *       200:
+ *         description: Liste des enseignants
+ *       403:
+ *         description: Accès refusé
+ */
+router.get('/regional/:id_etab_regionale/enseignants', isAuth, EtablissementController.getEnseignantsByEtablissementRegional);
+
+/**
+ * @swagger
  * /etablissement/{id_etab_formation}/stagiaires:
  *   get:
  *     summary: Récupérer tous les stagiaires d'un établissement
@@ -154,7 +190,7 @@ router.post('/enseignants', isAuth, EtablissementController.createEnseignant);
  * @swagger
  * /etablissement/stagiaires:
  *   post:
- *     summary: Créer un nouveau stagiaire
+ *     summary: Créer un nouveau stagiaire pour l'établissement
  *     tags: [Etablissement]
  *     security:
  *       - bearerAuth: []
@@ -164,31 +200,40 @@ router.post('/enseignants', isAuth, EtablissementController.createEnseignant);
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - username
- *               - password
- *               - nom_fr
- *               - prenom_fr
+ *             required: [nom_fr, prenom_fr]
  *             properties:
- *               username:
- *                 type: string
- *               password:
- *                 type: string
  *               nom_fr:
  *                 type: string
+ *                 description: Nom du stagiaire en français
  *               prenom_fr:
  *                 type: string
+ *                 description: Prénom du stagiaire en français
  *               nom_ar:
  *                 type: string
+ *                 description: Nom du stagiaire en arabe
  *               prenom_ar:
  *                 type: string
+ *                 description: Prénom du stagiaire en arabe
  *               email:
  *                 type: string
+ *                 format: email
+ *                 description: Email du stagiaire
  *               telephone:
  *                 type: string
+ *                 description: Téléphone du stagiaire
  *               date_naissance:
  *                 type: string
  *                 format: date
+ *                 description: Date de naissance du stagiaire
+ *               username:
+ *                 type: string
+ *                 description: Nom d'utilisateur pour créer un compte (optionnel)
+ *               password:
+ *                 type: string
+ *                 description: Mot de passe pour créer un compte (optionnel)
+ *               id_offre:
+ *                 type: integer
+ *                 description: ID de l'offre pour inscrire automatiquement le stagiaire (optionnel)
  *     responses:
  *       201:
  *         description: Stagiaire créé avec succès
@@ -196,8 +241,88 @@ router.post('/enseignants', isAuth, EtablissementController.createEnseignant);
  *         description: Données invalides
  *       403:
  *         description: Accès refusé
+ *       409:
+ *         description: Conflit (email ou username déjà utilisé)
  */
 router.post('/stagiaires', isAuth, EtablissementController.createStagiaire);
+
+/**
+ * @swagger
+ * /etablissement/stagiaires/{id_stagiaire}/inscrire:
+ *   post:
+ *     summary: Inscrire un stagiaire existant à une offre de formation
+ *     tags: [Etablissement]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id_stagiaire
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID du stagiaire à inscrire
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [id_offre]
+ *             properties:
+ *               id_offre:
+ *                 type: integer
+ *                 description: ID de l'offre de formation
+ *     responses:
+ *       201:
+ *         description: Stagiaire inscrit avec succès
+ *       400:
+ *         description: Données invalides
+ *       403:
+ *         description: Accès refusé
+ *       404:
+ *         description: Stagiaire ou offre introuvable
+ *       409:
+ *         description: Stagiaire déjà inscrit à cette offre
+ */
+router.post('/stagiaires/:id_stagiaire/inscrire', isAuth, EtablissementController.inscrireStagiaire);
+
+/**
+ * @swagger
+ * /etablissement/stagiaires/inscription-masse:
+ *   post:
+ *     summary: Inscrire plusieurs stagiaires à une offre de formation en masse
+ *     tags: [Etablissement]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [id_offre, stagiaire_ids]
+ *             properties:
+ *               id_offre:
+ *                 type: integer
+ *                 description: ID de l'offre de formation
+ *               stagiaire_ids:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 description: Liste des IDs des stagiaires à inscrire
+ *     responses:
+ *       201:
+ *         description: Stagiaires inscrits avec succès
+ *       400:
+ *         description: Données invalides
+ *       403:
+ *         description: Accès refusé
+ *       404:
+ *         description: Offre introuvable
+ *       409:
+ *         description: Tous les stagiaires sont déjà inscrits
+ */
+router.post('/stagiaires/inscription-masse', isAuth, EtablissementController.inscrireStagiairesEnMasse);
 
 /**
  * @swagger

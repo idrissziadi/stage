@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useAuthApi } from '@/hooks/useAuthApi';
-import { apiService } from '@/services/api';
+import { apiService, getFileUrl } from '@/services/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/components/ui/use-toast';
 import { 
   FileText, 
@@ -21,23 +22,33 @@ import {
   Filter,
   Users,
   Calendar,
-  Star
+  BookOpen,
+  GraduationCap,
+  ExternalLink,
+  Loader2,
+  AlertTriangle
 } from 'lucide-react';
 
+import { formatDate } from '@/utils/formatDate';
+
 interface Memoire {
-  id_memoire: string;
-  titre: string;
-  description: string;
-  fichier_memoire?: string;
+  id_memoire: number;
+  titre_fr?: string;
+  titre_ar?: string;
+  fichierpdf?: string;
   status: string;
-  created_at: string;
+  observation?: string;
+  createdAt: string;
+  updatedAt: string;
   stagiaire: {
     nom_fr: string;
     prenom_fr: string;
-    email?: string;
   };
-  observations?: string;
-  note?: number;
+  module?: {
+    designation_fr: string;
+    designation_ar?: string;
+    code_module: string;
+  };
 }
 
 const MemoireSupervision = () => {
@@ -49,10 +60,11 @@ const MemoireSupervision = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedMemoire, setSelectedMemoire] = useState<Memoire | null>(null);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const [isMemoireDialogOpen, setIsMemoireDialogOpen] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [reviewForm, setReviewForm] = useState({
     status: '',
-    observations: '',
-    note: ''
+    observations: ''
   });
 
   useEffect(() => {
@@ -65,8 +77,14 @@ const MemoireSupervision = () => {
     try {
       setLoading(true);
       
-      const response = await apiService.getMemoiresByEnseignant(userProfile.id_enseignant);
-      setMemoires(response.data || []);
+      // Use the API that returns all memoires for the enseignant
+      const response = await apiService.getMemoiresByEnseignant(userProfile.id_enseignant.toString());
+      
+      if (response.error) {
+        throw new Error(response.error.message || 'فشل في تحميل المذكرات');
+      }
+
+      setMemoires((response.data as Memoire[]) || []);
       
     } catch (error) {
       console.error('Error fetching memoires:', error);
@@ -90,31 +108,37 @@ const MemoireSupervision = () => {
       return;
     }
 
+    // Validate status
+    if (!['مقبول', 'مرفوض'].includes(reviewForm.status)) {
+      toast({
+        title: 'خطأ',
+        description: 'الحالة يجب أن تكون "مقبول" أو "مرفوض"',
+        variant: 'destructive'
+      });
+      return;
+    }
+
     try {
-      const response = await apiService.updateMemoireStatus(
-        selectedMemoire.id_memoire, 
-        reviewForm.status
+      // Use the correct API for enseignant validation
+      const response = await apiService.validateMemoireByEnseignant(
+        selectedMemoire.id_memoire,
+        {
+          status: reviewForm.status as 'مقبول' | 'مرفوض',
+          observation: reviewForm.observations.trim() || undefined
+        }
       );
       
       if (response.error) {
-        throw new Error(response.error);
-      }
-
-      // Update memoire with observations and note if provided
-      if (reviewForm.observations || reviewForm.note) {
-        await apiService.updateMemoire(selectedMemoire.id_memoire, {
-          observations: reviewForm.observations,
-          note: reviewForm.note ? parseFloat(reviewForm.note) : undefined
-        });
+        throw new Error(response.error.message || 'فشل في تقييم المذكرة');
       }
 
       toast({
         title: 'نجح',
-        description: 'تم تحديث حالة المذكرة بنجاح',
+        description: `تم ${reviewForm.status === 'مقبول' ? 'قبول' : 'رفض'} المذكرة بنجاح`,
       });
 
       // Reset form and close dialog
-      setReviewForm({ status: '', observations: '', note: '' });
+      setReviewForm({ status: '', observations: '' });
       setIsReviewOpen(false);
       setSelectedMemoire(null);
       
@@ -125,7 +149,7 @@ const MemoireSupervision = () => {
       console.error('Review error:', error);
       toast({
         title: 'خطأ',
-        description: 'فشل في تحديث حالة المذكرة',
+        description: error instanceof Error ? error.message : 'فشل في تقييم المذكرة',
         variant: 'destructive'
       });
     }
@@ -135,12 +159,10 @@ const MemoireSupervision = () => {
     switch (status) {
       case 'مقبول':
         return 'bg-green-100 text-green-800 hover:bg-green-200';
-      case 'في_الانتظار':
+      case 'مقدم':
         return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
       case 'مرفوض':
         return 'bg-red-100 text-red-800 hover:bg-red-200';
-      case 'قيد_المراجعة':
-        return 'bg-blue-100 text-blue-800 hover:bg-blue-200';
       default:
         return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
     }
@@ -150,12 +172,10 @@ const MemoireSupervision = () => {
     switch (status) {
       case 'مقبول':
         return <CheckCircle className="w-4 h-4" />;
-      case 'في_الانتظار':
+      case 'مقدم':
         return <Clock className="w-4 h-4" />;
       case 'مرفوض':
         return <XCircle className="w-4 h-4" />;
-      case 'قيد_المراجعة':
-        return <Eye className="w-4 h-4" />;
       default:
         return <Clock className="w-4 h-4" />;
     }
@@ -164,15 +184,15 @@ const MemoireSupervision = () => {
   const getStatusText = (status: string) => {
     const statusMap: { [key: string]: string } = {
       'مقبول': 'مقبول',
-      'في_الانتظار': 'في الانتظار',
-      'مرفوض': 'مرفوض',
-      'قيد_المراجعة': 'قيد المراجعة'
+      'مقدم': 'مقدم',
+      'مرفوض': 'مرفوض'
     };
     return statusMap[status] || status;
   };
 
   const filteredMemoires = memoires.filter(memoire => {
-    const matchesSearch = memoire.titre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const titre = memoire.titre_ar || memoire.titre_fr || '';
+    const matchesSearch = titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          memoire.stagiaire?.nom_fr?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          memoire.stagiaire?.prenom_fr?.toLowerCase().includes(searchTerm.toLowerCase());
     
@@ -185,8 +205,7 @@ const MemoireSupervision = () => {
     return {
       total: memoires.length,
       approved: memoires.filter(m => m.status === 'مقبول').length,
-      pending: memoires.filter(m => m.status === 'في_الانتظار').length,
-      underReview: memoires.filter(m => m.status === 'قيد_المراجعة').length,
+      pending: memoires.filter(m => m.status === 'مقدم').length,
       rejected: memoires.filter(m => m.status === 'مرفوض').length
     };
   };
@@ -197,10 +216,105 @@ const MemoireSupervision = () => {
     setSelectedMemoire(memoire);
     setReviewForm({
       status: memoire.status,
-      observations: memoire.observations || '',
-      note: memoire.note?.toString() || ''
+      observations: memoire.observation || ''
     });
     setIsReviewOpen(true);
+  };
+
+  const openMemoireDialog = (memoire: Memoire) => {
+    setSelectedMemoire(memoire);
+    setIsMemoireDialogOpen(true);
+    setPdfUrl(null);
+  };
+
+  const generatePdfUrl = (fichierpdf: string) => {
+    return getFileUrl(fichierpdf, 'memoires');
+  };
+
+  const handleViewPDF = () => {
+    if (!selectedMemoire?.fichierpdf) {
+      toast({
+        title: "خطأ",
+        description: "ملف PDF غير متوفر لهذه المذكرة",
+        variant: "destructive"
+      });
+      return;
+    }
+    const url = generatePdfUrl(selectedMemoire.fichierpdf);
+    setPdfUrl(url);
+  };
+
+  const handleDownloadPDF = async () => {
+    if (!selectedMemoire?.fichierpdf) {
+      toast({
+        title: "خطأ",
+        description: "ملف PDF غير متوفر لهذه المذكرة",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const url = generatePdfUrl(selectedMemoire.fichierpdf);
+      const token = localStorage.getItem('auth_token');
+      
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `${selectedMemoire.titre_ar || selectedMemoire.titre_fr || 'memoire'}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+
+      toast({
+        title: "نجح",
+        description: "تم تحميل المذكرة بنجاح",
+      });
+    } catch (error) {
+      console.error('Download error:', error);
+      toast({
+        title: "خطأ",
+        description: "فشل في تحميل المذكرة",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleOpenInNewTab = () => {
+    if (!selectedMemoire?.fichierpdf) {
+      toast({
+        title: "خطأ",
+        description: "ملف PDF غير متوفر لهذه المذكرة",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    const url = generatePdfUrl(selectedMemoire.fichierpdf);
+    const token = localStorage.getItem('auth_token');
+    
+    if (url && token) {
+      const urlWithAuth = `${url}?token=${encodeURIComponent(token)}`;
+      window.open(urlWithAuth, '_blank', 'noopener,noreferrer');
+    } else {
+      toast({
+        title: "خطأ",
+        description: "تعذر فتح الملف - غير مصرح",
+        variant: "destructive"
+      });
+    }
   };
 
   if (loading) {
@@ -215,7 +329,7 @@ const MemoireSupervision = () => {
   return (
     <div className="space-y-6">
       {/* Statistics Cards */}
-      <div className="grid gap-4 md:grid-cols-5">
+      <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -256,18 +370,6 @@ const MemoireSupervision = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">قيد المراجعة</p>
-                <p className="text-2xl font-bold text-blue-700">{stats.underReview}</p>
-              </div>
-              <Eye className="w-8 h-8 text-blue-500" />
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
                 <p className="text-sm font-medium text-gray-600">مرفوض</p>
                 <p className="text-2xl font-bold text-red-700">{stats.rejected}</p>
               </div>
@@ -298,8 +400,7 @@ const MemoireSupervision = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">جميع الحالات</SelectItem>
-                <SelectItem value="في_الانتظار">في الانتظار</SelectItem>
-                <SelectItem value="قيد_المراجعة">قيد المراجعة</SelectItem>
+                <SelectItem value="مقدم">مقدم</SelectItem>
                 <SelectItem value="مقبول">مقبول</SelectItem>
                 <SelectItem value="مرفوض">مرفوض</SelectItem>
               </SelectContent>
@@ -333,18 +434,12 @@ const MemoireSupervision = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="font-semibold text-gray-900">
-                          {memoire.titre}
+                          {memoire.titre_ar || memoire.titre_fr || 'بدون عنوان'}
                         </h3>
                         <Badge className={getStatusColor(memoire.status)}>
                           {getStatusIcon(memoire.status)}
                           <span className="mr-1">{getStatusText(memoire.status)}</span>
                         </Badge>
-                        {memoire.note && (
-                          <Badge variant="outline" className="flex items-center gap-1">
-                            <Star className="w-3 h-3" />
-                            {memoire.note}/20
-                          </Badge>
-                        )}
                       </div>
                       
                       <div className="space-y-1 text-sm text-gray-600 mb-3">
@@ -354,35 +449,38 @@ const MemoireSupervision = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
-                          <span><span className="font-medium">تاريخ التقديم:</span> {new Date(memoire.created_at).toLocaleDateString('ar-DZ')}</span>
+                          <span><span className="font-medium">تاريخ التقديم:</span> {formatDate(memoire.createdAt)}</span>
                         </div>
-                        {memoire.stagiaire.email && (
-                          <p><span className="font-medium">البريد الإلكتروني:</span> {memoire.stagiaire.email}</p>
-                        )}
                       </div>
                       
-                      {memoire.description && (
-                        <div className="bg-gray-50 p-3 rounded-md mb-3">
-                          <p className="text-sm font-medium text-gray-700 mb-1">الوصف:</p>
-                          <p className="text-sm text-gray-600">{memoire.description}</p>
-                        </div>
-                      )}
-                      
-                      {memoire.observations && (
+                      {memoire.observation && (
                         <div className="bg-blue-50 border border-blue-200 p-3 rounded-md">
                           <p className="text-sm font-medium text-blue-800 mb-1">ملاحظات المشرف:</p>
-                          <p className="text-sm text-blue-700">{memoire.observations}</p>
+                          <p className="text-sm text-blue-700">{memoire.observation}</p>
                         </div>
                       )}
                     </div>
                     
                     <div className="flex items-center gap-2 ml-4">
-                      {memoire.fichier_memoire && (
+                      {memoire.fichierpdf && (
                         <>
-                          <Button size="sm" variant="outline" title="عرض المذكرة">
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            onClick={() => openMemoireDialog(memoire)}
+                            title="عرض المذكرة"
+                          >
                             <Eye className="w-4 h-4" />
                           </Button>
-                          <Button size="sm" variant="outline" title="تحميل المذكرة">
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            onClick={() => {
+                              setSelectedMemoire(memoire);
+                              handleDownloadPDF();
+                            }}
+                            title="تحميل المذكرة"
+                          >
                             <Download className="w-4 h-4" />
                           </Button>
                         </>
@@ -403,6 +501,148 @@ const MemoireSupervision = () => {
         </CardContent>
       </Card>
 
+      {/* Memoire Details Dialog */}
+      <Dialog open={isMemoireDialogOpen} onOpenChange={setIsMemoireDialogOpen}>
+        <DialogContent className="max-w-2xl" dir="rtl">
+          <DialogHeader>
+            <DialogTitle className="font-arabic text-right flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              عرض مستند المذكرة
+            </DialogTitle>
+            <DialogDescription>
+              <span className="text-right font-arabic">معلومات المذكرة</span>
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedMemoire && (
+            <div className="space-y-3 text-right font-arabic mb-4">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-3">
+                  {selectedMemoire.titre_ar || selectedMemoire.titre_fr || 'بدون عنوان'}
+                </h3>
+                
+                {selectedMemoire.titre_fr && selectedMemoire.titre_ar && selectedMemoire.titre_fr !== selectedMemoire.titre_ar && (
+                  <p className="text-sm text-gray-600 mb-3 italic">
+                    {selectedMemoire.titre_fr}
+                  </p>
+                )}
+
+                <div className="grid gap-2 text-sm">
+                  {selectedMemoire.module && (
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-green-600" />
+                      <span className="font-medium">المادة:</span> 
+                      {selectedMemoire.module.designation_ar || selectedMemoire.module.designation_fr} ({selectedMemoire.module.code_module})
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4 text-orange-600" />
+                    <span className="font-medium">المتدرب:</span> 
+                    {selectedMemoire.stagiaire.prenom_fr} {selectedMemoire.stagiaire.nom_fr}
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <span className="font-medium">تاريخ التقديم:</span> 
+                    {formatDate(selectedMemoire.createdAt)}
+                  </div>
+                </div>
+
+                {selectedMemoire.observation && (
+                  <div className="mt-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                    <p className="text-sm text-blue-800">
+                      <span className="font-medium">ملاحظات المشرف:</span> {selectedMemoire.observation}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* PDF Actions */}
+              {selectedMemoire.fichierpdf ? (
+                <>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    <Button
+                      onClick={handleViewPDF}
+                      className="flex items-center gap-2 font-arabic"
+                      variant="default"
+                    >
+                      <Eye className="h-4 w-4" />
+                      عرض الملف
+                    </Button>
+                    
+                    <Button
+                      onClick={handleDownloadPDF}
+                      className="flex items-center gap-2 font-arabic"
+                      variant="outline"
+                    >
+                      <Download className="h-4 w-4" />
+                      تحميل PDF
+                    </Button>
+                    
+                    <Button
+                      onClick={handleOpenInNewTab}
+                      className="flex items-center gap-2 font-arabic"
+                      variant="outline"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      فتح في علامة تبويب جديدة
+                    </Button>
+                  </div>
+
+                  {/* Aperçu PDF intégré */}
+                  {pdfUrl && (
+                    <div className="border rounded-lg overflow-hidden">
+                      <div className="bg-gray-50 p-3 border-b">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-arabic">معاينة المستند</span>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => setPdfUrl(null)}
+                              className="font-arabic"
+                            >
+                              إخفاء المعاينة
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="h-96 bg-gray-100 flex items-center justify-center">
+                        <iframe
+                          src={`${pdfUrl}?token=${encodeURIComponent(localStorage.getItem('auth_token') || '')}#toolbar=1&navpanes=1&scrollbar=1`}
+                          className="w-full h-full border-0"
+                          title={`PDF - ${selectedMemoire.titre_ar || selectedMemoire.titre_fr || 'memoire'}`}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Alert>
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertDescription className="font-arabic">
+                    لا يوجد ملف PDF متوفر لهذه المذكرة
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {/* Actions de fermeture */}
+              <div className="flex justify-start pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsMemoireDialogOpen(false)}
+                  className="font-arabic"
+                >
+                  إغلاق
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Review Dialog */}
       <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
         <DialogContent className="max-w-2xl">
@@ -412,7 +652,7 @@ const MemoireSupervision = () => {
           {selectedMemoire && (
             <div className="space-y-4">
               <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">{selectedMemoire.titre}</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">{selectedMemoire.titre_ar || selectedMemoire.titre_fr || 'بدون عنوان'}</h3>
                 <p className="text-sm text-gray-600">
                   الطالب: {selectedMemoire.stagiaire.prenom_fr} {selectedMemoire.stagiaire.nom_fr}
                 </p>
@@ -427,27 +667,10 @@ const MemoireSupervision = () => {
                     <SelectValue placeholder="اختر الحالة" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="في_الانتظار">في الانتظار</SelectItem>
-                    <SelectItem value="قيد_المراجعة">قيد المراجعة</SelectItem>
                     <SelectItem value="مقبول">مقبول</SelectItem>
                     <SelectItem value="مرفوض">مرفوض</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  النقطة (من 20)
-                </label>
-                <Input
-                  type="number"
-                  min="0"
-                  max="20"
-                  step="0.5"
-                  value={reviewForm.note}
-                  onChange={(e) => setReviewForm({...reviewForm, note: e.target.value})}
-                  placeholder="أدخل النقطة"
-                />
               </div>
               
               <div>

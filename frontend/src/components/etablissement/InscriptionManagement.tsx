@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuthApi } from '@/hooks/useAuthApi';
 import { apiService } from '@/services/api';
-import { useToast } from '@/hooks/use-toast';
+import { formatDate } from '@/utils/formatDate';
+import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -479,7 +480,7 @@ const InscriptionManagement = () => {
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-gray-500" />
                             <span className="text-sm">
-                              {new Date(inscription.date_inscription).toLocaleDateString('ar-DZ')}
+                              {formatDate(inscription.date_inscription)}
                             </span>
                           </div>
                         </TableCell>
@@ -721,7 +722,7 @@ const InscriptionManagement = () => {
                   <div>
                     <label className="text-sm font-medium text-gray-600 font-arabic">تاريخ التسجيل</label>
                     <p className="font-medium">
-                      {new Date(selectedInscription.date_inscription).toLocaleDateString('ar-DZ')}
+                      {formatDate(selectedInscription.date_inscription)}
                     </p>
                   </div>
                   <div>
@@ -735,7 +736,7 @@ const InscriptionManagement = () => {
                     <div>
                       <label className="text-sm font-medium text-gray-600 font-arabic">تاريخ القرار</label>
                       <p className="font-medium">
-                        {new Date(selectedInscription.date_decision).toLocaleDateString('ar-DZ')}
+                        {formatDate(selectedInscription.date_decision)}
                       </p>
                     </div>
                   )}

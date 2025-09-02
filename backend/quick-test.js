@@ -1,51 +1,37 @@
-const { sequelize } = require('./config/database');
-const setupAssociations = require('./models/associations');
+const axios = require('axios');
 
-// Import all models
-require('./models/Compte');
-require('./models/Enseignant');
-require('./models/Stagiaire');
-require('./models/EtablissementFormation');
-require('./models/EtablissementRegionale');
-require('./models/EtablissementNationale');
-require('./models/Branche');
-require('./models/Specialite');
-require('./models/Module');
-require('./models/Cours');
-require('./models/Memoire');
-require('./models/Programme');
-require('./models/Offre');
-require('./models/Inscription');
-require('./models/SpecialiteEtab');
-require('./models/Ens_Module');
-require('./models/Grade');
-require('./models/Diplome');
-require('./models/TokenBlacklist');
+const BASE_URL = 'http://localhost:3000';
 
-// Setup associations
-setupAssociations();
+async function quickTest() {
+  console.log('🧪 Test rapide des APIs...\n');
 
-async function testConnection() {
   try {
-    console.log('🔌 Testing database connection...');
-    await sequelize.authenticate();
-    console.log('✅ Database connected successfully!');
+    // Test 1: Vérifier que le serveur fonctionne
+    console.log('1. Test de connexion au serveur');
+    const healthResponse = await axios.get(`${BASE_URL}/health`);
+    console.log('✅ Serveur OK:', healthResponse.data.message);
+    console.log('');
 
-    console.log('🔧 Synchronizing models...');
-    await sequelize.sync({ alter: true });
-    console.log('✅ All models synchronized successfully!');
+    // Test 2: Récupérer les statistiques
+    console.log('2. Test des statistiques des programmes');
+    const statsResponse = await axios.get(`${BASE_URL}/programme/stats`);
+    console.log('✅ Statistiques récupérées:', statsResponse.data);
+    console.log('');
 
-    console.log('🎉 Database setup complete!');
-    
+    // Test 3: Récupérer les activités récentes
+    console.log('3. Test des activités récentes');
+    const activitiesResponse = await axios.get(`${BASE_URL}/programme/recent-activities`);
+    console.log('✅ Activités récentes récupérées:', activitiesResponse.data.length, 'activités');
+    console.log('');
+
+    console.log('🎉 Tests réussis ! Le backend fonctionne correctement.');
+
   } catch (error) {
-    console.error('❌ Error:', error.message);
-    if (error.parent) {
-      console.error('Database error:', error.parent.message);
+    console.error('❌ Erreur lors du test:', error.message);
+    if (error.response) {
+      console.error('Détails:', error.response.data);
     }
-  } finally {
-    await sequelize.close();
-    console.log('🔒 Database connection closed.');
   }
 }
 
-testConnection();
+quickTest().catch(console.error);

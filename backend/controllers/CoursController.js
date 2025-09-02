@@ -2,32 +2,135 @@ const Cours = require('../models/Cours');
 const Module = require('../models/Module');
 const Enseignant = require('../models/Enseignant');
 const { Op } = require('sequelize');
+const path = require('path');
+const fs = require('fs');
 
 const CoursController = {
+  // Get cours statistics
+  async getCoursStats(req, res) {
+    try {
+      const total = await Cours.count();
+      const valides = await Cours.count({ where: { status: 'مقبول' } });
+      const en_attente = await Cours.count({ where: { status: 'في الانتظار' } });
+      const refuses = await Cours.count({ where: { status: 'مرفوض' } });
+
+      return res.json({
+        total,
+        valides,
+        en_attente,
+        refuses
+      });
+    } catch (error) {
+      console.error('Error getting cours stats:', error);
+      return res.status(500).json({ 
+        message: 'Erreur serveur lors de la récupération des statistiques des cours', 
+        error: error.message 
+      });
+    }
+  },
   // Récupérer tous les cours (pour les stagiaires)
   async getAllCours(req, res) {
     try {
-      const { data, error } = await Cours.findAll({
+      const cours = await Cours.findAll({
         include: [
           {
             model: Module,
             as: 'module',
-            attributes: ['designation_fr', 'designation_ar']
+            attributes: ['id_module', 'code_module', 'designation_fr', 'designation_ar']
           },
           {
             model: Enseignant,
             as: 'enseignant',
-            attributes: ['nom_fr', 'prenom_fr']
+            attributes: ['id_enseignant', 'nom_fr', 'prenom_fr', 'nom_ar', 'prenom_ar']
           }
-        ],
-        where: {
-          status: 'مقبول'
-        }
+        ]
+        // Supprimé le filtre de statut pour récupérer tous les cours
       });
 
-      if (error) throw error;
-      return res.json(data || []);
+      return res.json(cours || []);
     } catch (error) {
+      return res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
+  },
+
+  // Récupérer tous les cours selon les modules disponibles (pour établissement régional)
+  async getAllCoursByModules(req, res) {
+    try {
+      const { status = 'all', search = '', limit = 1000, offset = 0 } = req.query;
+
+      // Build where clause
+      let whereClause = {};
+      
+      // Filter by status if not 'all'
+      if (status !== 'all') {
+        whereClause.status = status;
+      }
+
+      // Add search functionality
+      if (search) {
+        whereClause = {
+          ...whereClause,
+          [Op.or]: [
+            { titre_fr: { [Op.iLike]: `%${search}%` } },
+            { titre_ar: { [Op.iLike]: `%${search}%` } },
+            { code_cours: { [Op.iLike]: `%${search}%` } }
+          ]
+        };
+      }
+
+      const cours = await Cours.findAndCountAll({
+        where: whereClause,
+        include: [
+          {
+            model: Module,
+            as: 'module',
+            attributes: ['id_module', 'code_module', 'designation_fr', 'designation_ar']
+          },
+          {
+            model: Enseignant,
+            as: 'enseignant',
+            attributes: ['id_enseignant', 'nom_fr', 'prenom_fr', 'nom_ar', 'prenom_ar']
+          }
+        ],
+        limit: parseInt(limit),
+        offset: parseInt(offset),
+        order: [['created_at', 'DESC']]
+      });
+
+      return res.json({
+        cours: cours.rows,
+        total: cours.count,
+        limit: parseInt(limit),
+        offset: parseInt(offset)
+      });
+    } catch (error) {
+      console.error('Error getting cours by modules:', error);
+      return res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
+  },
+
+  // Récupérer tous les cours avec tous les statuts (pour établissement régional)
+  async getAllCoursWithAllStatus(req, res) {
+    try {
+      const cours = await Cours.findAll({
+        include: [
+          {
+            model: Module,
+            as: 'module',
+            attributes: ['id_module', 'code_module', 'designation_fr', 'designation_ar']
+          },
+          {
+            model: Enseignant,
+            as: 'enseignant',
+            attributes: ['id_enseignant', 'nom_fr', 'prenom_fr', 'nom_ar', 'prenom_ar']
+          }
+        ],
+        order: [['created_at', 'DESC']]
+      });
+
+      return res.json(cours || []);
+    } catch (error) {
+      console.error('Error getting all cours with all status:', error);
       return res.status(500).json({ message: 'Erreur serveur', error: error.message });
     }
   },
@@ -222,7 +325,7 @@ const CoursController = {
         where: { compte_id: id_compte },
         include: [{
           model: require('../models/EtablissementFormation'),
-          as: 'etablissementformation',
+          as: 'etablissementFormation',
           attributes: ['id_etab_formation']
         }]
       });
@@ -246,7 +349,7 @@ const CoursController = {
 
       // Récupérer tous les enseignants du même établissement
       const enseignantsMemeEtablissement = await Enseignant.findAll({
-        where: { id_etab_formation: enseignant.etablissementformation.id_etab_formation },
+        where: { id_etab_formation: enseignant.etablissementFormation.id_etab_formation },
         attributes: ['id_enseignant']
       });
 
@@ -280,7 +383,7 @@ const CoursController = {
               attributes: ['designation_fr', 'designation_ar']
             }, {
               model: require('../models/EtablissementFormation'),
-              as: 'etablissementformation',
+              as: 'etablissementFormation',
               attributes: ['nom_fr', 'nom_ar']
             }]
           }
@@ -364,7 +467,7 @@ const CoursController = {
               },
               {
                 model: require('../models/EtablissementFormation'),
-                as: 'etablissementformation',
+                as: 'etablissementFormation',
                 attributes: ['id_etab_formation']
               }
             ],
@@ -382,8 +485,8 @@ const CoursController = {
         .filter((id, index, self) => self.indexOf(id) === index);
 
       const etablissementIds = inscriptions
-        .filter(inscription => inscription.offre && inscription.offre.etablissementformation)
-        .map(inscription => inscription.offre.etablissementformation.id_etab_formation)
+        .filter(inscription => inscription.offre && inscription.offre.etablissementFormation)
+        .map(inscription => inscription.offre.etablissementFormation.id_etab_formation)
         .filter((id, index, self) => self.indexOf(id) === index);
 
       console.log('Found specialite IDs:', specialiteIds);
@@ -455,7 +558,7 @@ const CoursController = {
               attributes: ['designation_fr', 'designation_ar']
             }, {
               model: require('../models/EtablissementFormation'),
-              as: 'etablissementformation',
+              as: 'etablissementFormation',
               attributes: ['nom_fr', 'nom_ar']
             }],
             required: false
@@ -498,6 +601,192 @@ const CoursController = {
 
       return res.json(cours);
     } catch (error) {
+      return res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
+  },
+
+  // Mettre à jour le statut d'un cours (pour établissement régionale)
+  async updateCoursStatus(req, res) {
+    try {
+      const { id_cours } = req.params;
+      const { status, observation } = req.body;
+      const { id_etab_regionale } = req.user;
+
+      // Vérifier que le cours appartient à un enseignant de l'établissement régionale
+      const cours = await Cours.findOne({
+        where: { id_cours },
+        include: [
+          {
+            model: Enseignant,
+            as: 'enseignant',
+            include: [
+              {
+                model: require('../models/EtablissementFormation'),
+                as: 'etablissementFormation',
+                where: { id_etab_regionale }
+              }
+            ]
+          }
+        ]
+      });
+
+      if (!cours) {
+        return res.status(404).json({ message: 'Cours non trouvé ou non autorisé' });
+      }
+
+      // Mettre à jour le statut et l'observation
+      await cours.update({
+        status: status,
+        observation: observation || cours.observation
+      });
+
+      return res.json({ 
+        message: 'Statut du cours mis à jour avec succès',
+        cours: cours
+      });
+    } catch (error) {
+      console.error('Erreur updateCoursStatus:', error);
+      return res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
+  },
+
+  // Mettre à jour un cours (pour établissement régionale)
+  async updateCoursRegional(req, res) {
+    try {
+      const { id_cours } = req.params;
+      const { observation, status } = req.body;
+      const { id_etab_regionale } = req.user;
+
+      console.log('🔍 updateCoursRegional - Debug Info:');
+      console.log('  - id_cours:', id_cours);
+      console.log('  - observation:', observation);
+      console.log('  - status:', status);
+      console.log('  - id_etab_regionale:', id_etab_regionale);
+      console.log('  - req.user:', req.user);
+
+      if (!id_etab_regionale) {
+        console.log('❌ Pas d\'ID établissement régional dans le token');
+        return res.status(403).json({ message: 'Accès refusé - ID établissement régional requis' });
+      }
+
+      // Vérifier que le cours existe et appartient à un établissement de cette région
+      // Utiliser la relation correcte : Cours -> Module -> Specialite -> Branche -> EtablissementRegionale
+      console.log('🔍 Recherche du cours avec les relations...');
+      const cours = await Cours.findOne({
+        where: { id_cours },
+        include: [
+          {
+            model: require('../models/Module'),
+            as: 'module',
+            include: [
+              {
+                model: require('../models/Specialite'),
+                as: 'specialite',
+                include: [
+                  {
+                    model: require('../models/Branche'),
+                    as: 'branche',
+                    where: { id_etab_regionale }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      });
+
+      console.log('🔍 Résultat de la recherche:', cours ? 'Cours trouvé' : 'Cours non trouvé');
+
+      if (!cours) {
+        console.log('❌ Cours non trouvé ou non autorisé pour cette région');
+        return res.status(404).json({ message: 'Cours non trouvé ou non autorisé pour cette région' });
+      }
+
+      // Préparer les données de mise à jour
+      const updateData = {};
+      if (observation !== undefined) updateData.observation = observation;
+      if (status !== undefined) updateData.status = status;
+      updateData.updated_at = new Date();
+
+      console.log('🔍 Données de mise à jour:', updateData);
+
+      // Mettre à jour le cours
+      await cours.update(updateData);
+      console.log('✅ Cours mis à jour avec succès');
+
+      return res.json({ 
+        message: 'Cours mis à jour avec succès',
+        cours: cours
+      });
+    } catch (error) {
+      console.error('❌ Erreur updateCoursRegional:', error);
+      return res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
+  },
+
+  // Servir un fichier PDF de cours
+  async servePDF(req, res) {
+    try {
+      const { filename } = req.params;
+      
+      if (!filename) {
+        return res.status(400).json({ message: 'Nom de fichier requis' });
+      }
+
+      const filePath = path.join(__dirname, '../upload/cours', filename);
+      
+      // Vérifier que le fichier existe
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ message: 'Fichier non trouvé' });
+      }
+
+      // Vérifier que l'utilisateur a accès au cours
+      const cours = await Cours.findOne({
+        where: { fichierpdf: filename },
+        include: [
+          {
+            model: Module,
+            as: 'module',
+            attributes: ['designation_fr', 'designation_ar']
+          },
+          {
+            model: Enseignant,
+            as: 'enseignant',
+            attributes: ['nom_fr', 'prenom_fr']
+          }
+        ]
+      });
+
+      if (!cours) {
+        return res.status(404).json({ message: 'Cours non trouvé' });
+      }
+
+      // Vérifier les permissions selon le rôle de l'utilisateur
+      const userRole = req.user.role;
+      
+      if (userRole === 'Enseignant') {
+        // Les enseignants peuvent voir tous les cours approuvés
+        if (cours.status !== 'مقبول') {
+          return res.status(403).json({ message: 'Accès refusé - Cours non approuvé' });
+        }
+      } else if (userRole === 'Stagiaire') {
+        // Les stagiaires peuvent voir les cours approuvés de leurs spécialités
+        if (cours.status !== 'مقبول') {
+          return res.status(403).json({ message: 'Accès refusé - Cours non approuvé' });
+        }
+      }
+      // Les autres rôles (EtablissementNationale, EtablissementRegionale) ont accès complet
+
+      // Servir le fichier PDF
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+      res.setHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+      res.setHeader('Expires', '-1');
+      res.setHeader('Pragma', 'no-cache');
+      
+      res.sendFile(filePath);
+    } catch (error) {
+      console.error('Erreur servePDF cours:', error);
       return res.status(500).json({ message: 'Erreur serveur', error: error.message });
     }
   }

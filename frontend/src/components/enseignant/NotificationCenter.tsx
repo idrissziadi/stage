@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuthApi } from '@/hooks/useAuthApi';
+import { formatDate } from '@/utils/formatDate';
 import { apiService } from '@/services/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -328,7 +329,7 @@ const NotificationCenter = () => {
                         <div className="flex items-center gap-2 mt-2">
                           <Calendar className="w-4 h-4 text-gray-400" />
                           <span className="text-xs text-gray-500">
-                            {new Date(notification.created_at).toLocaleString('ar-DZ')}
+                            {formatDate(notification.created_at)}
                           </span>
                         </div>
                       </div>

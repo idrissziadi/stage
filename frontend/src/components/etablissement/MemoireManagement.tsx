@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuthApi } from '@/hooks/useAuthApi';
 import { apiService } from '@/services/api';
-import { useToast } from '@/hooks/use-toast';
+import { formatDate } from '@/utils/formatDate';
+import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -559,7 +560,7 @@ const MemoireManagement = () => {
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-gray-500" />
                         <span className="text-sm">
-                          {new Date(memoire.createdAt).toLocaleDateString('ar-DZ')}
+                          {formatDate(memoire.createdAt)}
                         </span>
                       </div>
                     </TableCell>
