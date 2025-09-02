@@ -59,12 +59,16 @@ cd backend
 npm install
 cp env.example .env
 # Éditer .env avec vos paramètres de base de données
+# Voir la section "Variables d'environnement" ci-dessous
 ```
 
 ### **4. Configuration du frontend**
 ```bash
 cd frontend
 npm install
+cp env.example .env
+# Éditer .env avec vos paramètres de configuration
+# Voir la section "Variables d'environnement" ci-dessous
 ```
 
 ### **5. Démarrage des services**
@@ -173,14 +177,85 @@ npm test
 
 - **Guide utilisateur :** `/docs/user-guide.md`
 - **Guide développeur :** `/docs/developer-guide.md`
+- **Configuration des variables d'environnement :** `ENV_CONFIGURATION.md`
 - **API Swagger :** http://localhost:3000/api-docs
 - **Configuration Swagger :** `README_SWAGGER.md`
 
 ## 🔧 **Configuration**
 
 ### **Variables d'environnement**
-- **Backend :** `backend/env.example`
-- **Frontend :** `frontend/.env.example`
+
+#### **Backend** (`backend/env.example`)
+```bash
+# Configuration du serveur
+PORT=3000
+HOST=localhost
+NODE_ENV=development
+
+# Configuration de la base de données
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=formation_db
+DB_USER=root
+DB_PASSWORD=
+
+# Configuration JWT
+JWT_SECRET=aljawda-secret-key-2024-change-in-production
+
+# Configuration des emails (optionnel)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASSWORD=your-app-password
+
+# Configuration CORS
+CORS_ORIGIN=http://localhost:3000
+
+# Configuration des logs
+LOG_LEVEL=info
+
+# Configuration de sécurité
+BCRYPT_ROUNDS=12
+MAX_LOGIN_ATTEMPTS=5
+LOCKOUT_DURATION=15
+SESSION_TIMEOUT=30
+```
+
+#### **Frontend** (`frontend/env.example`)
+```bash
+# Configuration de l'API Backend
+VITE_API_BASE_URL=http://localhost:3000
+VITE_API_TIMEOUT=10000
+
+# Configuration de l'application
+VITE_APP_NAME=الجودة
+VITE_APP_VERSION=1.0.0
+VITE_APP_ENV=development
+
+# Configuration des fonctionnalités
+VITE_ENABLE_ANALYTICS=false
+VITE_ENABLE_DEBUG=true
+VITE_ENABLE_PWA=true
+
+# Configuration des services externes (optionnel)
+VITE_GOOGLE_ANALYTICS_ID=
+VITE_SENTRY_DSN=
+
+# Configuration de l'interface
+VITE_DEFAULT_LOCALE=ar
+VITE_DEFAULT_THEME=light
+VITE_ENABLE_RTL=true
+
+# Configuration de sécurité
+VITE_JWT_STORAGE_KEY=aljawda_token
+VITE_REFRESH_TOKEN_KEY=aljawda_refresh_token
+VITE_SESSION_TIMEOUT=3600000
+
+# Configuration des uploads
+VITE_MAX_FILE_SIZE=10485760
+VITE_ALLOWED_FILE_TYPES=pdf,doc,docx,ppt,pptx,xls,xlsx,jpg,jpeg,png
+VITE_UPLOAD_CHUNK_SIZE=1024000
+```
 
 ### **Configuration de l'application**
 - **Backend :** `backend/config/app.js`
