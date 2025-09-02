@@ -137,6 +137,23 @@ function setupAssociations() {
 
   Programme.belongsTo(Module, { foreignKey: 'id_module', as: 'module', ...cascadeOptions });
   Module.hasMany(Programme, { foreignKey: 'id_module', as: 'programmes', ...cascadeOptions });
+
+  // =========================
+  // Offre <-> Module (relation N:N via OffreModule)
+  // =========================
+  Offre.belongsToMany(Module, {
+    through: "OffreModule",
+    foreignKey: "id_offre",
+    otherKey: "id_module",
+    as: "offreModules"
+  });
+
+  Module.belongsToMany(Offre, {
+    through: "OffreModule",
+    foreignKey: "id_module",
+    otherKey: "id_offre",
+    as: "offreOffres"
+  });
 }
 
 module.exports = setupAssociations;

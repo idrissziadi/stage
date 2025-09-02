@@ -161,16 +161,40 @@ const EnsModuleController = {
         });
       }
 
-      // Supprimer les anciennes assignations pour cet enseignant et cette année scolaire
-      await Ens_Module.destroy({
+      // Vérifier les modules déjà assignés pour cet enseignant et cette année scolaire
+      const existingAssignations = await Ens_Module.findAll({
         where: { 
           id_enseignant,
           annee_scolaire
-        }
+        },
+        attributes: ['id_module']
       });
 
-      // Créer les nouvelles assignations
-      const assignations = modules.map(id_module => ({
+      const existingModuleIds = existingAssignations.map(em => em.id_module);
+      console.log('🔍 Modules déjà assignés:', existingModuleIds);
+
+      // Filtrer les nouveaux modules (ceux qui ne sont pas déjà assignés)
+      const newModules = modules.filter(id_module => !existingModuleIds.includes(id_module));
+      console.log('🆕 Nouveaux modules à assigner:', newModules);
+
+      if (newModules.length === 0) {
+        return res.status(200).json({
+          message: 'Tous les modules sélectionnés sont déjà assignés à cet enseignant',
+          enseignant: {
+            id_enseignant: enseignant.id_enseignant,
+            nom_fr: enseignant.nom_fr,
+            prenom_fr: enseignant.prenom_fr,
+            etablissement: enseignant.etablissementFormation.nom_fr
+          },
+          annee_scolaire,
+          semestre,
+          modules_already_assigned: existingModuleIds.length,
+          new_modules_assigned: 0
+        });
+      }
+
+      // Créer seulement les nouvelles assignations (sans supprimer les anciennes)
+      const assignations = newModules.map(id_module => ({
         id_module,
         id_enseignant,
         annee_scolaire,
@@ -180,7 +204,7 @@ const EnsModuleController = {
       const createdAssignations = await Ens_Module.bulkCreate(assignations);
 
       return res.status(201).json({
-        message: `${createdAssignations.length} module(s) assigné(s) avec succès à l'enseignant`,
+        message: `${createdAssignations.length} nouveau(x) module(s) assigné(s) avec succès à l'enseignant (${existingModuleIds.length} module(s) déjà assigné(s) conservé(s))`,
         enseignant: {
           id_enseignant: enseignant.id_enseignant,
           nom_fr: enseignant.nom_fr,
@@ -189,12 +213,14 @@ const EnsModuleController = {
         },
         annee_scolaire,
         semestre,
-        modules_assigned: modulesToAssign.map(m => ({
+        modules_already_assigned: existingModuleIds.length,
+        new_modules_assigned: createdAssignations.length,
+        total_modules: existingModuleIds.length + createdAssignations.length,
+        modules_assigned: modulesToAssign.filter(m => newModules.includes(m.id_module)).map(m => ({
           id_module: m.id_module,
           code_module: m.code_module,
           designation_fr: m.designation_fr
-        })),
-        total_modules: createdAssignations.length
+        }))
       });
 
     } catch (error) {

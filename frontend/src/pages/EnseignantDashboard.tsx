@@ -816,7 +816,7 @@ const EnseignantDashboard = () => {
           </TabsContent>
 
           <TabsContent value="modules">
-            <ModuleOverview />
+            <ModuleOverview onTabChange={setActiveTab} />
           </TabsContent>
 
           <TabsContent value="programmes">

@@ -28,6 +28,7 @@ import {
   Search,
   Filter
 } from 'lucide-react';
+import CourseMemoirePDFViewer from '@/components/ui/course-memoire-pdf-viewer';
 
 interface Module {
   id_module: number;
@@ -63,6 +64,8 @@ const CoursManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [isViewPDFOpen, setIsViewPDFOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   
   // Upload form state
   const [uploadForm, setUploadForm] = useState({
@@ -89,30 +92,47 @@ const CoursManagement = () => {
       
       // Fetch modules assigned to this enseignant
       const modulesResponse = await apiService.getModulesByEnseignant(userProfile.id_enseignant);
-      console.log('Modules response:', modulesResponse);
+      console.log('🔍 Modules response:', modulesResponse);
+      console.log('🔍 Structure de response.data:', typeof modulesResponse.data);
+      console.log('🔍 response.data.data existe:', !!modulesResponse.data?.data);
+      console.log('🔍 response.data.data est un tableau:', Array.isArray(modulesResponse.data?.data));
       
       let modulesData = [];
       
-      if (modulesResponse.data && modulesResponse.data.modules_by_year) {
-        // Extract all modules from all years
-        Object.values(modulesResponse.data.modules_by_year).forEach(yearModules => {
-          if (Array.isArray(yearModules)) {
-            modulesData = [...modulesData, ...yearModules];
-          }
-        });
-      } else if (Array.isArray(modulesResponse.data)) {
-        modulesData = modulesResponse.data;
+      // L'API retourne { data: { data: [...] } } - traitement corrigé
+      if (modulesResponse && modulesResponse.data) {
+        if (Array.isArray(modulesResponse.data)) {
+          modulesData = modulesResponse.data;
+          console.log('✅ Modules trouvés directement dans response.data:', modulesData.length);
+        } else if (modulesResponse.data.data && Array.isArray(modulesResponse.data.data)) {
+          // Structure: { data: { data: [...] } }
+          modulesData = modulesResponse.data.data;
+          console.log('✅ Modules trouvés dans response.data.data:', modulesData.length);
+        } else if (modulesResponse.data.modules_by_year) {
+          // Fallback pour l'ancienne structure
+          Object.values(modulesResponse.data.modules_by_year).forEach(yearModules => {
+            if (Array.isArray(yearModules)) {
+              modulesData = [...modulesData, ...yearModules];
+            }
+          });
+          console.log('✅ Modules extraits de modules_by_year:', modulesData.length);
+        }
       } else if (Array.isArray(modulesResponse)) {
+        // Fallback si la réponse est directement un tableau
         modulesData = modulesResponse;
+        console.log('✅ Modules trouvés directement dans la réponse:', modulesData.length);
       }
       
-      console.log('Processed modules data:', modulesData);
+      console.log('🎯 Processed modules data:', modulesData);
+      console.log('📊 Type de modulesData:', typeof modulesData);
+      console.log('📊 Est un tableau:', Array.isArray(modulesData));
       
       // Ensure modules is always an array
       if (Array.isArray(modulesData)) {
         setModules(modulesData);
+        console.log('✅ Modules définis avec succès:', modulesData.length);
       } else {
-        console.warn('Modules response is not an array:', modulesData);
+        console.warn('❌ Modules response is not an array:', modulesData);
         setModules([]);
       }
       
@@ -177,10 +197,22 @@ const CoursManagement = () => {
       fetchData();
       
     } catch (error) {
-      console.error('Upload error:', error);
+      console.error('❌ Upload error:', error);
+      
+      // Afficher plus de détails sur l'erreur
+      let errorMessage = 'فشل في رفع الدرس';
+      if (error.response) {
+        console.error('❌ Response error:', error.response);
+        if (error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        }
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: 'خطأ',
-        description: 'فشل في رفع الدرس',
+        description: errorMessage,
         variant: 'destructive'
       });
     } finally {
@@ -233,20 +265,8 @@ const CoursManagement = () => {
   };
 
   const handleViewPDF = (course: Course) => {
-    if (course.fichierpdf) {
-      // Debug: Log the file path and constructed URL
-      console.log('View PDF - File path from database:', course.fichierpdf);
-      const pdfUrl = getFileUrl(course.fichierpdf, 'cours');
-      console.log('View PDF - Constructed URL:', pdfUrl);
-      
-      window.open(pdfUrl, '_blank');
-    } else {
-      toast({
-        title: 'خطأ',
-        description: 'لا يوجد ملف PDF لهذا الدرس',
-        variant: 'destructive'
-      });
-    }
+    setSelectedCourse(course);
+    setIsViewPDFOpen(true);
   };
 
   const handleDownloadPDF = async (course: Course) => {
@@ -612,6 +632,21 @@ const CoursManagement = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* PDF Viewer Dialog */}
+      {/* This dialog shows course details and PDF viewer similar to CollaborativeCourses */}
+      {selectedCourse && (
+        <CourseMemoirePDFViewer
+          isOpen={isViewPDFOpen}
+          onClose={() => {
+            setIsViewPDFOpen(false);
+            setSelectedCourse(null);
+          }}
+          item={selectedCourse}
+          type="cours"
+          userRole="Enseignant"
+        />
+      )}
     </div>
   );
 };

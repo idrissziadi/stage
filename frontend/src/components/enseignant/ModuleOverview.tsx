@@ -29,12 +29,17 @@ interface Course {
   titre_fr: string;
   titre_ar: string;
   status: string;
-  created_at: string;
+  created_at?: string; // Format legacy
+  createdAt?: string; // Format Sequelize
   fichierpdf?: string;
   observation?: string;
 }
 
-const ModuleOverview = () => {
+interface ModuleOverviewProps {
+  onTabChange?: (tab: string) => void;
+}
+
+const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
   const { userProfile } = useAuthApi();
   const { toast } = useToast();
   const [modules, setModules] = useState<Module[]>([]);
@@ -480,7 +485,7 @@ const ModuleOverview = () => {
                           <div key="no-courses" className="text-center py-8">
                             <FileText className="w-12 h-12 mx-auto text-gray-400 mb-2" />
                             <p className="text-gray-600 dark:text-gray-400">لا توجد دروس مرفوعة لهذه المادة</p>
-                            <Button className="mt-4" size="sm">
+                            <Button className="mt-4" size="sm" onClick={() => onTabChange?.('cours')}>
                               <TrendingUp className="w-4 h-4 mr-2" />
                               رفع درس جديد
                             </Button>

@@ -1,7 +1,9 @@
 const Cours = require('../models/Cours');
 const Module = require('../models/Module');
 const Enseignant = require('../models/Enseignant');
-const { Op } = require('sequelize');
+const Specialite = require('../models/Specialite');
+const { Op, QueryTypes } = require('sequelize');
+const { sequelize } = require('../config/database');
 const path = require('path');
 const fs = require('fs');
 
@@ -196,7 +198,14 @@ const CoursController = {
       
       // Vérifier si un fichier a été uploadé
       if (!req.file) {
+        console.log('❌ Aucun fichier fourni');
         return res.status(400).json({ message: 'Aucun fichier PDF fourni' });
+      }
+
+      // Vérifier que le fichier a bien un chemin
+      if (!req.file.path && !req.file.filename) {
+        console.log('❌ Fichier sans chemin ni nom:', req.file);
+        return res.status(400).json({ message: 'Erreur lors de l\'upload du fichier' });
       }
 
       // Préparer les données du cours
@@ -206,7 +215,7 @@ const CoursController = {
         titre_ar: req.body.titre_ar,
         id_module: parseInt(req.body.id_module),
         id_enseignant: enseignant.id_enseignant,
-        fichierpdf: req.file.path, // Chemin du fichier uploadé
+        fichierpdf: req.file.filename || req.file.path, // Utiliser filename si disponible
         status: 'في_الانتظار', // Statut par défaut
         observation: req.body.observation || null // Optionnel
       };
@@ -232,9 +241,24 @@ const CoursController = {
         cours: coursWithRelations
       });
     } catch (error) {
-      console.error('Error creating course:', error);
+      console.error('❌ Error creating course:', error);
+      console.error('❌ Error stack:', error.stack);
+      
+      // Nettoyer le fichier uploadé en cas d'erreur
+      if (req.file && req.file.path) {
+        try {
+          const fs = require('fs');
+          if (fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+            console.log('🗑️ Fichier nettoyé après erreur:', req.file.path);
+          }
+        } catch (cleanupError) {
+          console.error('❌ Erreur lors du nettoyage du fichier:', cleanupError);
+        }
+      }
+      
       return res.status(500).json({ 
-        message: 'Erreur serveur', 
+        message: 'Erreur serveur lors de la création du cours', 
         error: error.message,
         details: error.errors ? error.errors.map(e => e.message) : null
       });
@@ -432,105 +456,66 @@ const CoursController = {
     }
   },
 
-  // Récupérer les cours approuvés pour les spécialités d'un stagiaire
+  // Récupérer les cours approuvés pour les offres d'un stagiaire via la table OffreModule
   async getCoursByStagiaire(req, res) {
     try {
       const { id_compte } = req.user;
       
-      // Find the stagiaire record to get id_stagiaire and etablissement
+      console.log('🔍 getCoursByStagiaire - Début pour compte:', id_compte);
+      
+      // Find the stagiaire record to get id_stagiaire
       const Stagiaire = require('../models/Stagiaire');
       const stagiaire = await Stagiaire.findOne({ where: { compte_id: id_compte } });
       
       if (!stagiaire) {
+        console.log('❌ Stagiaire non trouvé pour compte:', id_compte);
         return res.status(404).json({ message: 'Profil stagiaire introuvable' });
       }
       
-      console.log('Fetching courses for stagiaire:', stagiaire.id_stagiaire);
+      console.log('✅ Stagiaire trouvé:', stagiaire.id_stagiaire);
       
-      // Récupérer les inscriptions du stagiaire avec les offres et spécialités
+      // Récupérer les inscriptions du stagiaire
       const Inscription = require('../models/Inscription');
-      const Offre = require('../models/Offre');
-      const Specialite = require('../models/Specialite');
-      
       const inscriptions = await Inscription.findAll({
         where: { id_stagiaire: stagiaire.id_stagiaire },
-        include: [
-          {
-            model: Offre,
-            as: 'offre',
-            include: [
-              {
-                model: Specialite,
-                as: 'specialite',
-                attributes: ['id_specialite', 'designation_fr', 'designation_ar'],
-                required: false
-              },
-              {
-                model: require('../models/EtablissementFormation'),
-                as: 'etablissementFormation',
-                attributes: ['id_etab_formation']
-              }
-            ],
-            required: false
-          }
-        ]
+        attributes: ['id_offre']
       });
 
-      console.log('Found inscriptions:', inscriptions.length);
+      console.log('📋 Inscriptions trouvées:', inscriptions.length);
 
-      // Extraire les IDs des spécialités et établissements
-      const specialiteIds = inscriptions
-        .filter(inscription => inscription.offre && inscription.offre.specialite)
-        .map(inscription => inscription.offre.specialite.id_specialite)
-        .filter((id, index, self) => self.indexOf(id) === index);
-
-      const etablissementIds = inscriptions
-        .filter(inscription => inscription.offre && inscription.offre.etablissementFormation)
-        .map(inscription => inscription.offre.etablissementFormation.id_etab_formation)
-        .filter((id, index, self) => self.indexOf(id) === index);
-
-      console.log('Found specialite IDs:', specialiteIds);
-      console.log('Found etablissement IDs:', etablissementIds);
-
-      if (specialiteIds.length === 0 || etablissementIds.length === 0) {
-        console.log('No specialites or etablissements found for stagiaire');
+      if (inscriptions.length === 0) {
+        console.log('⚠️ Aucune inscription trouvée pour le stagiaire');
         return res.json([]);
       }
 
-      // Récupérer les modules de ces spécialités
-      const modules = await Module.findAll({
-        where: { 
-          id_specialite: { [Op.in]: specialiteIds }
-        },
-        attributes: ['id_module']
+      // Extraire les IDs des offres
+      const offreIds = inscriptions.map(inscription => inscription.id_offre);
+      console.log('🎯 IDs des offres:', offreIds);
+
+      // Récupérer les modules associés à ces offres via la table OffreModule
+      // Utiliser une requête SQL directe pour éviter les problèmes de modèle
+      const { QueryTypes } = require('sequelize');
+      const offreModules = await sequelize.query(`
+        SELECT id_module 
+        FROM OffreModule 
+        WHERE id_offre IN (:offreIds)
+      `, {
+        replacements: { offreIds: offreIds },
+        type: QueryTypes.SELECT
       });
 
-      const moduleIds = modules.map(module => module.id_module);
-      console.log('Found module IDs:', moduleIds);
+      const moduleIds = offreModules.map(om => om.id_module);
+      console.log('📚 Modules trouvés via OffreModule:', moduleIds.length);
 
       if (moduleIds.length === 0) {
-        console.log('No modules found for specialites');
+        console.log('⚠️ Aucun module trouvé pour les offres');
         return res.json([]);
       }
 
-      // Récupérer les enseignants des établissements du stagiaire
-      const enseignants = await Enseignant.findAll({
-        where: { id_etab_formation: { [Op.in]: etablissementIds } },
-        attributes: ['id_enseignant']
-      });
-
-      const enseignantIds = enseignants.map(ens => ens.id_enseignant);
-
-      if (enseignantIds.length === 0) {
-        console.log('No enseignants found for etablissements');
-        return res.json([]);
-      }
-
-      // Récupérer les cours approuvés pour ces modules, mais seulement des enseignants du même établissement
+      // Récupérer les cours approuvés pour ces modules spécifiques
       const cours = await Cours.findAll({
         where: { 
           id_module: { [Op.in]: moduleIds },
-          id_enseignant: { [Op.in]: enseignantIds },
           status: 'مقبول'
         },
         include: [
@@ -540,7 +525,7 @@ const CoursController = {
             attributes: ['id_module', 'designation_fr', 'designation_ar', 'code_module'],
             include: [
               {
-                model: Specialite,
+                model: require('../models/Specialite'),
                 as: 'specialite',
                 attributes: ['designation_fr', 'designation_ar'],
                 required: false
@@ -567,11 +552,15 @@ const CoursController = {
         order: [['createdAt', 'DESC']]
       });
 
-      console.log('Found courses:', cours.length);
+      console.log('✅ Cours trouvés:', cours.length);
       return res.json(cours);
+      
     } catch (error) {
-      console.error('Error in getCoursByStagiaire:', error);
-      return res.status(500).json({ message: 'Erreur serveur', error: error.message });
+      console.error('❌ Erreur dans getCoursByStagiaire:', error);
+      return res.status(500).json({ 
+        message: 'Erreur serveur lors de la récupération des cours', 
+        error: error.message 
+      });
     }
   },
 

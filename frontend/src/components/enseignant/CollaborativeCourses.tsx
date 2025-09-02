@@ -89,7 +89,25 @@ const CollaborativeCourses = () => {
       
       // Fetch modules taught by this instructor
       const modulesResponse = await apiService.getModulesByEnseignant(userProfile.id_enseignant.toString());
-      setModules(modulesResponse.data || []);
+      console.log('🔍 Modules Response:', modulesResponse);
+      
+      // Ensure modules is always an array with proper error handling
+      let modulesData = [];
+      if (modulesResponse && modulesResponse.data) {
+        if (Array.isArray(modulesResponse.data)) {
+          modulesData = modulesResponse.data;
+        } else if (typeof modulesResponse.data === 'object') {
+          // Handle nested data structure if it exists
+          if (modulesResponse.data.modules && Array.isArray(modulesResponse.data.modules)) {
+            modulesData = modulesResponse.data.modules;
+          } else if (modulesResponse.data.data && Array.isArray(modulesResponse.data.data)) {
+            modulesData = modulesResponse.data.data;
+          }
+        }
+      }
+      
+      console.log('🎯 Final modules array:', modulesData);
+      setModules(modulesData);
       
     } catch (error) {
       console.error('Error fetching collaborative courses:', error);
@@ -205,12 +223,24 @@ const CollaborativeCourses = () => {
                          course.enseignant?.nom_fr?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          course.enseignant?.prenom_fr?.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesModule = moduleFilter === 'all' || course.id_module.toString() === moduleFilter;
+    // Fix the module filter to work properly and handle undefined id_module
+    const matchesModule = moduleFilter === 'all' || 
+                         (course.id_module && course.id_module.toString() === moduleFilter);
     
     return matchesSearch && matchesModule;
   });
 
   const moduleStats = getModuleStats();
+
+  // Debug information for troubleshooting
+  console.log('🔍 CollaborativeCourses Debug Info:', {
+    totalCourses: courses.length,
+    totalModules: Array.isArray(modules) ? modules.length : 'Not an array',
+    modulesType: typeof modules,
+    moduleFilter,
+    filteredCoursesCount: filteredCourses.length,
+    searchTerm
+  });
 
   if (loading) {
     return (
@@ -273,25 +303,35 @@ const CollaborativeCourses = () => {
           <CardTitle className="font-arabic">إحصائيات المواد</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {Array.isArray(moduleStats) && moduleStats.map((stat) => (
-              <div key={stat.module.id_module} className="border border-gray-200 rounded-lg p-4">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 font-arabic">
-                      {stat.module.designation_ar || stat.module.designation_fr}
-                    </h3>
-                    <p className="text-sm text-gray-600">({stat.module.code_module})</p>
+          {Array.isArray(modules) && modules.length > 0 ? (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {moduleStats.map((stat) => (
+                <div key={stat.module.id_module} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900 font-arabic">
+                        {stat.module.designation_ar || stat.module.designation_fr}
+                      </h3>
+                      <p className="text-sm text-gray-600">({stat.module.code_module})</p>
+                    </div>
+                    <Badge variant="secondary">{stat.courseCount} دروس</Badge>
                   </div>
-                  <Badge variant="secondary">{stat.courseCount} دروس</Badge>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <User className="w-4 h-4" />
+                    <span className="font-arabic">{stat.instructors} أستاذ مشارك</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <User className="w-4 h-4" />
-                  <span className="font-arabic">{stat.instructors} أستاذ مشارك</span>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <BookOpen className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2 font-arabic">لا توجد مواد متاحة</h3>
+              <p className="text-gray-600 font-arabic">
+                لم يتم تعيين أي مواد لك حالياً. يرجى التواصل مع إدارة المؤسسة.
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -317,17 +357,28 @@ const CollaborativeCourses = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">جميع المواد</SelectItem>
-                {Array.isArray(modules) && modules.map(module => (
-                  <SelectItem key={module.id_module} value={module.id_module.toString()}>
-                    {module.designation_ar || module.designation_fr} ({module.code_module})
+                {Array.isArray(modules) && modules.length > 0 ? (
+                  modules.map(module => (
+                    <SelectItem key={module.id_module} value={module.id_module.toString()}>
+                      {module.designation_ar || module.designation_fr} ({module.code_module})
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value="no-modules" disabled>
+                    لا توجد مواد متاحة
                   </SelectItem>
-                ))}
+                )}
               </SelectContent>
             </Select>
             
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
               <Filter className="w-4 h-4" />
-              <span className="font-arabic">البحث في العناوين، المواد، والأساتذة</span>
+              <span className="font-arabic">
+                {Array.isArray(modules) && modules.length > 0 
+                  ? 'البحث في العناوين، المواد، والأساتذة'
+                  : 'لا يمكن تصفية النتائج - لا توجد مواد متاحة'
+                }
+              </span>
             </div>
           </div>
         </CardContent>
@@ -349,7 +400,9 @@ const CollaborativeCourses = () => {
               <p className="text-gray-600 font-arabic">
                 {searchTerm || moduleFilter !== 'all' 
                   ? 'لا توجد دروس تطابق معايير البحث'
-                  : 'لا توجد دروس معتمدة متاحة في المواد التي تدرسها حالياً'
+                  : Array.isArray(modules) && modules.length === 0
+                    ? 'لا توجد دروس متاحة - لم يتم تعيين أي مواد لك حالياً'
+                    : 'لا توجد دروس معتمدة متاحة في المواد التي تدرسها حالياً'
                 }
               </p>
             </CardContent>
@@ -527,8 +580,10 @@ const CollaborativeCourses = () => {
             <div className="flex-1">
               <h4 className="font-medium text-green-900 mb-1 font-arabic">ملاحظة تعليمية</h4>
               <p className="text-sm text-green-800 font-arabic">
-                هذه الدروس متاحة للاطلاع والاستفادة من زملائك الأساتذة في المواد التي تدرسها. 
-                يمكنك الاستفادة منها لتطوير محتوى دروسك أو للحصول على أفكار جديدة في التدريس.
+                {Array.isArray(modules) && modules.length > 0 
+                  ? 'هذه الدروس متاحة للاطلاع والاستفادة من زملائك الأساتذة في المواد التي تدرسها. يمكنك الاستفادة منها لتطوير محتوى دروسك أو للحصول على أفكار جديدة في التدريس.'
+                  : 'لا يمكن عرض الدروس التعاونية حالياً لأنك لم يتم تعيين أي مواد لك. يرجى التواصل مع إدارة المؤسسة لتعيين المواد التي ستدرسها.'
+                }
               </p>
             </div>
           </div>
