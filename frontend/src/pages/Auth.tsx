@@ -12,7 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { 
   Eye, EyeOff, User, Lock, Building2, GraduationCap, 
   BookOpen, Award, TrendingUp, Rocket, Shield, Star, 
-  Heart, Globe, Cpu, Database
+  Heart, Globe, Cpu, Database, ArrowLeft
 } from 'lucide-react';
 
 const Auth = () => {
@@ -164,6 +164,18 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-gray-900 overflow-hidden" dir="rtl">
+      {/* Back to Landing Page Button */}
+      <div className="absolute top-6 left-6 z-20">
+        <Button
+          variant="outline"
+          onClick={() => navigate('/')}
+          className="bg-white/90 backdrop-blur-sm border-gray-300 hover:bg-white hover:border-primary transition-all duration-300 shadow-lg hover:shadow-xl"
+        >
+          <ArrowLeft className="w-4 h-4 ml-2" />
+          العودة للصفحة الرئيسية
+        </Button>
+      </div>
+      
       {/* Background geometric shapes */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-20 w-32 h-32 border border-primary/20 rounded-full"></div>
