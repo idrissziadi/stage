@@ -331,6 +331,12 @@ All colors MUST be HSL.
     }
   }
 
+  /* Arabic font class */
+  .font-arabic {
+    font-family: 'Cairo', 'Noto Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    direction: rtl;
+  }
+
   /* Print styles for Arabic */
   @media print {
     body {

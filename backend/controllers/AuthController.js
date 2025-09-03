@@ -555,7 +555,7 @@ const AuthController = {
           id_stagiaire: stagiaire.id_stagiaire,
           id_offre: offre.id_offre,
           date_inscription: new Date(),
-          statut: 'en_attente'
+          statut: 'acceptee'
         });
       }
 

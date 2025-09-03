@@ -493,19 +493,33 @@ const EtablissementFormationDashboard = () => {
 
       {/* Logout Confirmation */}
       <AlertDialog open={isLogoutConfirmOpen} onOpenChange={setIsLogoutConfirmOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="font-arabic">تأكيد تسجيل الخروج</AlertDialogTitle>
-            <AlertDialogDescription className="font-arabic">
-              هل أنت متأكد من أنك تريد تسجيل الخروج من حسابك؟
+        <AlertDialogContent className="max-w-md border-l-4 border-l-destructive bg-gradient-to-br from-red-50 via-pink-50 to-red-100 dark:from-red-950/30 dark:via-pink-950/20 dark:to-red-950/30 shadow-2xl">
+          <AlertDialogHeader className="text-center">
+            <div className="mx-auto mb-6 w-20 h-20 bg-gradient-to-r from-red-500 via-pink-500 to-red-600 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+              <LogOut className="w-10 h-10 text-white animate-bounce" />
+            </div>
+            <AlertDialogTitle className="text-2xl font-bold text-gray-900 dark:text-white font-arabic mb-2">
+              تأكيد تسجيل الخروج
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-600 dark:text-gray-400 font-arabic leading-relaxed text-base">
+              هل أنت متأكد من أنك تريد تسجيل الخروج من النظام؟ 
+              <br />
+              <span className="text-sm text-gray-500 dark:text-gray-500 mt-2 block">
+                سيتم إغلاق جلسة العمل الخاصة بك
+              </span>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="font-arabic">إلغاء</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={handleLogoutConfirm}
-              className="bg-red-600 hover:bg-red-700 font-arabic"
+          <AlertDialogFooter className="flex flex-col sm:flex-row gap-3 pt-6">
+            <AlertDialogCancel 
+              className="font-arabic w-full sm:w-auto order-2 sm:order-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 px-8 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:scale-105 font-medium"
             >
+              إلغاء
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleLogoutConfirm} 
+              className="font-arabic w-full sm:w-auto order-1 sm:order-2 bg-gradient-to-r from-red-500 via-pink-500 to-red-600 hover:from-red-600 hover:via-pink-600 hover:to-red-700 text-white border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 px-8 py-3 rounded-xl font-medium text-base"
+            >
+              <LogOut className="w-5 h-5 ml-2 animate-pulse" />
               تسجيل الخروج
             </AlertDialogAction>
           </AlertDialogFooter>

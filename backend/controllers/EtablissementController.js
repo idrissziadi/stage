@@ -502,7 +502,7 @@ const EtablissementController = {
               id_stagiaire: stagiaire.id_stagiaire,
               id_offre: parseInt(id_offre),
               date_inscription: new Date(),
-              statut: 'en_attente'
+              statut: 'acceptee'
             });
           }
         }
@@ -615,7 +615,7 @@ const EtablissementController = {
         id_stagiaire: parseInt(id_stagiaire),
         id_offre: parseInt(id_offre),
         date_inscription: new Date(),
-        statut: 'en_attente'
+        statut: 'acceptee'
       });
 
       // Return inscription with relations
@@ -732,9 +732,9 @@ const EtablissementController = {
         newStagiaireIds.map(stagiaireId =>
           Inscription.create({
             id_stagiaire: stagiaireId,
-            id_offre: parseInt(id_offre),
+            id_offre,
             date_inscription: new Date(),
-            statut: 'en_attente'
+            statut: 'acceptee'
           })
         )
       );

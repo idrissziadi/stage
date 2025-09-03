@@ -79,7 +79,7 @@ const InscriptionController = {
         id_stagiaire,
         id_offre,
         date_inscription: new Date(),
-        statut: 'en_attente'
+        statut: 'acceptee'
       });
 
       return res.status(201).json(inscription);

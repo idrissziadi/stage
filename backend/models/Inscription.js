@@ -24,7 +24,7 @@ const Inscription = sequelize.define('Inscription', {
   statut: {
     type: DataTypes.ENUM('en_attente', 'acceptee', 'refusee', 'annulee'),
     allowNull: false,
-    defaultValue: 'en_attente'
+    defaultValue: 'acceptee'
   }
 }, {
   tableName: 'Inscription',
