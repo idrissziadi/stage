@@ -178,7 +178,13 @@ const EtablissementNationaleDashboard: React.FC = () => {
       // Récupérer les statistiques des programmes
       let statsRes;
       try {
+        console.log('🔄 Fetching programme stats...');
         statsRes = await request('/programme/stats');
+        console.log('📊 Raw programme stats response:', statsRes);
+        console.log('📊 Response type:', typeof statsRes);
+        console.log('📊 Has data property:', !!statsRes?.data);
+        console.log('📊 Data property content:', statsRes?.data);
+        console.log('📊 Direct response content:', statsRes);
       } catch (error) {
         console.warn('⚠️ Erreur lors de la récupération des stats des programmes:', error);
         statsRes = { total: 0, parStatut: {} };
@@ -187,7 +193,12 @@ const EtablissementNationaleDashboard: React.FC = () => {
       // Récupérer le nombre total d'établissements régionaux
       let etabRes;
       try {
+        console.log('🔄 Fetching etablissements...');
         etabRes = await request('/api/etablissement-regionale');
+        console.log('📊 Raw etablissements response:', etabRes);
+        console.log('📊 etabRes.data:', etabRes?.data);
+        console.log('📊 etabRes.data type:', typeof etabRes?.data);
+        console.log('📊 etabRes.data is array:', Array.isArray(etabRes?.data));
       } catch (error) {
         console.warn('⚠️ Erreur lors de la récupération des établissements:', error);
         etabRes = { data: [] };
@@ -233,7 +244,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 uniqueInstitutions.add(programme.id_etab_regionale);
               }
             });
-            institutionsWithProgramsRes = { data: uniqueInstitutions.size };
+            institutionsWithProgramsRes = { totalInstitutions: uniqueInstitutions.size };
             console.log('Unique institutions from programmes (data):', uniqueInstitutions);
           } else if (Array.isArray(programmesRes)) {
             // Si programmesRes est directement un tableau
@@ -243,19 +254,19 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 uniqueInstitutions.add(programme.id_etab_regionale);
               }
             });
-            institutionsWithProgramsRes = { data: uniqueInstitutions.size };
+            institutionsWithProgramsRes = { totalInstitutions: uniqueInstitutions.size };
             console.log('Unique institutions from programmes (direct):', uniqueInstitutions);
           } else {
-            institutionsWithProgramsRes = { data: 0 };
+            institutionsWithProgramsRes = { totalInstitutions: 0 };
           }
         } catch (fallbackError) {
           console.warn('⚠️ Erreur lors du fallback pour institutions:', fallbackError);
-          institutionsWithProgramsRes = { data: 0 };
+          institutionsWithProgramsRes = { totalInstitutions: 0 };
         }
       }
       
       // Si on n'a toujours pas de données, essayer de récupérer directement
-      if (!institutionsWithProgramsRes?.data || institutionsWithProgramsRes.data === 0) {
+      if (!institutionsWithProgramsRes?.totalInstitutions || institutionsWithProgramsRes.totalInstitutions === 0) {
         try {
           console.log('⚠️ Tentative de récupération directe des programmes pour institutions');
           const programmesRes = await request('/programme');
@@ -268,7 +279,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 uniqueInstitutions.add(programme.id_etab_regionale);
               }
             });
-            institutionsWithProgramsRes = { data: uniqueInstitutions.size };
+            institutionsWithProgramsRes = { totalInstitutions: uniqueInstitutions.size };
             console.log('Direct unique institutions from programmes:', uniqueInstitutions);
           } else if (Array.isArray(programmesRes)) {
             const uniqueInstitutions = new Set();
@@ -277,7 +288,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 uniqueInstitutions.add(programme.id_etab_regionale);
               }
             });
-            institutionsWithProgramsRes = { data: uniqueInstitutions.size };
+            institutionsWithProgramsRes = { totalInstitutions: uniqueInstitutions.size };
             console.log('Direct unique institutions from programmes (array):', uniqueInstitutions);
           }
         } catch (directError) {
@@ -286,8 +297,26 @@ const EtablissementNationaleDashboard: React.FC = () => {
       }
       
       // Formater les statistiques pour correspondre à l'interface
-      const programmeStats = statsRes;
-      const totalEtablissements = etabRes?.data ? etabRes.data.length : 0;
+      // Handle data wrapper structure: {data: {parStatut: {...}, total: 1}}
+      const programmeStats = statsRes?.data || statsRes;
+      
+      // Handle etablissements data wrapper structure
+      let totalEtablissements = 0;
+      if (etabRes?.data) {
+        if (Array.isArray(etabRes.data)) {
+          totalEtablissements = etabRes.data.length;
+        } else if (etabRes.data.data && Array.isArray(etabRes.data.data)) {
+          // Double wrapper: {data: {data: [...]}}
+          totalEtablissements = etabRes.data.data.length;
+        }
+      } else if (Array.isArray(etabRes)) {
+        // Direct array response
+        totalEtablissements = etabRes.length;
+      }
+      
+      console.log('📊 Calculated totalEtablissements:', totalEtablissements);
+      console.log('📊 etabRes structure:', etabRes);
+      console.log('📊 etabRes.data structure:', etabRes?.data);
       
       // Debug: Vérifier la structure des données modules
       console.log('Modules response structure:', modulesRes);
@@ -318,27 +347,26 @@ const EtablissementNationaleDashboard: React.FC = () => {
         try {
           // Essayer de récupérer les programmes pour compter les modules uniques
           const programmesRes = await request('/programme');
-          console.log('Programmes response:', programmesRes);
+          console.log('🔄 Programmes response for modules count:', programmesRes);
           
-          if (programmesRes?.data && Array.isArray(programmesRes.data)) {
+          // Handle data wrapper structure
+          const programmesData = programmesRes?.data || programmesRes;
+          console.log('📊 Extracted programmes data:', programmesData);
+          
+          if (Array.isArray(programmesData)) {
             const uniqueModules = new Set();
-            programmesRes.data.forEach((programme: any) => {
+            programmesData.forEach((programme: any) => {
               if (programme.id_module) {
                 uniqueModules.add(programme.id_module);
               }
             });
             modulesWithPrograms = uniqueModules.size;
-            console.log('Unique modules from programmes:', uniqueModules);
-          } else if (Array.isArray(programmesRes)) {
-            // Si programmesRes est directement un tableau
-            const uniqueModules = new Set();
-            programmesRes.forEach((programme: any) => {
-              if (programme.id_module) {
-                uniqueModules.add(programme.id_module);
-              }
-            });
-            modulesWithPrograms = uniqueModules.size;
-            console.log('Unique modules from programmes (direct array):', uniqueModules);
+            console.log('📊 Unique modules from programmes:', uniqueModules);
+            console.log('📊 modulesWithPrograms count:', modulesWithPrograms);
+          } else {
+            console.warn('⚠️ programmesData is not an array:', programmesData);
+            // Fallback: utiliser une estimation basée sur les stats
+            modulesWithPrograms = Math.min(programmeStats.total, totalModules);
           }
         } catch (error) {
           console.warn('⚠️ Erreur lors de la récupération des programmes pour compter les modules:', error);
@@ -362,33 +390,40 @@ const EtablissementNationaleDashboard: React.FC = () => {
         programmesRefuses: programmeStats?.parStatut?.['مرفوض'] || 0,
         totalEtablissements,
         totalModules: modulesWithPrograms,
-        institutionsWithProgrammes: institutionsWithProgramsRes?.data || 0
+        institutionsWithProgrammes: institutionsWithProgramsRes?.totalInstitutions || 0
       });
       
       // Debug: Vérifier le calcul du taux de participation
       const participationRate = totalEtablissements > 0 ? 
-        ((institutionsWithProgramsRes?.data || 0) / totalEtablissements * 100).toFixed(1) : 0;
+        ((institutionsWithProgramsRes?.totalInstitutions || 0) / totalEtablissements * 100).toFixed(1) : 0;
       console.log('Participation rate calculation:', {
-        institutionsWithPrograms: institutionsWithProgramsRes?.data || 0,
+        institutionsWithPrograms: institutionsWithProgramsRes?.totalInstitutions || 0,
         totalEtablissements,
         participationRate: participationRate + '%'
       });
       
       // Vérifier si on a des données valides
-      if (institutionsWithProgramsRes?.data === 0 && programmeStats?.total > 0) {
+      if (institutionsWithProgramsRes?.totalInstitutions === 0 && programmeStats?.total > 0) {
         console.warn('⚠️ ATTENTION: 0 institutions mais des programmes existent!');
         console.warn('⚠️ Vérifier la logique de calcul des institutions');
       }
       
-      setStats({
+      // Log final data before setStats
+      const finalStats = {
         totalProgrammes: programmeStats?.total || 0,
         programmesEnAttente: programmeStats?.parStatut?.['في_الانتظار'] || 0,
         programmesValides: programmeStats?.parStatut?.['مقبول'] || 0,
         programmesRefuses: programmeStats?.parStatut?.['مرفوض'] || 0,
         totalEtablissements,
         totalModules: modulesWithPrograms, // Utiliser le nombre de المواد التي لها برامج
-        institutionsWithProgrammes: institutionsWithProgramsRes?.data || 0
-      });
+        institutionsWithProgrammes: institutionsWithProgramsRes?.totalInstitutions || 0
+      };
+      
+      console.log('📊 Final stats before setStats:', finalStats);
+      console.log('📊 programmeStats object:', programmeStats);
+      console.log('📊 programmeStats.parStatut:', programmeStats?.parStatut);
+      
+      setStats(finalStats);
       
     } catch (error) {
       console.error('Erreur lors du chargement des données:', error);

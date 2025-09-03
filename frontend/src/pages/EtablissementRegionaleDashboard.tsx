@@ -165,20 +165,81 @@ const EtablissementRegionaleDashboardPage = () => {
       const specialitesRes = await request('/specialite/count');
       const modulesRes = await request('/module/count');
       
-      if (programmesRes && coursRes) {
-        setStats({
-          totalProgrammes: programmesRes.total || 0,
-          programmesApprouves: programmesRes.valides || 0,
-          programmesEnAttente: programmesRes.en_attente || 0,
-          programmesRefuses: programmesRes.refuses || 0,
-          totalCours: coursRes.total || 0,
-          coursApprouves: coursRes.valides || 0,
-          coursEnAttente: coursRes.en_attente || 0,
-          coursRefuses: coursRes.refuses || 0,
-          totalBranches: branchesRes?.count || 0,
-          totalSpecialites: specialitesRes?.count || 0,
-          totalModules: modulesRes?.count || 0
-        });
+      // Handle double data wrapper structure: {data: {data: {...}}}
+      const programmes = programmesRes?.data?.data || programmesRes?.data || programmesRes;
+      const cours = coursRes?.data?.data || coursRes?.data || coursRes;
+      const branches = branchesRes?.data?.data || branchesRes?.data || branchesRes;
+      const specialites = specialitesRes?.data?.data || specialitesRes?.data || specialitesRes;
+      const modules = modulesRes?.data?.data || modulesRes?.data || modulesRes;
+      
+      console.log('📊 Raw programmes response:', programmesRes);
+      console.log('📊 Raw cours response:', coursRes);
+      console.log('📊 Raw branches response:', branchesRes);
+      console.log('📊 Raw specialites response:', specialitesRes);
+      console.log('📊 Raw modules response:', modulesRes);
+      
+      console.log('📊 Processed programmes data:', programmes);
+      console.log('📊 Processed cours data:', cours);
+      console.log('📊 Processed branches data:', branches);
+      console.log('📊 Processed specialites data:', specialites);
+      console.log('📊 Processed modules data:', modules);
+      
+      console.log('📊 programmes object:', programmes);
+      console.log('📊 cours object:', cours);
+      console.log('📊 branches object:', branches);
+      console.log('📊 specialites object:', specialites);
+      console.log('📊 modules object:', modules);
+      
+      console.log('🔍 Checking if programmes and cours exist:', { 
+        programmes: !!programmes, 
+        cours: !!cours,
+        programmesType: typeof programmes,
+        coursType: typeof cours
+      });
+      
+      if (programmes && cours) {
+        // Handle programmes with parStatut structure
+        const programmesStats = {
+          total: programmes.total || 0,
+          approuves: programmes.parStatut?.مقبول || 0,
+          enAttente: programmes.parStatut?.في_الانتظار || 0,
+          refuses: programmes.parStatut?.مرفوض || 0
+        };
+        
+        console.log('📊 programmesStats:', programmesStats);
+        
+        // Handle cours with parStatut structure
+        const coursStats = {
+          total: cours.total || 0,
+          approuves: cours.parStatut?.مقبول || 0,
+          enAttente: cours.parStatut?.في_الانتظار || 0,
+          refuses: cours.parStatut?.مرفوض || 0
+        };
+        
+        console.log('📊 coursStats:', coursStats);
+        
+        const newStats = {
+          totalProgrammes: programmesStats.total,
+          programmesApprouves: programmesStats.approuves,
+          programmesEnAttente: programmesStats.enAttente,
+          programmesRefuses: programmesStats.refuses,
+          totalCours: coursStats.total,
+          coursApprouves: coursStats.approuves,
+          coursEnAttente: coursStats.enAttente,
+          coursRefuses: coursStats.refuses,
+          totalBranches: branches?.count || 0,
+          totalSpecialites: specialites?.count || 0,
+          totalModules: modules?.count || 0
+        };
+        
+        console.log('📊 Setting new stats:', newStats);
+        console.log('📊 Current stats before setStats:', stats);
+        setStats(newStats);
+        console.log('📊 Stats should be updated now');
+      } else {
+        console.warn('⚠️ programmes or cours is missing:', { programmes, cours });
+        console.warn('⚠️ programmes type:', typeof programmes);
+        console.warn('⚠️ cours type:', typeof cours);
       }
     } catch (error) {
       console.error('Erreur lors de la récupération des données:', error);
@@ -191,18 +252,54 @@ const EtablissementRegionaleDashboardPage = () => {
     try {
       setInfrastructureLoading(true);
       const branchesRes = await request('/branche/with-details');
+      console.log('🌳 Branches with details response:', branchesRes);
+      console.log('🌳 Type of branchesRes:', typeof branchesRes);
+      console.log('🌳 Is branchesRes an array?', Array.isArray(branchesRes));
+      console.log('🌳 branchesRes.data:', branchesRes?.data);
+      console.log('🌳 Is branchesRes.data an array?', Array.isArray(branchesRes?.data));
+      
+      // Handle double data wrapper: {data: {data: [...]}}
+      let branches = null;
       if (branchesRes && branchesRes.data) {
+        if (Array.isArray(branchesRes.data)) {
+          // Direct array: {data: [...]}
+          branches = branchesRes.data;
+        } else if (branchesRes.data.data && Array.isArray(branchesRes.data.data)) {
+          // Double wrapper: {data: {data: [...]}}
+          branches = branchesRes.data.data;
+        }
+      }
+      
+      if (branches && Array.isArray(branches)) {
+        console.log('🌳 Extracted branches:', branches);
+        console.log('🌳 Number of branches:', branches.length);
+        
         setInfrastructureData(prev => ({
           ...prev,
-          branches: branchesRes.data
+          branches: branches
         }));
         
         // Transformer les données en structure arborescente
-        const treeDataTransformed = transformToTreeData(branchesRes.data);
+        const treeDataTransformed = transformToTreeData(branches);
+        console.log('🌳 Transformed tree data:', treeDataTransformed);
         setTreeData(treeDataTransformed);
+      } else {
+        console.warn('⚠️ No branches data found or invalid format:', branchesRes);
+        console.warn('⚠️ branchesRes:', branchesRes);
+        console.warn('⚠️ branchesRes.data:', branchesRes?.data);
+        setTreeData([]);
+        setInfrastructureData(prev => ({
+          ...prev,
+          branches: []
+        }));
       }
     } catch (error) {
       console.error('Erreur lors de la récupération des données d\'infrastructure:', error);
+      setTreeData([]);
+      setInfrastructureData(prev => ({
+        ...prev,
+        branches: []
+      }));
     } finally {
       setInfrastructureLoading(false);
     }

@@ -52,7 +52,8 @@ import {
   FileText,
   ChevronDown,
   ChevronRight,
-  Eye
+  Eye,
+  User
 } from 'lucide-react';
 
 interface Enseignant {
@@ -174,6 +175,21 @@ const UserManagement = () => {
     semestre: ''
   });
 
+  // États pour la recherche وتسجيل المتدربين الموجودين
+  const [stagiaireSearchForm, setStagiaireSearchForm] = useState({
+    id_compte: '',
+    nom_fr: '',
+    prenom_fr: '',
+    email: '',
+    telephone: '',
+    searchType: 'id_compte', // 'id_compte', 'nom_fr', 'prenom_fr', 'email', 'telephone'
+    searchValue: ''
+  });
+  const [searchResults, setSearchResults] = useState<Stagiaire[]>([]);
+  const [selectedExistingStagiaire, setSelectedExistingStagiaire] = useState<Stagiaire | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [dialogActiveTab, setDialogActiveTab] = useState('create'); // 'create' or 'existing'
+
   useEffect(() => {
     if (userProfile?.id_etab_formation) {
       fetchAllUsers();
@@ -258,8 +274,7 @@ const UserManagement = () => {
         
         setEnseignants(response.data?.enseignants || []);
       } else {
-        const response = await apiService.getStagiairesByEtablissement(
-          userProfile.id_etab_formation,
+        const response = await apiService.getAllExistingStagiaires(
           searchTerm,
           50,
           0
@@ -306,6 +321,136 @@ const UserManagement = () => {
     });
     setCreateAccountForStagiaire(false);
     setAutoInscription(false);
+    setDialogActiveTab('create');
+  };
+
+  const resetStagiaireSearchForm = () => {
+    setStagiaireSearchForm({
+      id_compte: '',
+      nom_fr: '',
+      prenom_fr: '',
+      email: '',
+      telephone: '',
+      searchType: 'id_compte',
+      searchValue: ''
+    });
+    setSearchResults([]);
+    setSelectedExistingStagiaire(null);
+  };
+
+  const searchExistingStagiaires = async () => {
+    try {
+      setIsSearching(true);
+      setSearchResults([]);
+      
+      // Validation des paramètres
+      if (!stagiaireSearchForm.searchType || !stagiaireSearchForm.searchValue) {
+        toast({
+          title: 'خطأ في البحث',
+          description: 'يرجى اختيار نوع البحث وإدخال قيمة البحث',
+          variant: 'destructive'
+        });
+        return;
+      }
+      
+      // Construire les paramètres de recherche
+      const searchParams = new URLSearchParams();
+      if (stagiaireSearchForm.searchType === 'id_compte' && stagiaireSearchForm.searchValue) {
+        searchParams.append('id_stagiaire', stagiaireSearchForm.searchValue);
+      } else if (stagiaireSearchForm.searchType === 'nom_fr' && stagiaireSearchForm.searchValue) {
+        searchParams.append('nom_fr', stagiaireSearchForm.searchValue);
+      } else if (stagiaireSearchForm.searchType === 'prenom_fr' && stagiaireSearchForm.searchValue) {
+        searchParams.append('prenom_fr', stagiaireSearchForm.searchValue);
+      } else if (stagiaireSearchForm.searchType === 'email' && stagiaireSearchForm.searchValue) {
+        searchParams.append('email', stagiaireSearchForm.searchValue);
+      } else if (stagiaireSearchForm.searchType === 'telephone' && stagiaireSearchForm.searchValue) {
+        searchParams.append('telephone', stagiaireSearchForm.searchValue);
+      }
+      
+      console.log('🔍 Search params:', searchParams.toString());
+      console.log('🔍 Search type:', stagiaireSearchForm.searchType);
+      console.log('🔍 Search value:', stagiaireSearchForm.searchValue);
+      
+      const response = await apiService.searchStagiaires(searchParams.toString());
+      
+      console.log('🔍 API response:', response);
+      
+      if (response.error) {
+        throw new Error(response.error.message || 'Erreur lors de la recherche');
+      }
+      
+      setSearchResults(response.data?.stagiaires || []);
+      
+      if (response.data?.stagiaires?.length === 0) {
+        toast({
+          title: 'لا توجد نتائج',
+          description: 'لم يتم العثور على متدربين بهذه المعايير',
+        });
+      } else {
+        toast({
+          title: 'تم العثور على نتائج',
+          description: `تم العثور على ${response.data.stagiaires.length} متدرب`,
+        });
+      }
+      
+    } catch (error: any) {
+      console.error('Error searching stagiaires:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response,
+        stack: error.stack
+      });
+      
+      toast({
+        title: 'خطأ في البحث',
+        description: error.message || 'فشل في البحث عن المتدربين',
+        variant: 'destructive'
+      });
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const assignExistingStagiaireToOffre = async (stagiaire: Stagiaire, idOffre: string) => {
+    try {
+      setLoading(true);
+      
+      if (!idOffre) {
+        toast({
+          title: 'خطأ',
+          description: 'يرجى اختيار عرض للتسجيل',
+          variant: 'destructive'
+        });
+        return;
+      }
+
+      const response = await apiService.inscrireStagiaire(stagiaire.id_stagiaire, parseInt(idOffre));
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Erreur lors de l\'inscription');
+      }
+
+      toast({
+        title: 'نجح',
+        description: 'تم تسجيل المتدرب في العرض بنجاح',
+      });
+
+      // Fermer الديالوج وإعادة تعيين
+      setIsCreateStagiaireOpen(false);
+      resetStagiaireSearchForm();
+      setDialogActiveTab('create');
+      await fetchAllUsers();
+
+    } catch (error: any) {
+      console.error('Error assigning stagiaire to offre:', error);
+      toast({
+        title: 'خطأ',
+        description: error.response?.data?.message || 'فشل في تسجيل المتدرب في العرض',
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCreateStagiaire = async () => {
@@ -365,6 +510,7 @@ const UserManagement = () => {
 
       setIsCreateStagiaireOpen(false);
       resetStagiaireForm();
+      setDialogActiveTab('create');
       await fetchAllUsers();
 
     } catch (error: any) {
@@ -898,74 +1044,114 @@ const UserManagement = () => {
                           </TableRow>
                           
                           {/* Expanded row for trainee inscriptions */}
-                          {activeTab === 'stagiaires' && isExpanded && user.inscriptions && user.inscriptions.length > 0 && (
+                          {activeTab === 'stagiaires' && expandedRows.has(user.id_stagiaire) && user.inscriptions && user.inscriptions.length > 0 && (
                             <TableRow>
                               <TableCell colSpan={7} className="bg-gray-50 dark:bg-gray-800 p-0">
                                 <div className="p-4">
-                                  <h4 className="font-semibold mb-3 font-arabic text-right">تسجيلات المتدرب:</h4>
-                                  <div className="grid gap-3">
-                                    {user.inscriptions.map((inscription: any) => (
-                                      <div key={inscription.id_inscription} className="bg-white dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                                          {/* Row 1: Basic Info */}
-                                          <div>
-                                            <span className="font-medium text-gray-700 dark:text-gray-300 font-arabic">التخصص:</span>
-                                            <p className="text-gray-900 dark:text-gray-100 font-arabic">
-                                              {inscription.offre?.specialite?.designation_ar || inscription.offre?.specialite?.designation_fr || 'غير محدد'}
-                                            </p>
+                                  <div className="text-center mb-6" dir="rtl">
+                                    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                      <FileText className="w-8 h-8 text-blue-600" />
+                                    </div>
+                                    <h4 className="text-xl font-bold font-arabic text-gray-900 mb-2">
+                                      تسجيلات المتدرب: {user.prenom_ar} {user.nom_ar}
+                                    </h4>
+                                    <p className="text-gray-600 font-arabic">
+                                      إجمالي التسجيلات: {user.inscriptions?.length || 0} تسجيل
+                                    </p>
+                                  </div>
+                                  
+                                  
+                                  
+                                  <div className="space-y-3">
+                                    {user.inscriptions.map((inscription: any, idx: number) => (
+                                      <div key={inscription.id_inscription || idx} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm">
+                                        {/* Header */}
+                                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-800 px-4 py-3 rounded-t-lg border-b border-gray-200 dark:border-gray-600" dir="rtl">
+                                          <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                              <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                                                <span className="text-blue-600 dark:text-blue-400 text-sm font-bold">#{inscription.id_inscription}</span>
+                                              </div>
+                                              <div className="text-right">
+                                                <h5 className="font-semibold text-gray-900 dark:text-gray-100 font-arabic">
+                                                  تسجيل في عرض رقم {inscription.id_offre}
+                                                </h5>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                                                  {formatDate(inscription.createdAt)}
+                                                </p>
+                                              </div>
+                                            </div>
+                                            <div>
+                                              {inscription.statut === 'acceptee' ? (
+                                                <Badge variant="default" className="font-arabic bg-green-500 text-white">
+                                                  ✅ مقبول
+                                                </Badge>
+                                              ) : inscription.statut === 'en_attente' ? (
+                                                <Badge variant="outline" className="font-arabic text-yellow-600 border-yellow-400">
+                                                  ⏳ في الانتظار
+                                                </Badge>
+                                              ) : inscription.statut === 'refusee' ? (
+                                                <Badge variant="destructive" className="font-arabic">
+                                                  ❌ مرفوض
+                                                </Badge>
+                                              ) : inscription.statut === 'annulee' ? (
+                                                <Badge variant="secondary" className="font-arabic">
+                                                  🚫 ملغي
+                                                </Badge>
+                                              ) : (
+                                                <Badge variant="secondary" className="font-arabic">
+                                                  {inscription.statut || 'غير محدد'}
+                                                </Badge>
+                                              )}
+                                            </div>
                                           </div>
-                                          <div>
-                                            <span className="font-medium text-gray-700 dark:text-gray-300 font-arabic">الشهادة:</span>
-                                            <p className="text-gray-900 dark:text-gray-100 font-arabic">
-                                              {inscription.offre?.diplome?.designation_ar || inscription.offre?.diplome?.designation_fr || 'غير محدد'}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <span className="font-medium text-gray-700 dark:text-gray-300 font-arabic">طريقة التكوين:</span>
-                                            <p className="text-gray-900 dark:text-gray-100 font-arabic">
-                                              {inscription.offre?.modeFormation?.designation_ar || inscription.offre?.modeFormation?.designation_fr || 'غير محدد'}
-                                            </p>
-                                          </div>
-                                          
-                                          {/* Row 2: Dates and Institution */}
-                                          <div>
-                                            <span className="font-medium text-gray-700 dark:text-gray-300 font-arabic">تاريخ البداية:</span>
-                                            <p className="text-gray-900 dark:text-gray-100 font-arabic">
-                                              {inscription.offre?.date_debut ? formatDate(inscription.offre.date_debut) : 'غير محدد'}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <span className="font-medium text-gray-700 dark:text-gray-300 font-arabic">تاريخ النهاية:</span>
-                                            <p className="text-gray-900 dark:text-gray-100 font-arabic">
-                                              {inscription.offre?.date_fin ? formatDate(inscription.offre.date_fin) : 'غير محدد'}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <span className="font-medium text-gray-700 dark:text-gray-300 font-arabic">المؤسسة:</span>
-                                            <p className="text-gray-900 dark:text-gray-100 font-arabic">
-                                              {inscription.offre?.etablissementFormation?.nom_ar || inscription.offre?.etablissementFormation?.nom_fr || 'غير محدد'}
-                                            </p>
-                                          </div>
-                                          
-                                          {/* Row 3: Registration Info */}
-                                          <div>
-                                            <span className="font-medium text-gray-700 dark:text-gray-300 font-arabic">تاريخ التسجيل:</span>
-                                            <p className="text-gray-900 dark:text-gray-100 font-arabic">
-                                              {formatDate(inscription.createdAt)}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <span className="font-medium text-gray-700 dark:text-gray-300 font-arabic">رقم العرض:</span>
-                                            <p className="text-gray-900 dark:text-gray-100 font-arabic">
-                                              {inscription.offre?.id_offre || 'غير محدد'}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <span className="font-medium text-gray-700 dark:text-gray-300 font-arabic">رقم التسجيل:</span>
-                                            <p className="text-gray-900 dark:text-gray-100 font-arabic">
-                                              {inscription.id_inscription || 'غير محدد'}
-                                            </p>
-                                          </div>
+                                        </div>
+                                        
+                                        {/* Content */}
+                                        <div className="p-4" dir="rtl">
+                                          {inscription.offre && (
+                                            <div className="space-y-4">
+                                              {/* معلومات العرض */}
+                                              <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                  <BookOpen className="w-4 h-4 text-blue-600" />
+                                                  <span className="font-semibold text-gray-700 dark:text-gray-300 font-arabic">معلومات العرض</span>
+                                                </div>
+                                                <div className="space-y-2 text-right">
+                                                  {inscription.offre.specialite && (
+                                                    <div className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                                                      <span className="font-medium">التخصص:</span> {inscription.offre.specialite.designation_ar || inscription.offre.specialite.designation_fr}
+                                                    </div>
+                                                  )}
+                                                  {inscription.offre.diplome && (
+                                                    <div className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                                                      <span className="font-medium">الدبلوم:</span> {inscription.offre.diplome.designation_ar || inscription.offre.diplome.designation_fr}
+                                                    </div>
+                                                  )}
+                                                </div>
+                                              </div>
+                                              
+                                              {/* التفاصيل */}
+                                              <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border border-green-200 dark:border-green-800">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                  <Calendar className="w-4 h-4 text-green-600" />
+                                                  <span className="font-semibold text-gray-700 dark:text-gray-300 font-arabic">التفاصيل</span>
+                                                </div>
+                                                <div className="space-y-2 text-right">
+                                                  {inscription.offre.etablissementFormation && (
+                                                    <div className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                                                      <span className="font-medium">المؤسسة:</span> {inscription.offre.etablissementFormation.nom_ar || inscription.offre.etablissementFormation.nom_fr}
+                                                    </div>
+                                                  )}
+                                                  {inscription.offre.date_debut && inscription.offre.date_fin && (
+                                                    <div className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                                                      <span className="font-medium">الفترة:</span> {inscription.offre.date_debut} - {inscription.offre.date_fin}
+                                                    </div>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+                                          )}
                                         </div>
                                       </div>
                                     ))}
@@ -1040,181 +1226,489 @@ const UserManagement = () => {
 
       {/* Create Stagiaire Dialog */}
       <Dialog open={isCreateStagiaireOpen} onOpenChange={setIsCreateStagiaireOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" dir="rtl">
           <DialogHeader>
-            <DialogTitle className="font-arabic">
-              إنشاء متدرب جديد
+            <DialogTitle className="font-arabic text-right">
+              إدارة المتدربين
             </DialogTitle>
-            <DialogDescription className="font-arabic">
-              إدخال معلومات المتدرب وإنشاء حساب له (اختياري) وتسجيله في عرض (اختياري)
+            <DialogDescription className="font-arabic text-right">
+              إنشاء متدرب جديد أو البحث عن متدرب موجود وتسجيله في عرض
             </DialogDescription>
           </DialogHeader>
-          
-          <div className="grid gap-6 py-4">
-            {/* Informations de base */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label className="font-arabic">الاسم بالفرنسية *</Label>
-                <Input
-                  value={stagiaireForm.nom_fr}
-                  onChange={(e) => setStagiaireForm(prev => ({ ...prev, nom_fr: e.target.value }))}
-                  dir="ltr"
-                  placeholder="Nom en français"
-                />
-              </div>
-              <div>
-                <Label className="font-arabic">اللقب بالفرنسية *</Label>
-                <Input
-                  value={stagiaireForm.prenom_fr}
-                  onChange={(e) => setStagiaireForm(prev => ({ ...prev, prenom_fr: e.target.value }))}
-                  dir="ltr"
-                  placeholder="Prénom en français"
-                />
-              </div>
-              <div>
-                <Label className="font-arabic">الاسم بالعربية</Label>
-                <Input
-                  value={stagiaireForm.nom_ar}
-                  onChange={(e) => setStagiaireForm(prev => ({ ...prev, nom_ar: e.target.value }))}
-                  dir="rtl"
-                  placeholder="اسم العائلة"
-                />
-              </div>
-              <div>
-                <Label className="font-arabic">اللقب بالعربية</Label>
-                <Input
-                  value={stagiaireForm.prenom_ar}
-                  onChange={(e) => setStagiaireForm(prev => ({ ...prev, prenom_ar: e.target.value }))}
-                  dir="rtl"
-                  placeholder="الاسم الأول"
-                />
-              </div>
-            </div>
 
-            {/* Informations de contact */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label className="font-arabic">البريد الإلكتروني</Label>
-                <Input
-                  type="email"
-                  value={stagiaireForm.email}
-                  onChange={(e) => setStagiaireForm(prev => ({ ...prev, email: e.target.value }))}
-                  dir="ltr"
-                  placeholder="email@exemple.com"
-                />
-              </div>
-              <div>
-                <Label className="font-arabic">رقم الهاتف</Label>
-                <Input
-                  value={stagiaireForm.telephone}
-                  onChange={(e) => setStagiaireForm(prev => ({ ...prev, telephone: e.target.value }))}
-                  dir="ltr"
-                  placeholder="+212-6-1234-5678"
-                />
-              </div>
-              <div>
-                <Label className="font-arabic">تاريخ الميلاد</Label>
-                <Input
-                  type="date"
-                  value={stagiaireForm.date_naissance}
-                  onChange={(e) => setStagiaireForm(prev => ({ ...prev, date_naissance: e.target.value }))}
-                  dir="ltr"
-                />
-              </div>
-            </div>
+          <Tabs value={dialogActiveTab} onValueChange={setDialogActiveTab} className="w-full" dir="rtl">
+            <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-blue-50 to-indigo-50 p-1 rounded-xl border border-blue-200 shadow-sm">
+              <TabsTrigger 
+                value="create" 
+                className={`font-arabic transition-all duration-300 rounded-lg ${
+                  dialogActiveTab === 'create' 
+                    ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg scale-105' 
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-100'
+                }`}
+              >
+                <UserPlus className="w-4 h-4 ml-2" />
+                إنشاء متدرب جديد
+              </TabsTrigger>
+              <TabsTrigger 
+                value="existing" 
+                className={`font-arabic transition-all duration-300 rounded-lg ${
+                  dialogActiveTab === 'existing' 
+                    ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg scale-105' 
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-100'
+                }`}
+              >
+                <Search className="w-4 h-4 ml-2" />
+                البحث عن متدرب موجود
+              </TabsTrigger>
+            </TabsList>
 
-            {/* Options avancées */}
-            <div className="space-y-4 border-t pt-4">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="create-account"
-                  checked={createAccountForStagiaire}
-                  onChange={(e) => setCreateAccountForStagiaire(e.target.checked)}
-                  className="rounded"
-                />
-                <Label htmlFor="create-account" className="font-arabic">إنشاء حساب مستخدم</Label>
+            <TabsContent value="create" className="space-y-6" dir="rtl">
+              <div className="text-center mb-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-100 via-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <UserPlus className="w-10 h-10 text-green-600" />
+                </div>
+                <h3 className="text-2xl font-bold font-arabic text-gray-900 mb-3">إنشاء متدرب جديد</h3>
+                <p className="text-gray-600 font-arabic text-lg leading-relaxed max-w-2xl mx-auto">
+                  أدخل معلومات المتدرب وإنشاء حساب له (اختياري) وتسجيله في عرض (اختياري)
+                </p>
               </div>
-
-              {createAccountForStagiaire && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-6">
-                  <div>
-                    <Label className="font-arabic">اسم المستخدم *</Label>
-                    <Input
-                      value={stagiaireForm.username}
-                      onChange={(e) => setStagiaireForm(prev => ({ ...prev, username: e.target.value }))}
-                      dir="ltr"
-                      placeholder="nom.prenom"
-                    />
+              
+              <div className="grid gap-6">
+                {/* Informations de base */}
+                <div className="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl border border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300" dir="rtl">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
+                      <span className="text-white font-bold text-lg">1</span>
+                    </div>
+                    <h4 className="text-xl font-bold font-arabic text-gray-900 text-right">المعلومات الأساسية</h4>
                   </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-arabic text-gray-700">الاسم بالفرنسية *</Label>
+                      <Input
+                        value={stagiaireForm.nom_fr}
+                        onChange={(e) => setStagiaireForm(prev => ({ ...prev, nom_fr: e.target.value }))}
+                        dir="ltr"
+                        placeholder="Nom en français"
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-arabic text-gray-700">اللقب بالفرنسية *</Label>
+                      <Input
+                        value={stagiaireForm.prenom_fr}
+                        onChange={(e) => setStagiaireForm(prev => ({ ...prev, prenom_fr: e.target.value }))}
+                        dir="ltr"
+                        placeholder="Prénom en français"
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-arabic text-gray-600">الاسم بالعربية</Label>
+                      <Input
+                        value={stagiaireForm.nom_ar}
+                        onChange={(e) => setStagiaireForm(prev => ({ ...prev, nom_ar: e.target.value }))}
+                        dir="rtl"
+                        placeholder="اسم العائلة"
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-arabic text-gray-600">اللقب بالعربية</Label>
+                      <Input
+                        value={stagiaireForm.prenom_ar}
+                        onChange={(e) => setStagiaireForm(prev => ({ ...prev, prenom_ar: e.target.value }))}
+                        dir="rtl"
+                        placeholder="الاسم الأول"
+                        className="mt-2"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Informations de contact */}
+                <div className="bg-gradient-to-br from-white to-green-50 p-6 rounded-2xl border border-green-200 shadow-lg hover:shadow-xl transition-all duration-300" dir="rtl">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-md">
+                      <span className="text-white font-bold text-lg">2</span>
+                    </div>
+                    <h4 className="text-xl font-bold font-arabic text-gray-900 text-right">معلومات الاتصال</h4>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-arabic text-gray-700">البريد الإلكتروني</Label>
+                      <Input
+                        type="email"
+                        value={stagiaireForm.email}
+                        onChange={(e) => setStagiaireForm(prev => ({ ...prev, email: e.target.value }))}
+                        dir="ltr"
+                        placeholder="email@exemple.com"
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-arabic text-gray-700">رقم الهاتف</Label>
+                      <Input
+                        value={stagiaireForm.telephone}
+                        onChange={(e) => setStagiaireForm(prev => ({ ...prev, telephone: e.target.value }))}
+                        dir="ltr"
+                        placeholder="+212-6-1234-5678"
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-arabic text-gray-600">تاريخ الميلاد</Label>
+                      <Input
+                        type="date"
+                        value={stagiaireForm.date_naissance}
+                        onChange={(e) => setStagiaireForm(prev => ({ ...prev, date_naissance: e.target.value }))}
+                        dir="ltr"
+                        className="mt-2"
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+
+                {/* Options avancées */}
+                <div className="bg-gradient-to-br from-white to-purple-50 p-6 rounded-2xl border border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300" dir="rtl">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl flex items-center justify-center shadow-md">
+                      <span className="text-white font-bold text-lg">3</span>
+                    </div>
+                    <h4 className="text-xl font-bold font-arabic text-gray-900 text-right">الخيارات المتقدمة</h4>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                      <input
+                        type="checkbox"
+                        id="create-account"
+                        checked={createAccountForStagiaire}
+                        onChange={(e) => setCreateAccountForStagiaire(e.target.checked)}
+                        className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <Label htmlFor="create-account" className="font-arabic text-gray-700 cursor-pointer">
+                        إنشاء حساب مستخدم للمتدرب
+                      </Label>
+                    </div>
+
+                    {createAccountForStagiaire && (
+                      <div className="pl-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <Label className="font-arabic text-gray-700">اسم المستخدم *</Label>
+                            <Input
+                              value={stagiaireForm.username}
+                              onChange={(e) => setStagiaireForm(prev => ({ ...prev, username: e.target.value }))}
+                              dir="ltr"
+                              placeholder="nom.prenom"
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label className="font-arabic text-gray-700">كلمة المرور *</Label>
+                            <Input
+                              type="password"
+                              value={stagiaireForm.password}
+                              onChange={(e) => setStagiaireForm(prev => ({ ...prev, password: e.target.value }))}
+                              dir="ltr"
+                              placeholder="كلمة مرور آمنة"
+                              className="mt-2"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                      <input
+                        type="checkbox"
+                        id="auto-inscription"
+                        checked={autoInscription}
+                        onChange={(e) => setAutoInscription(e.target.checked)}
+                        className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <Label htmlFor="auto-inscription" className="font-arabic text-gray-700 cursor-pointer">
+                        التسجيل التلقائي في عرض
+                      </Label>
+                    </div>
+
+                    {autoInscription && (
+                      <div className="pl-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                        <Label className="font-arabic text-gray-700">اختيار العرض</Label>
+                        <Select
+                          value={stagiaireForm.id_offre}
+                          onValueChange={(value) => setStagiaireForm(prev => ({ ...prev, id_offre: value }))}
+                        >
+                          <SelectTrigger className="mt-2">
+                            <SelectValue placeholder="اختيار عرض من القائمة" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {offres.map((offre) => (
+                              <SelectItem key={offre.id_offre} value={offre.id_offre.toString()}>
+                                <div className="flex flex-col">
+                                  <span className="font-medium">{offre.designation_fr}</span>
+                                  {offre.specialite && (
+                                    <span className="text-sm text-gray-500">
+                                      {offre.specialite.designation_fr}
+                                    </span>
+                                  )}
+                                  {offre.diplome && (
+                                    <span className="text-xs text-gray-400">
+                                      {offre.diplome.designation_fr}
+                                    </span>
+                                  )}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <DialogFooter dir="rtl">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsCreateStagiaireOpen(false);
+                    resetStagiaireForm();
+                  }}
+                  className="font-arabic"
+                >
+                  إلغاء
+                </Button>
+                <Button
+                  onClick={handleCreateStagiaire}
+                  disabled={loading}
+                  className="font-arabic"
+                >
+                  {loading ? 'جاري الإنشاء...' : 'إنشاء المتدرب'}
+                </Button>
+              </DialogFooter>
+            </TabsContent>
+
+            <TabsContent value="existing" className="space-y-6" dir="rtl">
+              {/* Formulaire de recherche */}
+              <div className="text-center mb-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <Search className="w-10 h-10 text-blue-600" />
+                </div>
+                <h3 className="text-2xl font-bold font-arabic text-gray-900 mb-3">البحث عن متدرب موجود</h3>
+                <p className="text-gray-600 font-arabic text-lg leading-relaxed max-w-2xl mx-auto">
+                  ابحث عن متدرب موجود بواسطة معايير مختلفة وقم بتسجيله في عرض
+                </p>
+              </div>
+              
+              <div className="space-y-6" dir="rtl">
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label className="font-arabic">كلمة المرور *</Label>
+                    <Label className="font-arabic">نوع البحث</Label>
+                    <Select
+                      value={stagiaireSearchForm.searchType || 'id_compte'}
+                      onValueChange={(value) => setStagiaireSearchForm(prev => ({ 
+                        ...prev, 
+                        searchType: value,
+                        searchValue: '' // Reset search value when changing type
+                      }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="اختيار نوع البحث" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="id_compte">رقم الحساب (رقم الضمان الاجتماعي)</SelectItem>
+                        <SelectItem value="nom_fr">الاسم بالفرنسية</SelectItem>
+                        <SelectItem value="prenom_fr">اللقب بالفرنسية</SelectItem>
+                        <SelectItem value="email">البريد الإلكتروني</SelectItem>
+                        <SelectItem value="telephone">رقم الهاتف</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <Label className="font-arabic">قيمة البحث</Label>
                     <Input
-                      type="password"
-                      value={stagiaireForm.password}
-                      onChange={(e) => setStagiaireForm(prev => ({ ...prev, password: e.target.value }))}
+                      value={stagiaireSearchForm.searchValue}
+                      onChange={(e) => setStagiaireSearchForm(prev => ({ ...prev, searchValue: e.target.value }))}
                       dir="ltr"
-                      placeholder="كلمة مرور آمنة"
+                      placeholder={
+                        stagiaireSearchForm.searchType === 'id_compte' ? '123456789' :
+                        stagiaireSearchForm.searchType === 'nom_fr' ? 'Nom en français' :
+                        stagiaireSearchForm.searchType === 'prenom_fr' ? 'Prénom en français' :
+                        stagiaireSearchForm.searchType === 'email' ? 'email@exemple.com' :
+                        stagiaireSearchForm.searchType === 'telephone' ? '+212-6-1234-5678' :
+                        'أدخل قيمة البحث'
+                      }
                     />
                   </div>
                 </div>
-              )}
 
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="auto-inscription"
-                  checked={autoInscription}
-                  onChange={(e) => setAutoInscription(e.target.checked)}
-                  className="rounded"
-                />
-                <Label htmlFor="auto-inscription" className="font-arabic">التسجيل التلقائي في عرض</Label>
-              </div>
-
-              {autoInscription && (
-                <div className="pl-6">
-                  <Label className="font-arabic">اختيار العرض</Label>
-                  <Select
-                    value={stagiaireForm.id_offre}
-                    onValueChange={(value) => setStagiaireForm(prev => ({ ...prev, id_offre: value }))}
+                <div className="flex gap-2">
+                  <Button
+                    onClick={searchExistingStagiaires}
+                    disabled={isSearching || !stagiaireSearchForm.searchValue || !stagiaireSearchForm.searchType}
+                    className="font-arabic"
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="اختيار عرض" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {offres.map((offre) => (
-                        <SelectItem key={offre.id_offre} value={offre.id_offre.toString()}>
-                          {offre.designation_fr}
-                          {offre.specialite && ` - ${offre.specialite.designation_fr}`}
-                          {offre.diplome && ` (${offre.diplome.designation_fr})`}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    {isSearching ? 'جاري البحث...' : 'البحث'}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={resetStagiaireSearchForm}
+                    className="font-arabic"
+                  >
+                    إعادة تعيين
+                  </Button>
+                </div>
+              </div>
+
+              {/* Résultats de recherche */}
+              {searchResults.length > 0 && (
+                <div className="space-y-4">
+                  <h4 className="text-md font-semibold font-arabic">نتائج البحث</h4>
+                  
+                  <div className="space-y-3">
+                    {searchResults.map((stagiaire) => (
+                      <div
+                        key={stagiaire.id_stagiaire}
+                        className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                          selectedExistingStagiaire?.id_stagiaire === stagiaire.id_stagiaire
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                        onClick={() => setSelectedExistingStagiaire(stagiaire)}
+                      >
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <h5 className="font-semibold font-arabic text-lg mb-2">
+                              {stagiaire.prenom_fr} {stagiaire.nom_fr}
+                            </h5>
+                            {stagiaire.nom_ar && stagiaire.prenom_ar && (
+                              <p className="text-sm text-gray-600 font-arabic mb-1">
+                                {stagiaire.prenom_ar} {stagiaire.nom_ar}
+                              </p>
+                            )}
+                            <div className="space-y-1">
+                              {stagiaire.email && (
+                                <p className="text-sm text-gray-500 flex items-center gap-2">
+                                  <Mail className="w-4 h-4" />
+                                  {stagiaire.email}
+                                </p>
+                              )}
+                              {stagiaire.telephone && (
+                                <p className="text-sm text-gray-500 flex items-center gap-2">
+                                  <Phone className="w-4 h-4" />
+                                  {stagiaire.telephone}
+                                </p>
+                              )}
+                              {stagiaire.Compte && (
+                                <p className="text-sm text-blue-600 flex items-center gap-2">
+                                  <User className="w-4 h-4" />
+                                  حساب: {stagiaire.Compte.username}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                          <div className="text-right ml-4">
+                            <Badge variant="outline" className="font-arabic text-sm">
+                              {stagiaire.inscriptions?.length || 0} تسجيل
+                            </Badge>
+                          </div>
+                        </div>
+
+                        {/* عرض التسجيلات الموجودة */}
+                        {stagiaire.inscriptions && stagiaire.inscriptions.length > 0 && (
+                          <div className="mt-3 pt-3 border-t border-gray-200">
+                            <h6 className="text-sm font-medium text-gray-700 mb-2 font-arabic">
+                              التسجيلات الموجودة:
+                            </h6>
+                            <div className="space-y-2">
+                              {stagiaire.inscriptions.map((inscription) => (
+                                <div key={inscription.id_inscription} className="text-xs bg-gray-50 p-2 rounded">
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-gray-600">
+                                      {inscription.offre?.specialite?.designation_fr || 'تخصص غير محدد'}
+                                    </span>
+                                    <span className="text-blue-600 font-medium">
+                                      {inscription.offre?.etablissementFormation?.nom_fr || 'مؤسسة غير محدد'}
+                                    </span>
+                                  </div>
+                                  {inscription.offre?.diplome && (
+                                    <div className="text-gray-500 mt-1">
+                                      {inscription.offre.diplome.designation_fr}
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Sélection de l'offre pour l'inscription */}
+                  {selectedExistingStagiaire && (
+                    <div className="p-4 border rounded-lg bg-gray-50">
+                      <h5 className="font-semibold font-arabic mb-3">
+                        تسجيل {selectedExistingStagiaire.prenom_fr} {selectedExistingStagiaire.nom_fr} في عرض
+                      </h5>
+                      
+                      <div className="space-y-3">
+                        <div>
+                          <Label className="font-arabic">اختيار العرض</Label>
+                          <Select
+                            value={stagiaireForm.id_offre}
+                            onValueChange={(value) => setStagiaireForm(prev => ({ ...prev, id_offre: value }))}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="اختيار عرض" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {offres.map((offre) => (
+                                <SelectItem key={offre.id_offre} value={offre.id_offre.toString()}>
+                                  {offre.designation_fr}
+                                  {offre.specialite && ` - ${offre.specialite.designation_fr}`}
+                                  {offre.diplome && ` (${offre.diplome.designation_fr})`}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <Button
+                          onClick={() => assignExistingStagiaireToOffre(selectedExistingStagiaire, stagiaireForm.id_offre)}
+                          disabled={loading || !stagiaireForm.id_offre}
+                          className="font-arabic"
+                        >
+                          {loading ? 'جاري التسجيل...' : 'تسجيل المتدرب في العرض'}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
-          </div>
 
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsCreateStagiaireOpen(false);
-                resetStagiaireForm();
-              }}
-              className="font-arabic"
-            >
-              إلغاء
-            </Button>
-            <Button
-              onClick={handleCreateStagiaire}
-              disabled={loading}
-              className="font-arabic"
-            >
-              {loading ? 'جاري الإنشاء...' : 'إنشاء المتدرب'}
-            </Button>
-          </DialogFooter>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsCreateStagiaireOpen(false);
+                    resetStagiaireSearchForm();
+                    setDialogActiveTab('create');
+                  }}
+                  className="font-arabic"
+                >
+                  إغلاق
+                </Button>
+              </DialogFooter>
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
 

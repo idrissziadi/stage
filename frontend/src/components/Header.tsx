@@ -1,12 +1,12 @@
 import React from 'react';
-import { APP_CONFIG } from '../config/app';
+import { LogOut } from 'lucide-react';
 
 interface HeaderProps {
   user?: {
     nom: string;
     prenom: string;
     role: string;
-  };
+  } | null;
   onLogout?: () => void;
 }
 
@@ -15,55 +15,13 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
     <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo et nom de l'application */}
-          <div className="flex items-center space-x-4 rtl:space-x-reverse">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white text-xl font-bold">ج</span>
+          {/* Logo et navigation */}
+          <nav className="flex space-x-8 rtl:space-x-reverse">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <h1 className="text-xl font-bold text-gray-900">نظام إدارة التدريب</h1>
               </div>
             </div>
-            <div className="hidden md:block">
-              <h1 className="text-xl font-bold text-gray-900">
-                {APP_CONFIG.name.ar}
-              </h1>
-              <p className="text-sm text-gray-500">
-                نظام إدارة التكوين المهني
-              </p>
-            </div>
-          </div>
-
-          {/* Navigation centrale */}
-          <nav className="hidden md:flex space-x-8 rtl:space-x-reverse">
-            <a
-              href="/dashboard"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              الرئيسية
-            </a>
-            <a
-              href="/programs"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              البرامج
-            </a>
-            <a
-              href="/users"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              المستخدمون
-            </a>
-            <a
-              href="/establishments"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              المؤسسات
-            </a>
-            <a
-              href="/reports"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              التقارير
-            </a>
           </nav>
 
           {/* Informations utilisateur et actions */}
@@ -71,10 +29,10 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
             {user ? (
               <>
                 <div className="hidden md:block text-right">
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-gray-900 font-arabic">
                     {user.prenom} {user.nom}
                   </p>
-                  <p className="text-xs text-gray-500 capitalize">
+                  <p className="text-xs text-gray-500 capitalize font-arabic">
                     {user.role === 'admin' && 'مدير'}
                     {user.role === 'enseignant' && 'أستاذ'}
                     {user.role === 'stagiaire' && 'متدرب'}
@@ -84,8 +42,9 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                 <div className="relative">
                   <button
                     onClick={onLogout}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                    className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 font-arabic"
                   >
+                    <LogOut className="w-4 h-4" />
                     تسجيل الخروج
                   </button>
                 </div>
@@ -93,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
             ) : (
               <a
                 href="/login"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 font-arabic"
               >
                 تسجيل الدخول
               </a>

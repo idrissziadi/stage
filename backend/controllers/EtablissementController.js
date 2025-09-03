@@ -11,6 +11,7 @@ const Memoire = require('../models/Memoire');
 const Inscription = require('../models/Inscription');
 const Specialite = require('../models/Specialite');
 const Diplome = require('../models/Diplome');
+const ModeFormation = require('../models/ModeFormation');
 
 const EtablissementController = {
   // Get all enseignants for a specific establishment
@@ -208,14 +209,24 @@ const EtablissementController = {
         });
       }
 
-      // Get inscriptions for these offers
+      // Get inscriptions for these offers (simplified for now)
       const inscriptions = await Inscription.findAll({
         where: { id_offre: { [Op.in]: offreIds } },
-        attributes: ['id_stagiaire'],
-        group: ['id_stagiaire']
+        attributes: ['id_inscription', 'id_stagiaire', 'id_offre', 'statut', 'createdAt'],
+        order: [['createdAt', 'DESC']]
       });
 
-      const stagiaireIds = inscriptions.map(inscription => inscription.id_stagiaire);
+      // Group inscriptions by stagiaire
+      const inscriptionsByStagiaire = {};
+      inscriptions.forEach(inscription => {
+        const stagiaireId = inscription.id_stagiaire;
+        if (!inscriptionsByStagiaire[stagiaireId]) {
+          inscriptionsByStagiaire[stagiaireId] = [];
+        }
+        inscriptionsByStagiaire[stagiaireId].push(inscription);
+      });
+
+      const stagiaireIds = Object.keys(inscriptionsByStagiaire).map(id => parseInt(id));
 
       if (stagiaireIds.length === 0) {
         return res.json({
@@ -255,8 +266,19 @@ const EtablissementController = {
         order: [['nom_fr', 'ASC'], ['prenom_fr', 'ASC']]
       });
 
+      // Attach inscriptions to each stagiaire
+                 const stagiairesWithInscriptions = stagiaires.rows.map(stagiaire => {
+             const stagiaireData = stagiaire.toJSON();
+             // Get inscriptions for this stagiaire with full offre details
+             const stagiaireInscriptions = inscriptions.filter(inscription => 
+               inscription.id_stagiaire === stagiaire.id_stagiaire
+             );
+             stagiaireData.inscriptions = stagiaireInscriptions;
+             return stagiaireData;
+           });
+
       return res.json({
-        stagiaires: stagiaires.rows,
+        stagiaires: stagiairesWithInscriptions,
         total: stagiaires.count,
         limit: parseInt(limit),
         offset: parseInt(offset)
@@ -1764,6 +1786,220 @@ const EtablissementController = {
       console.error('Error creating account for stagiaire:', error);
       return res.status(500).json({ 
         message: 'Erreur serveur lors de la création du compte', 
+        error: error.message 
+      });
+    }
+  },
+
+  // Search existing stagiaires by various criteria
+  async searchExistingStagiaires(req, res) {
+    try {
+      console.log('🔍 Search request received:', req.query);
+      const { id_stagiaire, nom_fr, prenom_fr, email, telephone } = req.query;
+
+      // Verify that the requesting user is from an establishment
+      const etablissement = await EtablissementFormation.findOne({ 
+        where: { compte_id: req.user.id_compte } 
+      });
+      
+      console.log('🔍 Etablissement found:', etablissement ? 'Yes' : 'No');
+      
+      if (!etablissement) {
+        return res.status(403).json({ 
+          message: 'Accès refusé: seules les institutions peuvent rechercher des stagiaires' 
+        });
+      }
+
+      // Build search conditions
+      let whereClause = {};
+      
+      if (id_stagiaire) {
+        whereClause.id_stagiaire = parseInt(id_stagiaire);
+      }
+      
+      if (nom_fr) {
+        whereClause.nom_fr = { [Op.like]: `%${nom_fr.trim()}%` };
+      }
+      
+      if (prenom_fr) {
+        whereClause.prenom_fr = { [Op.like]: `%${prenom_fr.trim()}%` };
+      }
+      
+      if (email) {
+        whereClause.email = { [Op.like]: `%${email.trim()}%` };
+      }
+      
+      if (telephone) {
+        whereClause.telephone = { [Op.like]: `%${telephone.trim()}%` };
+      }
+
+      console.log('🔍 Where clause built:', whereClause);
+
+      // If no search criteria provided, return error
+      if (Object.keys(whereClause).length === 0) {
+        return res.status(400).json({ 
+          message: 'Veuillez fournir au moins un critère de recherche' 
+        });
+      }
+
+      console.log('🔍 Searching with conditions:', whereClause);
+
+      // Search for stagiaires
+      const stagiaires = await Stagiaire.findAll({
+        where: whereClause,
+        include: [
+          {
+            model: Compte,
+            as: 'Compte',
+            attributes: ['id_compte', 'username', 'role', 'createdAt'],
+            required: false
+          },
+          {
+            model: Inscription,
+            as: 'inscriptions',
+            include: [
+              {
+                model: Offre,
+                as: 'offre',
+                attributes: ['id_offre', 'date_debut', 'date_fin'],
+                include: [
+                  {
+                    model: Specialite,
+                    as: 'specialite',
+                    attributes: ['designation_fr', 'designation_ar'],
+                    required: false
+                  },
+                  {
+                    model: Diplome,
+                    as: 'diplome',
+                    attributes: ['designation_fr', 'designation_ar'],
+                    required: false
+                  },
+                  {
+                    model: EtablissementFormation,
+                    as: 'etablissementFormation',
+                    attributes: ['nom_fr', 'nom_ar', 'code'],
+                    required: false
+                  }
+                ],
+                required: false
+              }
+            ],
+            required: false
+          }
+        ],
+        order: [['nom_fr', 'ASC'], ['prenom_fr', 'ASC']],
+        limit: 50 // Limit results to prevent overwhelming response
+      });
+
+      console.log('🔍 Search completed, found:', stagiaires.length, 'stagiaires');
+
+      return res.json({
+        message: 'Recherche effectuée avec succès',
+        stagiaires: stagiaires,
+        total: stagiaires.length
+      });
+
+    } catch (error) {
+      console.error('❌ Error searching stagiaires:', error);
+      console.error('❌ Error stack:', error.stack);
+      return res.status(500).json({ 
+        message: 'Erreur serveur lors de la recherche des stagiaires', 
+        error: error.message 
+      });
+    }
+  },
+
+  // Get all inscriptions for a specific stagiaire (including those from other establishments)
+  async getAllInscriptionsForStagiaire(req, res) {
+    try {
+      const { id_stagiaire } = req.params;
+      console.log('🔍 Getting all inscriptions for stagiaire:', id_stagiaire);
+
+      // Verify that the requesting user is from an establishment
+      const etablissement = await EtablissementFormation.findOne({ 
+        where: { compte_id: req.user.id_compte } 
+      });
+      
+      if (!etablissement) {
+        return res.status(403).json({ 
+          message: 'Accès refusé: seules les institutions peuvent consulter les inscriptions' 
+        });
+      }
+
+      // Get the stagiaire with all his inscriptions
+      const stagiaire = await Stagiaire.findByPk(id_stagiaire, {
+        include: [
+          {
+            model: Compte,
+            as: 'Compte',
+            attributes: ['id_compte', 'username', 'role', 'createdAt'],
+            required: false
+          },
+          {
+            model: Inscription,
+            as: 'inscriptions',
+            include: [
+              {
+                model: Offre,
+                as: 'offre',
+                attributes: ['id_offre', 'date_debut', 'date_fin'],
+                include: [
+                  {
+                    model: Specialite,
+                    as: 'specialite',
+                    attributes: ['designation_fr', 'designation_ar'],
+                    required: false
+                  },
+                  {
+                    model: Diplome,
+                    as: 'diplome',
+                    attributes: ['designation_fr', 'designation_ar'],
+                    required: false
+                  },
+                  {
+                    model: EtablissementFormation,
+                    as: 'etablissementFormation',
+                    attributes: ['nom_fr', 'nom_ar', 'code'],
+                    required: false
+                  }
+                ],
+                required: false
+              }
+            ],
+            required: false
+          }
+        ]
+      });
+
+      if (!stagiaire) {
+        return res.status(404).json({
+          message: 'Stagiaire non trouvé'
+        });
+      }
+
+      console.log('🔍 Stagiaire trouvé:', stagiaire.nom_fr, stagiaire.prenom_fr);
+      console.log('🔍 Nombre d\'inscriptions:', stagiaire.inscriptions?.length || 0);
+
+      if (stagiaire.inscriptions) {
+        stagiaire.inscriptions.forEach(inscription => {
+          console.log(`  - Inscription ${inscription.id_inscription} pour offre ${inscription.id_offre}`);
+          if (inscription.offre && inscription.offre.etablissementFormation) {
+            console.log(`    Établissement: ${inscription.offre.etablissementFormation.nom_fr}`);
+          }
+        });
+      }
+
+      return res.json({
+        message: 'Inscriptions récupérées avec succès',
+        stagiaire: stagiaire,
+        totalInscriptions: stagiaire.inscriptions?.length || 0
+      });
+
+    } catch (error) {
+      console.error('❌ Error getting inscriptions for stagiaire:', error);
+      return res.status(500).json({ 
+        message: 'Erreur serveur lors de la récupération des inscriptions', 
         error: error.message 
       });
     }

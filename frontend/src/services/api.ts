@@ -341,9 +341,6 @@ class ApiService {
   }
 
   // Module endpoints
-  async getModulesByEnseignant(id_enseignant: string): Promise<ApiResponse> {
-    return this.request(`/module/enseignant/${id_enseignant}`);
-  }
 
   async getModules(): Promise<ApiResponse> {
     return this.request('/module');
@@ -674,6 +671,25 @@ class ApiService {
   async removeModuleFromEnseignant(id_enseignant: number, id_module: number, annee_scolaire: string): Promise<ApiResponse> {
     return this.request(`/ens-module/enseignant/${id_enseignant}/module/${id_module}/${annee_scolaire}`, {
       method: 'DELETE',
+    });
+  }
+
+  // ==============================================
+  // STAGIAIRE SEARCH AND ASSIGNMENT METHODS
+  // ==============================================
+
+  // Rechercher des stagiaires existants par différents critères
+  async searchStagiaires(searchParams: string): Promise<ApiResponse> {
+    return this.request(`/etablissement/stagiaires/search?${searchParams}`);
+  }
+
+  // Inscrire un stagiaire existant dans une offre
+  async inscrireStagiaire(id_stagiaire: number, id_offre: number): Promise<ApiResponse> {
+    return this.request(`/etablissement/stagiaires/${id_stagiaire}/inscrire`, {
+      method: 'POST',
+      body: JSON.stringify({
+        id_offre
+      }),
     });
   }
 }

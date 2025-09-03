@@ -103,12 +103,48 @@ const ProgrammeManagementExtraordinary = () => {
   const fetchProgrammes = async () => {
     try {
       setLoading(true);
-      const response = await request('/api/etablissement-regionale/programmes', {
-        method: 'GET',
-        params: filters
-      });
-      setProgrammes(response?.programmes || []);
-      setTotal(response?.total || 0);
+      console.log('🔄 Fetching programmes with filters:', filters);
+      
+      // Use the correct API endpoint
+      const queryString = new URLSearchParams({
+        search: filters.search,
+        status: filters.status,
+        limit: filters.limit.toString(),
+        offset: filters.offset.toString()
+      }).toString();
+      
+      const response = await request(`/programme?${queryString}`);
+      
+      console.log('📊 Programmes response:', response);
+      
+      // Handle data wrapper structure
+      const programmesData = response?.data || response;
+      let programmesList = [];
+      let totalCount = 0;
+      
+      if (response?.error) {
+        console.warn('⚠️ API returned error:', response.error);
+        programmesList = [];
+        totalCount = 0;
+      } else if (Array.isArray(programmesData)) {
+        // Direct array response
+        programmesList = programmesData;
+        totalCount = programmesData.length;
+      } else if (programmesData?.programmes && Array.isArray(programmesData.programmes)) {
+        // Wrapped response
+        programmesList = programmesData.programmes;
+        totalCount = programmesData.total || programmesData.programmes.length;
+      } else if (Array.isArray(programmesData)) {
+        // Fallback
+        programmesList = programmesData;
+        totalCount = programmesData.length;
+      }
+      
+      console.log('📊 Extracted programmes:', programmesList);
+      console.log('📊 Total count:', totalCount);
+      
+      setProgrammes(programmesList);
+      setTotal(totalCount);
     } catch (error: any) {
       console.error('Error fetching programmes:', error);
       toast({
@@ -123,8 +159,16 @@ const ProgrammeManagementExtraordinary = () => {
 
   const fetchModules = async () => {
     try {
-      const response = await request('/api/etablissement-regionale/modules');
-      setModules(response || []);
+      console.log('🔄 Fetching modules...');
+      const response = await request('/module');
+      console.log('📊 Modules response:', response);
+      
+      // Handle data wrapper structure
+      const modulesData = response?.data || response;
+      const modulesList = Array.isArray(modulesData) ? modulesData : [];
+      
+      console.log('📊 Extracted modules:', modulesList);
+      setModules(modulesList);
     } catch (error: any) {
       console.error('Error fetching modules:', error);
     }
@@ -206,6 +250,12 @@ const ProgrammeManagementExtraordinary = () => {
   };
 
   const getStats = () => {
+    // Ensure programmes is an array
+    if (!Array.isArray(programmes)) {
+      console.warn('⚠️ programmes is not an array:', programmes);
+      return { total: 0, pending: 0, approved: 0, rejected: 0 };
+    }
+    
     const total = programmes.length;
     const pending = programmes.filter(p => p.status === 'في_الانتظار').length;
     const approved = programmes.filter(p => p.status === 'مقبول').length;

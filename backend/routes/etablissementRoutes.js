@@ -743,4 +743,9 @@ router.post('/enseignants/:id_enseignant/create-account', isAuth, EtablissementC
  */
 router.post('/stagiaires/:id_stagiaire/create-account', isAuth, EtablissementController.createAccountForStagiaire);
 
+router.get('/stagiaires/search', isAuth, EtablissementController.searchExistingStagiaires);
+
+// Get all inscriptions for a specific stagiaire (including those from other establishments)
+router.get('/stagiaires/:id_stagiaire/inscriptions', isAuth, EtablissementController.getAllInscriptionsForStagiaire);
+
 module.exports = router;
