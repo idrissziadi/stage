@@ -196,7 +196,7 @@ import AnimatedSection from '../components/AnimatedSection';
               whileHover={{ scale: 1.05 }}
               className="flex items-center space-x-3 space-x-reverse"
             >
-                             <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center">
                 <GraduationCap className="w-6 h-6 text-white" />
               </div>
                              <span className="text-xl font-bold text-gray-900">وزارة التكوين والتعليم المهنيين</span>
@@ -257,7 +257,7 @@ import AnimatedSection from '../components/AnimatedSection';
               <AnimatedButton
                 variant="primary"
                 size="lg"
-                onClick={() => console.log('Access platform')}
+                onClick={() => navigate('/auth')}
               >
                 الوصول للمنصة
               </AnimatedButton>

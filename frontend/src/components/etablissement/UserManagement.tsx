@@ -3,6 +3,8 @@ import { useAuthApi } from '@/hooks/useAuthApi';
 import { apiService } from '@/services/api';
 import { formatDate } from '@/utils/formatDate';
 import { useToast } from '@/components/ui/use-toast';
+import StyledSnackbar from '@/components/ui/styled-snackbar';
+import { useStyledSnackbar } from '@/hooks/useStyledSnackbar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -99,10 +101,14 @@ interface Stagiaire {
   inscriptions?: Array<{
     id_inscription: number;
     statut: string;
+    date_inscription: string;
     createdAt: string;
+    updatedAt: string;
     offre: {
       id_offre: number;
-      description: string;
+      id_etab_formation: number;
+      date_debut?: string;
+      date_fin?: string;
       specialite?: {
         designation_fr: string;
         designation_ar: string;
@@ -129,6 +135,7 @@ interface Grade {
 const UserManagement = () => {
   const { userProfile } = useAuthApi();
   const { toast } = useToast();
+  const { snackbar, hideSnackbar, showSuccess, showError, showWarning, showInfo } = useStyledSnackbar();
   const [activeTab, setActiveTab] = useState('enseignants');
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -148,6 +155,7 @@ const UserManagement = () => {
   });
 
   const [stagiaireForm, setStagiaireForm] = useState({
+    id_stagiaire: '',
     nom_fr: '',
     prenom_fr: '',
     nom_ar: '',
@@ -308,6 +316,7 @@ const UserManagement = () => {
 
   const resetStagiaireForm = () => {
     setStagiaireForm({
+      id_stagiaire: '',
       nom_fr: '',
       prenom_fr: '',
       nom_ar: '',
@@ -382,15 +391,15 @@ const UserManagement = () => {
       setSearchResults(response.data?.stagiaires || []);
       
       if (response.data?.stagiaires?.length === 0) {
-        toast({
-          title: 'لا توجد نتائج',
-          description: 'لم يتم العثور على متدربين بهذه المعايير',
-        });
+        showInfo(
+          'لا توجد نتائج 🔍',
+          'لم يتم العثور على متدربين بهذه المعايير. يرجى تجربة معايير بحث أخرى'
+        );
       } else {
-        toast({
-          title: 'تم العثور على نتائج',
-          description: `تم العثور على ${response.data.stagiaires.length} متدرب`,
-        });
+        showSuccess(
+          'تم العثور على نتائج! ✅',
+          `تم العثور على ${response.data.stagiaires.length} متدرب يطابق معايير البحث`
+        );
       }
       
     } catch (error: any) {
@@ -458,33 +467,45 @@ const UserManagement = () => {
       setLoading(true);
       
       if (!stagiaireForm.nom_fr || !stagiaireForm.prenom_fr) {
-        toast({
-          title: 'خطأ',
-          description: 'الاسم واللقب بالفرنسية مطلوبان',
-          variant: 'destructive'
-        });
+        showError(
+          'معلومات مطلوبة مفقودة ❌',
+          'الاسم واللقب بالفرنسية مطلوبان لإنشاء المتدرب'
+        );
         return;
       }
 
       if (createAccountForStagiaire && (!stagiaireForm.username || !stagiaireForm.password)) {
-        toast({
-          title: 'خطأ',
-          description: 'اسم المستخدم وكلمة المرور مطلوبان لإنشاء الحساب',
-          variant: 'destructive'
-        });
+        showError(
+          'معلومات الحساب مطلوبة 🔐',
+          'اسم المستخدم وكلمة المرور مطلوبان لإنشاء حساب المستخدم'
+        );
         return;
       }
 
       if (autoInscription && !stagiaireForm.id_offre) {
-        toast({
-          title: 'خطأ',
-          description: 'يرجى اختيار عرض للتسجيل التلقائي',
-          variant: 'destructive'
-        });
+        showError(
+          'عرض مطلوب للتسجيل 📋',
+          'يرجى اختيار عرض للتسجيل التلقائي للمتدرب'
+        );
         return;
       }
 
+      // Validate id_stagiaire if provided
+      if (stagiaireForm.id_stagiaire) {
+        const idValue = parseInt(stagiaireForm.id_stagiaire);
+        if (isNaN(idValue) || idValue <= 0 || idValue > 9223372036854775807) {
+          showError(
+            'رقم المتدرب غير صالح 🔢',
+            'رقم المتدرب يجب أن يكون رقماً صحيحاً موجباً صالحاً'
+          );
+          return;
+        }
+      }
+
       const payload = {
+        ...(stagiaireForm.id_stagiaire && {
+          id_stagiaire: parseInt(stagiaireForm.id_stagiaire)
+        }),
         nom_fr: stagiaireForm.nom_fr,
         prenom_fr: stagiaireForm.prenom_fr,
         nom_ar: stagiaireForm.nom_ar || undefined,
@@ -503,10 +524,20 @@ const UserManagement = () => {
 
       const response = await apiService.createStagiaireByEtablissement(payload);
 
-      toast({
-        title: 'نجح',
-        description: response.data.message,
-      });
+      if (response.error) {
+        console.error('Error creating stagiaire:', response.error);
+        showError(
+          'فشل في إنشاء المتدرب ❌',
+          response.error.message || 'حدث خطأ أثناء إنشاء المتدرب. يرجى المحاولة مرة أخرى'
+        );
+        return;
+      }
+
+      showSuccess(
+        'تم إنشاء المتدرب بنجاح! 🎉',
+        `تم إنشاء المتدرب ${stagiaireForm.prenom_fr} ${stagiaireForm.nom_fr} بنجاح${createAccountForStagiaire ? ' مع حساب مستخدم' : ''}${autoInscription ? ' وتسجيله في العرض' : ''}`,
+        6000
+      );
 
       setIsCreateStagiaireOpen(false);
       resetStagiaireForm();
@@ -515,11 +546,10 @@ const UserManagement = () => {
 
     } catch (error: any) {
       console.error('Error creating stagiaire:', error);
-      toast({
-        title: 'خطأ',
-        description: error.response?.data?.message || 'فشل في إنشاء المتدرب',
-        variant: 'destructive'
-      });
+      showError(
+        'خطأ في النظام ⚠️',
+        error.message || 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى'
+      );
     } finally {
       setLoading(false);
     }
@@ -633,10 +663,11 @@ const UserManagement = () => {
         }
       );
 
-      toast({
-        title: 'تم تعيين الوحدات بنجاح',
-        description: `تم تعيين ${moduleAssignmentForm.modules.length} وحدة للاستاذ ${selectedEnseignantForModules.prenom_fr} ${selectedEnseignantForModules.nom_fr}`,
-      });
+      showSuccess(
+        'تم تعيين الوحدات بنجاح! 📚',
+        `تم تعيين ${moduleAssignmentForm.modules.length} وحدة للاستاذ ${selectedEnseignantForModules.prenom_fr} ${selectedEnseignantForModules.nom_fr} بنجاح`,
+        6000
+      );
 
       // Rafraîchir les modules assignés
       const assignedResponse = await apiService.getModulesByEnseignant(selectedEnseignantForModules.id_enseignant);
@@ -783,11 +814,10 @@ const UserManagement = () => {
       setLoading(true);
       
       if (!accountForm.username || !accountForm.password) {
-        toast({
-          title: 'خطأ',
-          description: 'جميع الحقول المطلوبة يجب ملؤها',
-          variant: 'destructive'
-        });
+        showError(
+          'معلومات مطلوبة مفقودة ❌',
+          'جميع الحقول المطلوبة يجب ملؤها لإنشاء الحساب'
+        );
         return;
       }
 
@@ -810,10 +840,11 @@ const UserManagement = () => {
         throw new Error(response.error.message || 'Erreur lors de la création du compte');
       }
 
-      toast({
-        title: 'نجح',
-        description: `تم إنشاء الحساب بنجاح`,
-      });
+      showSuccess(
+        'تم إنشاء الحساب بنجاح! 🔐',
+        `تم إنشاء حساب مستخدم جديد بنجاح للمستخدم ${selectedUser.prenom_fr} ${selectedUser.nom_fr}`,
+        5000
+      );
 
       setIsCreateAccountOpen(false);
       resetAccountForm();
@@ -822,11 +853,10 @@ const UserManagement = () => {
       await fetchAllUsers();
     } catch (error) {
       console.error('Error creating account:', error);
-      toast({
-        title: 'خطأ',
-        description: error instanceof Error ? error.message : 'فشل في إنشاء الحساب',
-        variant: 'destructive'
-      });
+      showError(
+        'فشل في إنشاء الحساب ❌',
+        error instanceof Error ? error.message : 'حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى'
+      );
     } finally {
       setLoading(false);
     }
@@ -1285,7 +1315,26 @@ const UserManagement = () => {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label className="font-arabic text-gray-700">الاسم بالفرنسية *</Label>
+                      <Label className="font-arabic text-gray-600">رقم المتدرب (اختياري)</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="9223372036854775807"
+                        value={stagiaireForm.id_stagiaire}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          // Only allow positive integers within BIGINT range
+                          if (value === '' || (value.match(/^\d+$/) && parseInt(value) > 0 && parseInt(value) <= 9223372036854775807)) {
+                            setStagiaireForm(prev => ({ ...prev, id_stagiaire: value }));
+                          }
+                        }}
+                        dir="ltr"
+                        placeholder="رقم المتدرب"
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-arabic text-gray-700">اللقب بالفرنسية *</Label>
                       <Input
                         value={stagiaireForm.nom_fr}
                         onChange={(e) => setStagiaireForm(prev => ({ ...prev, nom_fr: e.target.value }))}
@@ -1295,7 +1344,7 @@ const UserManagement = () => {
                       />
                     </div>
                     <div>
-                      <Label className="font-arabic text-gray-700">اللقب بالفرنسية *</Label>
+                      <Label className="font-arabic text-gray-700">الاسم بالفرنسية *</Label>
                       <Input
                         value={stagiaireForm.prenom_fr}
                         onChange={(e) => setStagiaireForm(prev => ({ ...prev, prenom_fr: e.target.value }))}
@@ -1305,7 +1354,7 @@ const UserManagement = () => {
                       />
                     </div>
                     <div>
-                      <Label className="font-arabic text-gray-600">الاسم بالعربية</Label>
+                      <Label className="font-arabic text-gray-600">اللقب بالعربية</Label>
                       <Input
                         value={stagiaireForm.nom_ar}
                         onChange={(e) => setStagiaireForm(prev => ({ ...prev, nom_ar: e.target.value }))}
@@ -1315,7 +1364,7 @@ const UserManagement = () => {
                       />
                     </div>
                     <div>
-                      <Label className="font-arabic text-gray-600">اللقب بالعربية</Label>
+                      <Label className="font-arabic text-gray-600">الاسم بالعربية</Label>
                       <Input
                         value={stagiaireForm.prenom_ar}
                         onChange={(e) => setStagiaireForm(prev => ({ ...prev, prenom_ar: e.target.value }))}
@@ -1522,7 +1571,7 @@ const UserManagement = () => {
                         <SelectValue placeholder="اختيار نوع البحث" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="id_compte">رقم الحساب (رقم الضمان الاجتماعي)</SelectItem>
+                        <SelectItem value="id_compte">رقم الحساب </SelectItem>
                         <SelectItem value="nom_fr">الاسم بالفرنسية</SelectItem>
                         <SelectItem value="prenom_fr">اللقب بالفرنسية</SelectItem>
                         <SelectItem value="email">البريد الإلكتروني</SelectItem>
@@ -1624,27 +1673,92 @@ const UserManagement = () => {
                         {/* عرض التسجيلات الموجودة */}
                         {stagiaire.inscriptions && stagiaire.inscriptions.length > 0 && (
                           <div className="mt-3 pt-3 border-t border-gray-200">
-                            <h6 className="text-sm font-medium text-gray-700 mb-2 font-arabic">
+                            <h6 className="text-sm font-medium text-gray-700 mb-3 font-arabic">
                               التسجيلات الموجودة:
                             </h6>
-                            <div className="space-y-2">
-                              {stagiaire.inscriptions.map((inscription) => (
-                                <div key={inscription.id_inscription} className="text-xs bg-gray-50 p-2 rounded">
-                                  <div className="flex justify-between items-center">
-                                    <span className="text-gray-600">
-                                      {inscription.offre?.specialite?.designation_fr || 'تخصص غير محدد'}
-                                    </span>
-                                    <span className="text-blue-600 font-medium">
-                                      {inscription.offre?.etablissementFormation?.nom_fr || 'مؤسسة غير محدد'}
+                            <div className="space-y-3">
+                              {stagiaire.inscriptions.map((inscription) => {
+                                const isCurrentEstablishment = inscription.offre?.id_etab_formation === userProfile?.id_etab_formation;
+                                return (
+                                <div key={inscription.id_inscription} className={`p-3 rounded-lg border ${
+                                  isCurrentEstablishment ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'
+                                }`}>
+                                  {/* Header with inscription number and status */}
+                                  <div className="flex justify-between items-start mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-sm font-medium text-blue-600">
+                                        #{inscription.id_inscription}
+                                      </span>
+                                      <span className="text-xs text-gray-500 font-arabic">
+                                        تسجيل في عرض رقم {inscription.offre?.id_offre}
+                                      </span>
+                                      {isCurrentEstablishment && (
+                                        <Badge variant="outline" className="text-xs bg-blue-100 text-blue-700 border-blue-300">
+                                          مؤسستك
+                                        </Badge>
+                                      )}
+                                    </div>
+                                    <Badge 
+                                      variant={inscription.statut === 'acceptee' ? 'default' : 
+                                              inscription.statut === 'en_attente' ? 'secondary' : 'destructive'}
+                                      className="text-xs font-arabic"
+                                    >
+                                      {inscription.statut === 'acceptee' ? '✅ مقبول' : 
+                                       inscription.statut === 'en_attente' ? '⏳ في الانتظار' :
+                                       inscription.statut === 'refusee' ? '❌ مرفوض' : '🚫 ملغى'}
+                                    </Badge>
+                                  </div>
+
+                                  {/* Date */}
+                                  <div className="text-xs text-gray-600 mb-2">
+                                    <span className="font-arabic">تاريخ التسجيل:</span>
+                                    <span className="mr-2">
+                                      {new Date(inscription.date_inscription || inscription.createdAt).toLocaleDateString('ar-DZ')}
                                     </span>
                                   </div>
-                                  {inscription.offre?.diplome && (
-                                    <div className="text-gray-500 mt-1">
-                                      {inscription.offre.diplome.designation_fr}
+
+                                  {/* Offer details */}
+                                  <div className="space-y-1">
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-xs font-medium text-gray-700 font-arabic">التخصص:</span>
+                                      <span className="text-xs text-gray-600">
+                                        {inscription.offre?.specialite?.designation_ar || 
+                                         inscription.offre?.specialite?.designation_fr || 'غير محدد'}
+                                      </span>
                                     </div>
-                                  )}
+                                    
+                                    {inscription.offre?.diplome && (
+                                      <div className="flex justify-between items-center">
+                                        <span className="text-xs font-medium text-gray-700 font-arabic">الدبلوم:</span>
+                                        <span className="text-xs text-gray-600">
+                                          {inscription.offre.diplome.designation_ar || 
+                                           inscription.offre.diplome.designation_fr}
+                                        </span>
+                                      </div>
+                                    )}
+
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-xs font-medium text-gray-700 font-arabic">المؤسسة:</span>
+                                      <span className="text-xs text-blue-600 font-medium">
+                                        {inscription.offre?.etablissementFormation?.nom_ar || 
+                                         inscription.offre?.etablissementFormation?.nom_fr || 'غير محدد'}
+                                      </span>
+                                    </div>
+
+                                    {(inscription.offre?.date_debut || inscription.offre?.date_fin) && (
+                                      <div className="flex justify-between items-center">
+                                        <span className="text-xs font-medium text-gray-700 font-arabic">الفترة:</span>
+                                        <span className="text-xs text-gray-600">
+                                          {inscription.offre?.date_debut && inscription.offre?.date_fin 
+                                            ? `${inscription.offre.date_debut} - ${inscription.offre.date_fin}`
+                                            : inscription.offre?.date_debut || inscription.offre?.date_fin || 'غير محدد'}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
-                              ))}
+                                );
+                              })}
                             </div>
                           </div>
                         )}
@@ -1873,6 +1987,17 @@ const UserManagement = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Styled Snackbar */}
+      <StyledSnackbar
+        open={snackbar.open}
+        onClose={hideSnackbar}
+        title={snackbar.title}
+        description={snackbar.description}
+        type={snackbar.type}
+        duration={snackbar.duration}
+        position={snackbar.position}
+      />
     </div>
   );
 };

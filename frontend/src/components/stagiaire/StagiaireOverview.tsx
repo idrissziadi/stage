@@ -114,11 +114,21 @@ const StagiaireOverview = ({ onTabChange }: StagiaireOverviewProps) => {
         inscriptionsResponse
       ] = await Promise.all(promises);
 
-      const courses = coursesResponse.data || [];
+      // Handle both old format (array) and new format (object)
+      let courses;
+      if (Array.isArray(coursesResponse.data)) {
+        // Old format - backward compatibility
+        courses = coursesResponse.data;
+      } else {
+        // New format
+        courses = coursesResponse.data?.courses || [];
+      }
       const collaborativeMemoires = collaborativeMemoiresResponse.data || [];
       const myMemoires = myMemoireResponse.data || [];
       const inscriptions = inscriptionsResponse.data || [];
 
+      console.log('Raw courses response:', coursesResponse.data);
+      console.log('Processed courses:', courses);
       console.log('Fetched data:', {
         courses: courses.length,
         collaborativeMemoires: collaborativeMemoires.length,
@@ -134,14 +144,17 @@ const StagiaireOverview = ({ onTabChange }: StagiaireOverviewProps) => {
         }
       });
 
-      setStats({
+      const newStats = {
         totalCourses: courses.length,
         totalMemoires: collaborativeMemoires.length,
         myMemoire: myMemoires.length > 0 ? myMemoires[0] : null,
         specializations: uniqueSpecializations.size,
         collaborativeMemoires: collaborativeMemoires.length,
         inscriptions
-      });
+      };
+      
+      console.log('Setting stats with totalCourses:', newStats.totalCourses);
+      setStats(newStats);
 
       // Generate notifications
       generateNotifications(myMemoires, courses, inscriptions);
@@ -229,7 +242,7 @@ const StagiaireOverview = ({ onTabChange }: StagiaireOverviewProps) => {
           id: 'new-courses',
           type: 'info',
           title: 'دروس جديدة متاحة',
-          message: `تم إضافة ${recentCourses.length} دروس جديدة في تخصصاتك`,
+          message: `تم إضافة ${recentCourses.length} دروس جديدة لدروس المتاحة`,
           date: new Date().toISOString(),
           action: {
             label: 'عرض الدروس',
@@ -287,8 +300,10 @@ const StagiaireOverview = ({ onTabChange }: StagiaireOverviewProps) => {
             <div className="flex items-center justify-between">
               <div className="text-start-rtl">
                 <p className="text-sm font-medium text-green-600 dark:text-green-400 font-arabic">الدروس المتاحة</p>
-                <p className="text-3xl font-bold text-green-700 dark:text-green-300 font-arabic">{stats.totalCourses}</p>
-                <p className="text-xs text-green-500 font-arabic">في تخصصاتك</p>
+                <p className="text-3xl font-bold text-green-700 dark:text-green-300 font-arabic">
+                  {stats.totalCourses !== undefined ? stats.totalCourses : '...'}
+                </p>
+                <p className="text-xs text-green-500 font-arabic">لدروس المتاحة</p>
               </div>
               <div className="p-3 bg-green-200 dark:bg-green-800/50 rounded-full">
                 <BookOpen className="w-6 h-6 text-green-600 dark:text-green-400" />

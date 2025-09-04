@@ -474,29 +474,56 @@ const CoursController = {
       
       console.log('✅ Stagiaire trouvé:', stagiaire.id_stagiaire);
       
-      // Récupérer les inscriptions du stagiaire
+      // Récupérer les inscriptions du stagiaire avec les détails des offres
       const Inscription = require('../models/Inscription');
+      const Offre = require('../models/Offre');
       const inscriptions = await Inscription.findAll({
         where: { id_stagiaire: stagiaire.id_stagiaire },
-        attributes: ['id_offre']
+        include: [
+          {
+            model: Offre,
+            as: 'offre',
+            attributes: ['id_offre', 'date_debut', 'date_fin'],
+            include: [
+              {
+                model: require('../models/Specialite'),
+                as: 'specialite',
+                attributes: ['designation_fr', 'designation_ar'],
+                required: false
+              },
+              {
+                model: require('../models/EtablissementFormation'),
+                as: 'etablissementFormation',
+                attributes: ['nom_fr', 'nom_ar'],
+                required: false
+              }
+            ],
+            required: false
+          }
+        ]
       });
 
       console.log('📋 Inscriptions trouvées:', inscriptions.length);
 
       if (inscriptions.length === 0) {
         console.log('⚠️ Aucune inscription trouvée pour le stagiaire');
-        return res.json([]);
+        return res.json({
+          courses: [],
+          modules: [],
+          offres: []
+        });
       }
 
-      // Extraire les IDs des offres
-      const offreIds = inscriptions.map(inscription => inscription.id_offre);
+      // Extraire les offres avec leurs détails
+      const offres = inscriptions.map(inscription => inscription.offre).filter(offre => offre);
+      const offreIds = offres.map(offre => offre.id_offre);
       console.log('🎯 IDs des offres:', offreIds);
 
       // Récupérer les modules associés à ces offres via la table OffreModule
       // Utiliser une requête SQL directe pour éviter les problèmes de modèle
       const { QueryTypes } = require('sequelize');
       const offreModules = await sequelize.query(`
-        SELECT id_module 
+        SELECT id_offre, id_module 
         FROM OffreModule 
         WHERE id_offre IN (:offreIds)
       `, {
@@ -509,8 +536,51 @@ const CoursController = {
 
       if (moduleIds.length === 0) {
         console.log('⚠️ Aucun module trouvé pour les offres');
-        return res.json([]);
+        return res.json({
+          courses: [],
+          modules: [],
+          specialites: []
+        });
       }
+
+      // Récupérer TOUS les modules du stagiaire (avec ou sans cours)
+      const allModules = await Module.findAll({
+        where: { 
+          id_module: { [Op.in]: moduleIds }
+        },
+        include: [
+          {
+            model: require('../models/Specialite'),
+            as: 'specialite',
+            attributes: ['designation_fr', 'designation_ar'],
+            required: false
+          }
+        ],
+        order: [['designation_ar', 'ASC']]
+      });
+
+      console.log('📚 Tous les modules du stagiaire:', allModules.length);
+
+      // Créer un mapping des modules par offre
+      const modulesByOffre = {};
+      console.log('🔍 Création du mapping modules par offre...');
+      console.log('📋 OffreModules récupérés:', offreModules);
+      
+      offres.forEach(offre => {
+        // Récupérer les modules spécifiques à cette offre
+        const offreModuleIds = offreModules
+          .filter(om => om.id_offre === offre.id_offre)
+          .map(om => om.id_module);
+        
+        console.log(`📚 Offre ${offre.id_offre} - Module IDs:`, offreModuleIds);
+        
+        const modulesForThisOffre = allModules.filter(module => 
+          offreModuleIds.includes(module.id_module)
+        );
+        
+        modulesByOffre[offre.id_offre] = modulesForThisOffre;
+        console.log(`📚 Offre ${offre.id_offre} - Modules trouvés:`, modulesForThisOffre.length);
+      });
 
       // Récupérer les cours approuvés pour ces modules spécifiques
       const cours = await Cours.findAll({
@@ -553,7 +623,19 @@ const CoursController = {
       });
 
       console.log('✅ Cours trouvés:', cours.length);
-      return res.json(cours);
+
+      // Créer un objet de réponse avec toutes les données nécessaires
+      const response = {
+        courses: cours,
+        modules: allModules,
+        offres: offres,
+        modulesByOffre: modulesByOffre
+      };
+
+      console.log('✅ Offres trouvées:', response.offres.length);
+      console.log('✅ Modules par offre:', Object.keys(modulesByOffre).length);
+      
+      return res.json(response);
       
     } catch (error) {
       console.error('❌ Erreur dans getCoursByStagiaire:', error);

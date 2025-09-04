@@ -39,6 +39,20 @@ interface Module {
   };
 }
 
+interface Offre {
+  id_offre: number;
+  date_debut: string;
+  date_fin: string;
+  specialite?: {
+    designation_fr: string;
+    designation_ar: string;
+  };
+  etablissementFormation?: {
+    nom_fr: string;
+    nom_ar: string;
+  };
+}
+
 interface Course {
   id_cours: number;
   id_module: number;
@@ -61,10 +75,12 @@ const StagiaireRelatedCourses = () => {
   const { toast } = useToast();
   const [courses, setCourses] = useState<Course[]>([]);
   const [modules, setModules] = useState<Module[]>([]);
+  const [offres, setOffres] = useState<Offre[]>([]);
+  const [modulesByOffre, setModulesByOffre] = useState<{[key: number]: Module[]}>({});
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [moduleFilter, setModuleFilter] = useState('all');
-  const [specialiteFilter, setSpecialiteFilter] = useState('all');
+  const [offreFilter, setOffreFilter] = useState('all');
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
 
@@ -79,23 +95,38 @@ const StagiaireRelatedCourses = () => {
       setLoading(true);
       
       // Fetch courses related to stagiaire's specializations
-      const coursesResponse = await apiService.getCoursByStagiaire(userProfile.id_stagiaire.toString());
-      const coursesData = coursesResponse.data || [];
-      console.log('StagiaireRelatedCourses - Raw courses data:', coursesData);
+      const response = await apiService.getCoursByStagiaire(userProfile.id_stagiaire.toString());
+      const responseData = response.data || {};
+      
+      // Handle both old format (array) and new format (object)
+      let coursesData, modulesData, offresData, modulesByOffreData;
+      
+      if (Array.isArray(responseData)) {
+        // Old format - backward compatibility
+        coursesData = responseData;
+        modulesData = responseData.reduce((acc: Module[], course: Course) => {
+          if (course.module && !acc.find(m => m.id_module === course.module!.id_module)) {
+            acc.push(course.module);
+          }
+          return acc;
+        }, []);
+        offresData = [];
+        modulesByOffreData = {};
+      } else {
+        // New format
+        coursesData = responseData.courses || [];
+        modulesData = responseData.modules || [];
+        offresData = responseData.offres || [];
+        modulesByOffreData = responseData.modulesByOffre || {};
+      }
+      
+      console.log('StagiaireRelatedCourses - Raw response data:', responseData);
+      console.log('Courses:', coursesData.length, 'Modules:', modulesData.length, 'Offres:', offresData.length);
       
       setCourses(coursesData);
-      
-      // Extract unique modules for filtering
-      const uniqueModules = coursesData.reduce((acc: Module[], course: Course) => {
-        if (course.module && !acc.find(m => m.id_module === course.module!.id_module)) {
-          console.log('Found module:', course.module);
-          acc.push(course.module);
-        }
-        return acc;
-      }, []);
-      
-      console.log('Unique modules found:', uniqueModules.length, uniqueModules);
-      setModules(uniqueModules);
+      setModules(modulesData);
+      setOffres(offresData);
+      setModulesByOffre(modulesByOffreData);
       
     } catch (error) {
       console.error('Error fetching related courses:', error);
@@ -161,38 +192,41 @@ const StagiaireRelatedCourses = () => {
     setSelectedCourse(null);
   };
 
-  const getSpecialiteStats = () => {
-    console.log('Calculating specialite stats for courses:', courses.length);
-    const specialites = new Map();
+  const getOffreStats = () => {
+    console.log('🔍 Calculating offre stats for offres:', offres.length);
+    console.log('📋 ModulesByOffre data:', modulesByOffre);
+    console.log('📚 All modules:', modules.length);
+    console.log('🎓 All courses:', courses.length);
     
-    courses.forEach((course, index) => {
-      console.log(`Course ${index}:`, {
-        titre: course.titre_ar || course.titre_fr,
-        module: course.module,
-        specialite: course.module?.specialite
+    const offreStats = offres.map(offre => {
+      // Récupérer les modules spécifiques à cette offre
+      const offreModules = modulesByOffre[offre.id_offre] || [];
+      console.log(`📚 Offre ${offre.id_offre} modules:`, offreModules);
+      
+      // Compter les cours pour les modules de cette offre
+      const offreCourses = courses.filter(course => {
+        return offreModules.some(module => module.id_module === course.id_module);
       });
       
-      if (course.module?.specialite) {
-        const key = course.module.specialite.designation_ar || course.module.specialite.designation_fr;
-        if (key) {
-          if (!specialites.has(key)) {
-            specialites.set(key, { count: 0, modules: new Set() });
-          }
-          specialites.get(key).count += 1;
-          const moduleKey = course.module.designation_ar || course.module.designation_fr || `Module-${course.id_module}`;
-          specialites.get(key).modules.add(moduleKey);
-        }
-      }
+      console.log(`🎓 Offre ${offre.id_offre} courses:`, offreCourses.length);
+      
+      const result = {
+        offre,
+        courseCount: offreCourses.length,
+        moduleCount: offreModules.length
+      };
+      
+      console.log('📊 Offre stat:', {
+        offre: offre.specialite?.designation_ar || offre.specialite?.designation_fr || `Offre ${offre.id_offre}`,
+        courseCount: result.courseCount,
+        moduleCount: result.moduleCount
+      });
+      
+      return result;
     });
     
-    const result = Array.from(specialites.entries()).map(([name, data]) => ({
-      name,
-      courseCount: data.count,
-      moduleCount: data.modules.size
-    }));
-    
-    console.log('Specialite stats result:', result);
-    return result;
+    console.log('✅ Offre stats result:', offreStats);
+    return offreStats;
   };
 
   const getModuleStats = () => {
@@ -245,14 +279,14 @@ const StagiaireRelatedCourses = () => {
     
     const matchesModule = moduleFilter === 'all' || course.id_module.toString() === moduleFilter;
     
-    const matchesSpecialite = specialiteFilter === 'all' || 
-                             (course.module?.specialite?.designation_ar === specialiteFilter) ||
-                             (course.module?.specialite?.designation_fr === specialiteFilter);
+    const matchesOffre = offreFilter === 'all' || 
+                         (course.module?.specialite?.designation_ar === offreFilter) ||
+                         (course.module?.specialite?.designation_fr === offreFilter);
     
-    return matchesSearch && matchesModule && matchesSpecialite;
+    return matchesSearch && matchesModule && matchesOffre;
   });
 
-  const specialiteStats = getSpecialiteStats();
+  const offreStats = getOffreStats();
   const moduleStats = getModuleStats();
 
   if (loading) {
@@ -286,8 +320,8 @@ const StagiaireRelatedCourses = () => {
             <div className="flex items-center gap-3">
               <BookOpen className="w-8 h-8 text-green-500" />
               <div>
-                <p className="text-sm font-medium text-gray-600 font-arabic">التخصصات</p>
-                <p className="text-2xl font-bold text-green-700">{specialiteStats.length}</p>
+                <p className="text-sm font-medium text-gray-600 font-arabic">العروض</p>
+                <p className="text-2xl font-bold text-green-700">{offreStats.length}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -308,18 +342,25 @@ const StagiaireRelatedCourses = () => {
         </CardContent>
       </Card>
 
-      {/* Specialite Statistics */}
+      {/* Offre Statistics */}
       <Card>
         <CardHeader>
-          <CardTitle className="font-arabic">إحصائيات التخصصات</CardTitle>
+          <CardTitle className="font-arabic">إحصائيات العروض</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {specialiteStats.map((stat, index) => (
+            {offreStats.map((stat, index) => (
               <div key={index} className="border border-gray-200 rounded-lg p-4">
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 font-arabic">{stat.name}</h3>
+                    <h3 className="font-semibold text-gray-900 font-arabic">
+                      {stat.offre.specialite?.designation_ar || stat.offre.specialite?.designation_fr || `عرض ${stat.offre.id_offre}`}
+                    </h3>
+                    {stat.offre.etablissementFormation && (
+                      <p className="text-sm text-gray-600 font-arabic">
+                        {stat.offre.etablissementFormation.nom_ar || stat.offre.etablissementFormation.nom_fr}
+                      </p>
+                    )}
                   </div>
                   <Badge variant="secondary">{stat.courseCount} دروس</Badge>
                 </div>
@@ -375,16 +416,16 @@ const StagiaireRelatedCourses = () => {
               />
             </div>
             
-            <Select value={specialiteFilter} onValueChange={setSpecialiteFilter}>
+            <Select value={offreFilter} onValueChange={setOffreFilter}>
               <SelectTrigger className="w-[200px]">
                 <Filter className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="تصفية حسب التخصص" />
+                <SelectValue placeholder="تصفية حسب العرض" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">جميع التخصصات</SelectItem>
-                {specialiteStats.map((stat, index) => (
-                  <SelectItem key={index} value={stat.name}>
-                    {stat.name}
+                <SelectItem value="all">جميع العروض</SelectItem>
+                {offreStats.map((stat, index) => (
+                  <SelectItem key={index} value={stat.offre.specialite?.designation_ar || stat.offre.specialite?.designation_fr || `عرض ${stat.offre.id_offre}`}>
+                    {stat.offre.specialite?.designation_ar || stat.offre.specialite?.designation_fr || `عرض ${stat.offre.id_offre}`}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -419,9 +460,9 @@ const StagiaireRelatedCourses = () => {
               <GraduationCap className="w-16 h-16 mx-auto text-gray-400 mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2 font-arabic">لا توجد دروس متاحة</h3>
               <p className="text-gray-600 font-arabic">
-                {searchTerm || moduleFilter !== 'all' || specialiteFilter !== 'all'
+                {searchTerm || moduleFilter !== 'all' || offreFilter !== 'all'
                   ? 'لا توجد دروس تطابق معايير البحث'
-                  : 'لا توجد دروس معتمدة متاحة في تخصصاتك حالياً'
+                  : 'لا توجد دروس معتمدة متاحة في عروضك حالياً'
                 }
               </p>
             </div>

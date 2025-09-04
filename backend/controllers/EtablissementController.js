@@ -403,6 +403,7 @@ const EtablissementController = {
   async createStagiaire(req, res) {
     try {
       const { 
+        id_stagiaire,
         nom_fr, 
         prenom_fr, 
         nom_ar, 
@@ -433,6 +434,26 @@ const EtablissementController = {
         return res.status(400).json({ 
           message: 'Les champs nom_fr et prenom_fr sont obligatoires' 
         });
+      }
+
+      // Check if id_stagiaire is provided and validate it
+      if (id_stagiaire) {
+        const idValue = parseInt(id_stagiaire);
+        
+        // Validate the ID value (BIGINT range: 1 to 9,223,372,036,854,775,807)
+        if (isNaN(idValue) || idValue <= 0 || idValue > 9223372036854775807) {
+          return res.status(400).json({ 
+            message: 'L\'ID du stagiaire doit être un nombre entier positif valide' 
+          });
+        }
+        
+        // Check if the ID already exists
+        const existingStagiaireById = await Stagiaire.findByPk(idValue);
+        if (existingStagiaireById) {
+          return res.status(400).json({ 
+            message: 'Cet ID de stagiaire existe déjà' 
+          });
+        }
       }
 
       // Check if email already exists (if provided)
@@ -469,7 +490,7 @@ const EtablissementController = {
       }
 
       // Create stagiaire profile
-      stagiaire = await Stagiaire.create({
+      const stagiaireData = {
         nom_fr,
         prenom_fr,
         nom_ar: nom_ar || null,
@@ -478,7 +499,14 @@ const EtablissementController = {
         telephone: telephone || null,
         date_naissance: date_naissance || null,
         compte_id: compte ? compte.id_compte : null
-      });
+      };
+
+      // Add id_stagiaire if provided
+      if (id_stagiaire) {
+        stagiaireData.id_stagiaire = parseInt(id_stagiaire);
+      }
+
+      stagiaire = await Stagiaire.create(stagiaireData);
 
       // Inscrire le stagiaire à l'offre si spécifiée
       let inscription = null;
@@ -1532,7 +1560,7 @@ const EtablissementController = {
     }
   },
 
-  // Get all existing stagiaires (with or without accounts)
+  // Get all existing stagiaires (with or without accounts) enrolled in offers from the connected establishment
   async getAllExistingStagiaires(req, res) {
     try {
       const { search, limit = 50, offset = 0 } = req.query;
@@ -1562,6 +1590,39 @@ const EtablissementController = {
         };
       }
 
+      // First, get stagiaire IDs who are enrolled in offers from this establishment
+      const stagiaireIds = await Inscription.findAll({
+        attributes: ['id_stagiaire'],
+        include: [
+          {
+            model: Offre,
+            as: 'offre',
+            where: { id_etab_formation: etablissement.id_etab_formation },
+            attributes: [],
+            required: true
+          }
+        ],
+        attributes: ['id_stagiaire'],
+        group: ['id_stagiaire'],
+        raw: true
+      });
+
+      const stagiaireIdList = stagiaireIds.map(item => item.id_stagiaire);
+
+      // If no stagiaires found, return empty result
+      if (stagiaireIdList.length === 0) {
+        return res.json({
+          stagiaires: [],
+          total: 0,
+          limit: parseInt(limit),
+          offset: parseInt(offset)
+        });
+      }
+
+      // Add the stagiaire ID filter to the where clause
+      whereClause.id_stagiaire = { [Op.in]: stagiaireIdList };
+
+      // Now get the stagiaires with their details
       const stagiaires = await Stagiaire.findAndCountAll({
         where: whereClause,
         include: [
@@ -1574,11 +1635,12 @@ const EtablissementController = {
           {
             model: Inscription,
             as: 'inscriptions',
+            attributes: ['id_inscription', 'statut', 'date_inscription', 'createdAt', 'updatedAt'],
             include: [
               {
                 model: Offre,
                 as: 'offre',
-                attributes: ['id_offre', 'date_debut', 'date_fin'], // Removed 'description' field which doesn't exist
+                attributes: ['id_offre', 'date_debut', 'date_fin', 'id_etab_formation'],
                 include: [
                   {
                     model: Specialite,
@@ -1590,6 +1652,12 @@ const EtablissementController = {
                     model: EtablissementFormation,
                     as: 'etablissementFormation',
                     attributes: ['nom_fr', 'nom_ar'],
+                    required: false
+                  },
+                  {
+                    model: Diplome,
+                    as: 'diplome',
+                    attributes: ['designation_fr', 'designation_ar'],
                     required: false
                   }
                 ],

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuthApi } from '@/hooks/useAuthApi';
 import { apiService, getFileUrl } from '@/services/api';
 import { formatDate } from '@/utils/formatDate';
+import { formatCourseDateToArabic } from '@/utils/arabicDateFormatter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -49,6 +50,13 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isCourseDialogOpen, setIsCourseDialogOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+
+  // Helper function to safely format course date - using utility function like in collaborative courses
+  const formatCourseDateSafe = (course: Course) => {
+    // Use formatCourseDateToArabic to match collaborative courses format
+    const result = formatCourseDateToArabic(course);
+    return result;
+  };
 
   useEffect(() => {
     if (userProfile?.id_enseignant) {
@@ -519,7 +527,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                                          <span className="flex items-center gap-1">
                                            <span className="font-medium">التاريخ:</span>
                                            <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-                                             {course.created_at ? formatDate(course.created_at) : 'غير محدد'}
+                                             {formatCourseDateSafe(course)}
                                            </span>
                                          </span>
                                        </div>
@@ -613,12 +621,10 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                       </div>
                     )}
                     
-                    {selectedCourse.created_at && (
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">تاريخ الإنشاء:</span> 
-                        {formatDate(selectedCourse.created_at)}
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">تاريخ الإنشاء:</span> 
+                      {formatCourseDateSafe(selectedCourse)}
+                    </div>
                   </div>
 
                   {selectedCourse.observation && (

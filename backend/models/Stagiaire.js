@@ -5,9 +5,10 @@ const { sequelize } = require('../config/database');
 
 const Stagiaire = sequelize.define('Stagiaire', {
   id_stagiaire: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     primaryKey: true,
     autoIncrement: true,
+    allowNull: false,
     comment: 'Identifiant unique du stagiaire'
   },
   nom_fr: {
