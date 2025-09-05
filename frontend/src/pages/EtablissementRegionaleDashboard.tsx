@@ -59,7 +59,6 @@ import StepNavigation from '@/components/ui/step-navigation';
 import UniversalNavbar from '@/components/layout/UniversalNavbar';
 import MinistryFooter from '@/components/layout/MinistryFooter';
 import NotificationCenter from '@/components/etablissement-regionale/NotificationCenter';
-import UserGuide from '@/components/etablissement-regionale/UserGuide';
 import UserGuideEtablissementRegionale from '@/components/etablissement-regionale/UserGuide';
 
 const EtablissementRegionaleDashboardPage = () => {

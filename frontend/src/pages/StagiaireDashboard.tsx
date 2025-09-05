@@ -41,7 +41,7 @@ import StagiaireRelatedCourses from '@/components/stagiaire/StagiaireRelatedCour
 import CollaborativeMemoires from '@/components/stagiaire/CollaborativeMemoires';
 import MonMemoire from '@/components/stagiaire/MonMemoire';
 import NotificationCenter from '@/components/enseignant/NotificationCenter';
-import UserGuide from '@/components/enseignant/UserGuide';
+import UserGuide from '@/components/stagiaire/UserGuide';
 import MinistryFooter from '@/components/layout/MinistryFooter';
 
 const StagiaireDashboard = () => {

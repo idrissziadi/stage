@@ -58,7 +58,7 @@ import UserManagement from '@/components/etablissement/UserManagement';
 import MemoireManagement from '@/components/etablissement/MemoireManagement';
 import OffreManagement from '@/components/etablissement/OffreManagement';
 import NotificationCenter from '@/components/enseignant/NotificationCenter';
-import UserGuide from '@/components/enseignant/UserGuide';
+import UserGuide from '@/components/etablissement-formation/UserGuide';
 import MinistryFooter from '@/components/layout/MinistryFooter';
 
 

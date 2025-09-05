@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useAuthApi } from '@/hooks/useAuthApi';
 import { 
   BookOpen, 
   Users, 
@@ -19,26 +20,89 @@ import {
   Star,
   ChevronDown
 } from 'lucide-react';
-import FeatureCard from '../components/FeatureCard';
-import TestimonialCarousel from '../components/TestimonialCarousel';
-import StatsSection from '../components/StatsSection';
-import MobileNavigation from '../components/MobileNavigation';
-import FloatingParticles from '../components/FloatingParticles';
-import AnimatedButton from '../components/AnimatedButton';
-import ResourceCard from '../components/ResourceCard';
-import NewsSection from '../components/NewsSection';
-import MagicTransition from '../components/MagicTransition';
-import SectionAnimation from '../components/SectionAnimation';
-import MagicParticles from '../components/MagicParticles';
-import MagicScrollEffect from '../components/MagicScrollEffect';
-import SectionTransition from '../components/SectionTransition';
-import AnimatedSection from '../components/AnimatedSection';
+import {
+  FeatureCard,
+  TestimonialCarousel,
+  StatsSection,
+  MobileNavigation,
+  FloatingParticles,
+  AnimatedButton,
+  ResourceCard,
+  NewsSection,
+  MagicTransition,
+  SectionAnimation,
+  MagicParticles,
+  MagicScrollEffect,
+  SectionTransition,
+  AnimatedSection
+} from '../components/landing-page';
 
   const LandingPage: React.FC = () => {
     const navigate = useNavigate();
+    const { user } = useAuthApi();
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
     const { scrollYProgress } = useScroll();
+    
+    // Form state for contact form
+    const [contactForm, setContactForm] = useState({
+      name: '',
+      email: '',
+      message: ''
+    });
+    
+    // Handle platform access button
+    const handlePlatformAccess = () => {
+      if (user) {
+        // User is logged in, redirect to dashboard
+        navigate('/dashboard');
+      } else {
+        // User is not logged in, redirect to login page
+        navigate('/auth');
+      }
+    };
+    
+    // Handle contact form submission
+    const handleContactSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      
+      // Validation
+      if (!contactForm.name || !contactForm.email || !contactForm.message) {
+        alert('يرجى ملء جميع الحقول المطلوبة');
+        return;
+      }
+      
+      try {
+        const response = await fetch('http://localhost:3000/simple-email/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: contactForm.name,
+            email: contactForm.email,
+            message: contactForm.message
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('تم إرسال الرسالة بنجاح! سنتواصل معك قريباً.');
+          // Reset form
+          setContactForm({
+            name: '',
+            email: '',
+            message: ''
+          });
+        } else {
+          alert('خطأ في إرسال الرسالة: ' + result.message);
+        }
+      } catch (error) {
+        console.error('Error sending email:', error);
+        alert('خطأ في إرسال الرسالة. يرجى المحاولة مرة أخرى.');
+      }
+    };
     
     // Fonction de navigation animée vers les sections
     const scrollToSection = (sectionId: string) => {
@@ -259,7 +323,7 @@ import AnimatedSection from '../components/AnimatedSection';
               <AnimatedButton
                 variant="primary"
                 size="lg"
-                onClick={() => navigate('/auth')}
+                onClick={handlePlatformAccess}
               >
                 الوصول للمنصة
               </AnimatedButton>
@@ -743,7 +807,7 @@ import AnimatedSection from '../components/AnimatedSection';
                  </div>
                <div>
                  <div className="font-semibold text-gray-900">البريد الإلكتروني</div>
-                 <div className="text-gray-600">https://mail.mfep.gov.dz/hpronto/</div>
+                 <div className="text-gray-600" dir="ltr">https://mail.mfep.gov.dz/hpronto/</div>
                </div>
               </div>
               
@@ -753,7 +817,7 @@ import AnimatedSection from '../components/AnimatedSection';
                  </div>
                <div>
                  <div className="font-semibold text-gray-900">الهاتف</div>
-                 <div className="text-gray-600">+213 21 60 55 55</div>
+                 <div className="text-gray-600" dir="ltr">+213 21 60 55 55</div>
                </div>
               </div>
               
@@ -763,7 +827,7 @@ import AnimatedSection from '../components/AnimatedSection';
                  </div>
                <div>
                  <div className="font-semibold text-gray-900">الموقع</div>
-                 <div className="text-gray-600">https://mfp.gov.dz/</div>
+                 <div className="text-gray-600" dir="ltr">https://mfp.gov.dz/</div>
                </div>
               </div>
             </motion.div>
@@ -774,11 +838,14 @@ import AnimatedSection from '../components/AnimatedSection';
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
               className="space-y-6"
+              onSubmit={handleContactSubmit}
             >
               <div>
                                  <input
                    type="text"
                    placeholder="الاسم الكامل"
+                   value={contactForm.name}
+                   onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                  />
               </div>
@@ -786,6 +853,8 @@ import AnimatedSection from '../components/AnimatedSection';
                                  <input
                    type="email"
                    placeholder="البريد الإلكتروني"
+                   value={contactForm.email}
+                   onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                  />
               </div>
@@ -793,6 +862,8 @@ import AnimatedSection from '../components/AnimatedSection';
                                  <textarea
                    rows={4}
                    placeholder="رسالتك"
+                   value={contactForm.message}
+                   onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                  ></textarea>
               </div>
@@ -907,7 +978,7 @@ import AnimatedSection from '../components/AnimatedSection';
           </div>
           
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 منصة الجودة. جميع الحقوق محفوظة.</p>
+            <p>&copy; 2025 منصة الجودة. جميع الحقوق محفوظة.</p>
           </div>
         </div>
       </footer>

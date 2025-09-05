@@ -115,6 +115,18 @@ app.use('/ens-module', ensModuleRoutes);
 const auxiliaryRoutes = require('./routes/auxiliaryRoutes');
 app.use('/', auxiliaryRoutes);
 
+// Routes email
+const emailRoutes = require('./routes/emailRoutes');
+app.use('/email', emailRoutes);
+
+// Routes simple email
+const simpleEmailRoutes = require('./routes/simpleEmailRoutes');
+app.use('/simple-email', simpleEmailRoutes);
+
+// Routes free email
+const freeEmailRoutes = require('./routes/freeEmailRoutes');
+app.use('/free-email', freeEmailRoutes);
+
 // Synchronisation Sequelize
 const startServer = async () => {
   try {

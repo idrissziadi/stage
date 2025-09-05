@@ -19,9 +19,41 @@ const UserGuide = () => {
       {/* Header */}
       <Card className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white">
         <CardContent className="p-8 text-center">
-          <h1 className="text-3xl font-bold mb-4 font-arabic">دليل استخدام لوحة تحكم المؤسسة الوطنية</h1>
+          <h1 className="text-3xl font-bold mb-4 font-arabic">🏛️ المساعدة و الدعم - المؤسسة الوطنية</h1>
           <p className="text-lg opacity-90 font-arabic">
-            مرحباً بك في دليل الاستخدام الشامل لنظام إدارة التدريب - قسم المؤسسة الوطنية
+            دليل شامل مخصص للمؤسسة الوطنية في نظام إدارة التدريب المهني
+          </p>
+          <div className="mt-4 p-3 bg-white/20 rounded-lg">
+            <p className="text-sm font-arabic">✅ هذا الدليل مخصص للمؤسسة الوطنية فقط</p>
+          </div>
+          <div className="flex items-center justify-center gap-4 mt-6">
+            <div className="flex items-center gap-2">
+              <Building className="w-5 h-5" />
+              <span className="font-arabic">دليل المؤسسة الوطنية</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5" />
+              <span className="font-arabic">الدعم المخصص</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Settings className="w-5 h-5" />
+              <span className="font-arabic">تواصل معنا</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Notice Important */}
+      <Card className="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-2 border-purple-200 dark:border-purple-800">
+        <CardContent className="p-6 text-center">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-full">
+              <Building className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+            </div>
+            <h2 className="text-xl font-bold text-purple-800 dark:text-purple-200 font-arabic">دليل المؤسسة الوطنية</h2>
+          </div>
+          <p className="text-purple-700 dark:text-purple-300 font-arabic">
+            هذا الدليل مخصص للمؤسسة الوطنية في نظام إدارة التدريب المهني. يحتوي على جميع المعلومات والخطوات اللازمة لإدارة النظام ومراجعة البرامج.
           </p>
         </CardContent>
       </Card>
@@ -259,30 +291,72 @@ const UserGuide = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-orange-600" />
-            <span className="font-arabic">معلومات الدعم</span>
+            <span className="font-arabic">دعم المؤسسة الوطنية</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <h4 className="font-medium text-foreground font-arabic">الدعم التقني</h4>
+              <h4 className="font-medium text-foreground font-arabic">الدعم المخصص للمؤسسة الوطنية</h4>
               <p className="text-sm text-muted-foreground font-arabic">
-                للاستفسارات التقنية أو المشاكل في النظام، يرجى التواصل مع فريق الدعم التقني
+                فريق دعم مخصص للمؤسسة الوطنية - متاح على مدار الساعة للمشاكل العاجلة
               </p>
-              <div className="flex items-center gap-2 text-sm text-primary">
-                <span className="font-arabic">البريد الإلكتروني:</span>
-                <span>support@formation.gov.dz</span>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-primary">
+                  <span className="font-arabic">البريد الإلكتروني:</span>
+                  <span>nationale@formation.gov.dz</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-success">
+                  <span className="font-arabic">الهاتف:</span>
+                  <span>+213 21 71 23 50</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-secondary">
+                  <span className="font-arabic">ساعات العمل:</span>
+                  <span>24/7 للمشاكل العاجلة</span>
+                </div>
               </div>
             </div>
             <div className="space-y-2">
-              <h4 className="font-medium text-foreground font-arabic">الدليل الإلكتروني</h4>
+              <h4 className="font-medium text-foreground font-arabic">الموارد الإدارية للمؤسسة الوطنية</h4>
               <p className="text-sm text-muted-foreground font-arabic">
-                يمكنك الوصول إلى الدليل الإلكتروني الكامل للنظام عبر الرابط التالي
+                موارد مخصصة لمساعدة المؤسسة الوطنية في إدارة النظام والبرامج
               </p>
-              <Button variant="link" className="p-0 h-auto text-primary font-arabic">
-                دليل النظام الإلكتروني →
-              </Button>
+              <div className="space-y-2">
+                <Button variant="link" className="p-0 h-auto text-primary font-arabic">
+                  دليل المؤسسة الوطنية الشامل →
+                </Button>
+                <Button variant="link" className="p-0 h-auto text-success font-arabic">
+                  دليل إدارة البرامج →
+                </Button>
+                <Button variant="link" className="p-0 h-auto text-secondary font-arabic">
+                  دعم إداري مباشر →
+                </Button>
+              </div>
             </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Contact & Support */}
+      <Card className="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20">
+        <CardContent className="p-6 text-center">
+          <h3 className="text-lg font-semibold mb-4 font-arabic">هل تحتاج إلى مساعدة إضافية كمؤسسة وطنية؟</h3>
+          <p className="text-muted-foreground dark:text-muted-foreground mb-4 font-arabic">
+            فريق الدعم المخصص للمؤسسة الوطنية جاهز لمساعدتك في أي وقت
+          </p>
+          <div className="flex gap-3 justify-center">
+            <Button variant="outline" size="sm" className="font-arabic">
+              <AlertTriangle className="w-4 h-4 ml-2" />
+              دعم المؤسسة الوطنية
+            </Button>
+            <Button variant="outline" size="sm" className="font-arabic">
+              <FileText className="w-4 h-4 ml-2" />
+              دليل المؤسسة الوطنية
+            </Button>
+            <Button variant="outline" size="sm" className="font-arabic">
+              <Settings className="w-4 h-4 ml-2" />
+              تواصل معنا
+            </Button>
           </div>
         </CardContent>
       </Card>

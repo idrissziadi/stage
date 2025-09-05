@@ -127,6 +127,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
     if (userProfile) {
       console.log('🔍 Setting profile form with userProfile data:', userProfile);
       setProfileForm({
+        username: userProfile.username || '',
         nom_fr: userProfile.nom_fr || '',
         nom_ar: userProfile.nom_ar || '',
         code: userProfile.code || '',
@@ -146,7 +147,10 @@ const EtablissementNationaleDashboard: React.FC = () => {
       
       const response = await request('/user/profile', {
         method: 'PUT',
-        data: profileForm
+        body: JSON.stringify(profileForm),
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
       
       if (response) {
@@ -608,8 +612,8 @@ const EtablissementNationaleDashboard: React.FC = () => {
             {/* Profile Information Section */}
             <Card>
               <CardHeader className="bg-gradient-to-l from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700">
-                <CardTitle className="flex items-center justify-end">
-                  <div className="flex items-center gap-3">
+                <CardTitle className="text-right" dir="rtl">
+                  <div className="flex items-center justify-end gap-3">
                     <span className="font-arabic">معلومات المؤسسة الوطنية</span>
                     <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
                       <Building className="w-5 h-5 text-secondary dark:text-purple-400" />
@@ -617,8 +621,8 @@ const EtablissementNationaleDashboard: React.FC = () => {
                   </div>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-6">
-                <div className="grid gap-6 md:grid-cols-2 rtl">
+              <CardContent className="p-6" dir="rtl">
+                <div className="grid gap-6 md:grid-cols-2">
                   {/* Basic Information */}
                   <div className="space-y-4">
                     <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic border-b pb-2 text-right">المعلومات الأساسية</h3>
@@ -626,26 +630,26 @@ const EtablissementNationaleDashboard: React.FC = () => {
                     <div className="space-y-3">
                       <div className="text-right">
                         <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اسم المستخدم</p>
-                        <p className="text-lg font-semibold text-foreground dark:text-white">{userProfile?.username || 'غير محدد'}</p>
+                        <p className="text-lg font-semibold text-foreground dark:text-white text-right">{userProfile?.username || 'غير محدد'}</p>
                       </div>
                       
                       <div className="text-right">
                         <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اسم المؤسسة بالفرنسية</p>
-                        <p className="text-lg font-semibold text-foreground dark:text-white">
+                        <p className="text-lg font-semibold text-foreground dark:text-white text-right">
                           {userProfile?.nom_fr || 'غير محدد'}
                         </p>
                       </div>
                       
                       <div className="text-right">
                         <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اسم المؤسسة بالعربية</p>
-                        <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
+                        <p className="text-lg font-semibold text-foreground dark:text-white font-arabic text-right">
                           {userProfile?.nom_ar || 'غير محدد'}
                         </p>
                       </div>
                       
                       <div className="text-right">
                         <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">رمز الإدارة</p>
-                        <p className="text-lg font-semibold text-foreground dark:text-white">
+                        <p className="text-lg font-semibold text-foreground dark:text-white text-right">
                           {userProfile?.code || 'غير محدد'}
                         </p>
                       </div>
@@ -653,10 +657,10 @@ const EtablissementNationaleDashboard: React.FC = () => {
                       <div className="text-right">
                         <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الدور</p>
                         <div className="flex items-center gap-2 justify-end">
+                          <IdCard className="w-4 h-4 text-muted-foreground" />
                           <Badge variant="secondary" className="font-arabic">
                             مؤسسة وطنية
                           </Badge>
-                          <IdCard className="w-4 h-4 text-muted-foreground" />
                         </div>
                       </div>
                     </div>
@@ -670,37 +674,38 @@ const EtablissementNationaleDashboard: React.FC = () => {
                       <div className="text-right">
                         <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">البريد الإلكتروني</p>
                         <div className="flex items-center gap-2 justify-end">
-                          <p className="text-lg font-semibold text-foreground dark:text-white">
+                          <Mail className="w-4 h-4 text-muted-foreground" />
+                          <p className="text-lg font-semibold text-foreground dark:text-white text-right">
                             {userProfile?.email || userProfile?.email_for_auth || 'غير محدد'}
                           </p>
-                          <Mail className="w-4 h-4 text-muted-foreground" />
                         </div>
                       </div>
                       
                       <div className="text-right">
                         <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">رقم الهاتف</p>
                         <div className="flex items-center gap-2 justify-end">
-                          <p className="text-lg font-semibold text-foreground dark:text-white">
+                          <Phone className="w-4 h-4 text-muted-foreground" />
+                          <p className="text-lg font-semibold text-foreground dark:text-white text-right">
                             {userProfile?.telephone || 'غير محدد'}
                           </p>
-                          <Phone className="w-4 h-4 text-muted-foreground" />
                         </div>
                       </div>
 
                       <div className="text-right">
                         <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">العنوان</p>
                         <div className="flex items-center gap-2 justify-end">
-                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
+                          <MapPin className="w-4 h-4 text-muted-foreground" />
+                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic text-right">
                             {userProfile?.adresse_ar || userProfile?.adresse_fr || 'غير محدد'}
                           </p>
-                          <MapPin className="w-4 h-4 text-muted-foreground" />
                         </div>
                       </div>
 
                       <div className="text-right">
                         <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">تاريخ التسجيل</p>
                         <div className="flex items-center gap-2 justify-end">
-                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
+                          <Calendar className="w-4 h-4 text-muted-foreground" />
+                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic text-right">
                             {userProfile?.created_at 
                               ? new Date(userProfile.created_at).toLocaleDateString('ar-DZ', {
                                   year: 'numeric',
@@ -710,7 +715,6 @@ const EtablissementNationaleDashboard: React.FC = () => {
                               : 'غير محدد'
                             }
                           </p>
-                          <Calendar className="w-4 h-4 text-muted-foreground" />
                         </div>
                       </div>
                     </div>

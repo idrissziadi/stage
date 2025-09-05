@@ -12,7 +12,10 @@ import {
   Clock, 
   Eye,
   FileText,
-  Download
+  Download,
+  AlertTriangle,
+  Mail,
+  Phone
 } from 'lucide-react';
 
 const UserGuide = () => {
@@ -21,9 +24,41 @@ const UserGuide = () => {
       {/* Header */}
       <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
         <CardContent className="p-8 text-center">
-          <h1 className="text-3xl font-bold mb-4">دليل استخدام لوحة تحكم الأستاذ</h1>
-          <p className="text-lg opacity-90">
-            مرحباً بك في دليل الاستخدام الشامل لنظام إدارة التدريب - قسم الأساتذة
+          <h1 className="text-3xl font-bold mb-4 font-arabic">👨‍🏫 المساعدة و الدعم - الأستاذ</h1>
+          <p className="text-lg opacity-90 font-arabic">
+            دليل شامل مخصص للأساتذة في نظام إدارة التدريب المهني
+          </p>
+          <div className="mt-4 p-3 bg-white/20 rounded-lg">
+            <p className="text-sm font-arabic">✅ هذا الدليل مخصص للأساتذة فقط</p>
+          </div>
+          <div className="flex items-center justify-center gap-4 mt-6">
+            <div className="flex items-center gap-2">
+              <User className="w-5 h-5" />
+              <span className="font-arabic">دليل الأستاذ</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <HelpCircle className="w-5 h-5" />
+              <span className="font-arabic">الدعم المخصص</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Bell className="w-5 h-5" />
+              <span className="font-arabic">تواصل معنا</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Notice Important */}
+      <Card className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-2 border-blue-200 dark:border-blue-800">
+        <CardContent className="p-6 text-center">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-full">
+              <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <h2 className="text-xl font-bold text-blue-800 dark:text-blue-200 font-arabic">دليل الأستاذ</h2>
+          </div>
+          <p className="text-blue-700 dark:text-blue-300 font-arabic">
+            هذا الدليل مخصص للأساتذة في نظام إدارة التدريب المهني. يحتوي على جميع المعلومات والخطوات اللازمة لرفع وإدارة الدروس والموديولات.
           </p>
         </CardContent>
       </Card>
@@ -268,21 +303,82 @@ const UserGuide = () => {
         </CardContent>
       </Card>
 
+      {/* Informations de Support */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 font-arabic">
+            <AlertTriangle className="w-5 h-5 text-orange-600" />
+            <span>دعم الأساتذة</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-4">
+              <h4 className="font-medium text-foreground dark:text-white font-arabic">الدعم المخصص للأساتذة</h4>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
+                فريق دعم مخصص للأساتذة - متاح من الأحد إلى الخميس من 8:00 إلى 17:00
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-primary">
+                  <Mail className="w-4 h-4" />
+                  <span className="font-arabic">البريد الإلكتروني:</span>
+                  <span>enseignants@formation.gov.dz</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-success">
+                  <Phone className="w-4 h-4" />
+                  <span className="font-arabic">الهاتف:</span>
+                  <span>+213 21 71 23 47</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-secondary">
+                  <Clock className="w-4 h-4" />
+                  <span className="font-arabic">ساعات العمل:</span>
+                  <span>8:00 - 17:00</span>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h4 className="font-medium text-foreground dark:text-white font-arabic">الموارد التعليمية للأساتذة</h4>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
+                موارد مخصصة لمساعدة الأساتذة في إدارة الدروس والموديولات
+              </p>
+              <div className="space-y-2">
+                <Button variant="link" className="p-0 h-auto text-primary font-arabic flex items-center gap-2">
+                  <BookOpen className="w-4 h-4" />
+                  دليل الأستاذ الشامل →
+                </Button>
+                <Button variant="link" className="p-0 h-auto text-success font-arabic flex items-center gap-2">
+                  <Upload className="w-4 h-4" />
+                  دليل رفع الدروس →
+                </Button>
+                <Button variant="link" className="p-0 h-auto text-secondary font-arabic flex items-center gap-2">
+                  <Settings className="w-4 h-4" />
+                  دليل إدارة الموديولات →
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Contact & Support */}
       <Card className="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20">
         <CardContent className="p-6 text-center">
-          <h3 className="text-lg font-semibold mb-4">هل تحتاج إلى مساعدة إضافية؟</h3>
-          <p className="text-muted-foreground dark:text-muted-foreground mb-4">
-            لا تتردد في التواصل مع فريق الدعم التقني أو إدارة المؤسسة
+          <h3 className="text-lg font-semibold mb-4 font-arabic">هل تحتاج إلى مساعدة إضافية كأستاذ؟</h3>
+          <p className="text-muted-foreground dark:text-muted-foreground mb-4 font-arabic">
+            فريق الدعم المخصص للأساتذة جاهز لمساعدتك في أي وقت
           </p>
           <div className="flex gap-3 justify-center">
-            <Button variant="outline" size="sm">
-              <Bell className="w-4 h-4 mr-2" />
-              اتصل بالدعم
+            <Button variant="outline" size="sm" className="font-arabic">
+              <Bell className="w-4 h-4 ml-2" />
+              دعم الأساتذة
             </Button>
-            <Button variant="outline" size="sm">
-              <FileText className="w-4 h-4 mr-2" />
-              دليل شامل
+            <Button variant="outline" size="sm" className="font-arabic">
+              <FileText className="w-4 h-4 ml-2" />
+              دليل الأستاذ
+            </Button>
+            <Button variant="outline" size="sm" className="font-arabic">
+              <HelpCircle className="w-4 h-4 ml-2" />
+              تواصل معنا
             </Button>
           </div>
         </CardContent>

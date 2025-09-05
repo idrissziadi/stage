@@ -55,24 +55,42 @@ const UserGuide = () => {
       {/* Header Principal */}
       <Card className="bg-gradient-to-r from-orange-600 to-red-600 text-white">
         <CardContent className="p-8 text-center">
-          <h1 className="text-4xl font-bold mb-4 font-arabic">المساعدة و الدعم</h1>
+          <h1 className="text-4xl font-bold mb-4 font-arabic">🏢 المساعدة و الدعم - مؤسسة التكوين</h1>
           <p className="text-xl opacity-90 font-arabic">
-            دليل شامل لاستخدام نظام إدارة التدريب - مؤسسة التكوين
+            دليل شامل مخصص لمؤسسات التكوين في نظام إدارة التدريب المهني
           </p>
+          <div className="mt-4 p-3 bg-white/20 rounded-lg">
+            <p className="text-sm font-arabic">✅ هذا الدليل مخصص لمؤسسات التكوين فقط</p>
+          </div>
           <div className="flex items-center justify-center gap-4 mt-6">
             <div className="flex items-center gap-2">
-              <HelpCircle className="w-5 h-5" />
-              <span className="font-arabic">دليل الاستخدام</span>
+              <Building className="w-5 h-5" />
+              <span className="font-arabic">دليل المؤسسة</span>
             </div>
             <div className="flex items-center gap-2">
               <LifeBuoy className="w-5 h-5" />
-              <span className="font-arabic">الدعم الفني</span>
+              <span className="font-arabic">الدعم المخصص</span>
             </div>
             <div className="flex items-center gap-2">
               <MessageCircle className="w-5 h-5" />
-              <span className="font-arabic">اتصل بنا</span>
+              <span className="font-arabic">تواصل معنا</span>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Notice Important */}
+      <Card className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-2 border-orange-200 dark:border-orange-800">
+        <CardContent className="p-6 text-center">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="p-2 bg-orange-100 dark:bg-orange-900/50 rounded-full">
+              <Building className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+            </div>
+            <h2 className="text-xl font-bold text-orange-800 dark:text-orange-200 font-arabic">دليل مؤسسة التكوين</h2>
+          </div>
+          <p className="text-orange-700 dark:text-orange-300 font-arabic">
+            هذا الدليل مخصص لمؤسسات التكوين في نظام إدارة التدريب المهني. يحتوي على جميع المعلومات والخطوات اللازمة لإدارة البرامج والأساتذة والمتدربين.
+          </p>
         </CardContent>
       </Card>
 
@@ -366,42 +384,51 @@ const UserGuide = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 font-arabic">
             <AlertTriangle className="w-5 h-5 text-orange-600" />
-            <span>معلومات الدعم</span>
+            <span>دعم مؤسسات التكوين</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-4">
-              <h4 className="font-medium text-foreground dark:text-white font-arabic">الدعم التقني</h4>
+              <h4 className="font-medium text-foreground dark:text-white font-arabic">الدعم المخصص للمؤسسات</h4>
               <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
-                للاستفسارات التقنية أو المشاكل في النظام، يرجى التواصل مع فريق الدعم التقني
+                فريق دعم مخصص لمؤسسات التكوين - متاح من الأحد إلى الخميس من 8:00 إلى 18:00
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-primary">
                   <Mail className="w-4 h-4" />
                   <span className="font-arabic">البريد الإلكتروني:</span>
-                  <span>support@formation.gov.dz</span>
+                  <span>etablissements@formation.gov.dz</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-success">
                   <Phone className="w-4 h-4" />
                   <span className="font-arabic">الهاتف:</span>
-                  <span>+213 21 71 23 45</span>
+                  <span>+213 21 71 23 48</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-secondary">
+                  <Clock className="w-4 h-4" />
+                  <span className="font-arabic">ساعات العمل:</span>
+                  <span>8:00 - 18:00</span>
                 </div>
               </div>
             </div>
             <div className="space-y-4">
-              <h4 className="font-medium text-foreground dark:text-white font-arabic">الموارد الإضافية</h4>
+              <h4 className="font-medium text-foreground dark:text-white font-arabic">الموارد الإدارية للمؤسسات</h4>
               <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
-                يمكنك الوصول إلى موارد إضافية لمساعدتك في استخدام النظام
+                موارد مخصصة لمساعدة مؤسسات التكوين في إدارة البرامج والأساتذة والمتدربين
               </p>
               <div className="space-y-2">
                 <Button variant="link" className="p-0 h-auto text-primary font-arabic flex items-center gap-2">
                   <BookOpenIcon className="w-4 h-4" />
-                  دليل النظام الإلكتروني →
+                  دليل المؤسسة الشامل →
                 </Button>
                 <Button variant="link" className="p-0 h-auto text-success font-arabic flex items-center gap-2">
                   <Video className="w-4 h-4" />
-                  فيديوهات تعليمية →
+                  فيديوهات إدارية للمؤسسات →
+                </Button>
+                <Button variant="link" className="p-0 h-auto text-secondary font-arabic flex items-center gap-2">
+                  <Headphones className="w-4 h-4" />
+                  دعم إداري مباشر →
                 </Button>
               </div>
             </div>
@@ -412,22 +439,22 @@ const UserGuide = () => {
       {/* Contact & Support */}
       <Card className="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20">
         <CardContent className="p-6 text-center">
-          <h3 className="text-lg font-semibold mb-4 font-arabic">هل تحتاج إلى مساعدة إضافية؟</h3>
+          <h3 className="text-lg font-semibold mb-4 font-arabic">هل تحتاج إلى مساعدة إضافية كمؤسسة تكوين؟</h3>
           <p className="text-muted-foreground dark:text-muted-foreground mb-4 font-arabic">
-            لا تتردد في التواصل مع فريق الدعم التقني أو إدارة المؤسسة
+            فريق الدعم المخصص لمؤسسات التكوين جاهز لمساعدتك في أي وقت
           </p>
           <div className="flex gap-3 justify-center">
             <Button variant="outline" size="sm" className="font-arabic">
               <Bell className="w-4 h-4 ml-2" />
-              اتصل بالدعم
+              دعم المؤسسات
             </Button>
             <Button variant="outline" size="sm" className="font-arabic">
               <FileText className="w-4 h-4 ml-2" />
-              دليل شامل
+              دليل المؤسسة
             </Button>
             <Button variant="outline" size="sm" className="font-arabic">
               <MessageCircle className="w-4 h-4 ml-2" />
-              راسلنا
+              تواصل معنا
             </Button>
           </div>
         </CardContent>
