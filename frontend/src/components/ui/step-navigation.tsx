@@ -40,28 +40,28 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
 
   const getStepColor = (step: string) => {
     switch (step) {
-      case 'branch': return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'speciality': return 'text-green-600 bg-green-50 border-green-200';
+      case 'branch': return 'text-primary bg-background-secondary border-blue-200';
+      case 'speciality': return 'text-success bg-green-50 border-green-200';
       case 'module': return 'text-orange-600 bg-orange-50 border-orange-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      default: return 'text-muted-foreground bg-background-secondary border-border';
     }
   };
 
   return (
     <div className={className}>
-      <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border">
+      <div className="theme-transition-colors flex items-center gap-2 p-3 bg-background-secondary rounded-lg border">
         {/* Bouton Accueil */}
         <Button
           variant="ghost"
           size="sm"
           onClick={onHomeClick}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+          className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
         >
           <Home className="w-4 h-4" />
           <span className="font-arabic">الرئيسية</span>
         </Button>
 
-        <ChevronRight className="w-4 h-4 text-gray-400" />
+        <ChevronRight className="w-4 h-4 text-muted-foreground" />
 
         {/* Navigation par étapes */}
         <div className="flex items-center gap-2">
@@ -73,7 +73,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
             className={`flex items-center gap-2 border rounded-lg px-3 py-1 transition-all ${
               currentStep === 'branch' || selectedBranch
                 ? 'bg-blue-100 text-blue-700 border-blue-300 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted'
             }`}
           >
             <Building className="w-4 h-4" />
@@ -88,7 +88,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
           {/* Flèche conditionnelle */}
           {selectedBranch && (
             <>
-              <ChevronRight className="w-4 h-4 text-gray-400" />
+              <ChevronRight className="w-4 h-4 text-muted-foreground" />
               
               {/* Étape 2: Spécialités */}
               <Button
@@ -98,7 +98,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
                 className={`flex items-center gap-2 border rounded-lg px-3 py-1 transition-all ${
                   currentStep === 'speciality' || selectedSpeciality
                     ? 'bg-green-100 text-green-700 border-green-300 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 }`}
               >
                 <GraduationCap className="w-4 h-4" />
@@ -115,7 +115,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
           {/* Flèche conditionnelle */}
           {selectedSpeciality && (
             <>
-              <ChevronRight className="w-4 h-4 text-gray-400" />
+              <ChevronRight className="w-4 h-4 text-muted-foreground" />
               
               {/* Étape 3: Modules */}
               <Button
@@ -125,7 +125,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
                 className={`flex items-center gap-2 border rounded-lg px-3 py-1 transition-all ${
                   currentStep === 'module'
                     ? 'bg-orange-100 text-orange-700 border-orange-300 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 }`}
               >
                 <BookOpen className="w-4 h-4" />
@@ -138,7 +138,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
 
       {/* Indicateur de progression */}
       <div className="mt-3">
-        <div className="flex items-center justify-between text-xs text-gray-500 font-arabic">
+        <div className="flex items-center justify-between text-xs text-muted-foreground font-arabic">
           <span>التقدم:</span>
           <span>
             {!selectedBranch && '0%'}
@@ -147,7 +147,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
             {selectedBranch && selectedSpeciality && currentStep === 'module' && '100%'}
           </span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+        <div className="theme-transition-colors w-full bg-muted-secondary rounded-full h-2 mt-1">
           <div
             className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all duration-300"
             style={{

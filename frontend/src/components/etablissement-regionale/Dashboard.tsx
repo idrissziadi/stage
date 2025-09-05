@@ -64,13 +64,13 @@ const Dashboard = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
             <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-              <Building className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              <Building className="w-8 h-8 text-primary dark:text-blue-400" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-arabic">
+              <h1 className="text-2xl font-bold text-foreground dark:text-white font-arabic">
                 {etablissementInfo.nom}
               </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                 لوحة التحكم - إدارة المؤسسة التعليمية الإقليمية
               </p>
             </div>
@@ -80,7 +80,7 @@ const Dashboard = () => {
 
       {/* Navigation par Onglets */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <TabsList className="grid w-full grid-cols-3 bg-card dark:bg-gray-800 border border-border dark:border-gray-700">
           <TabsTrigger 
             value="overview" 
             className="flex items-center gap-2 py-3 px-4 data-[state=active]:bg-blue-100 data-[state=active]:text-blue-700 dark:data-[state=active]:bg-blue-900/50 dark:data-[state=active]:text-blue-300"
@@ -119,7 +119,7 @@ const Dashboard = () => {
                     <BookOpen className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-blue-600 dark:text-blue-400 font-arabic">إجمالي الدروس</p>
+                    <p className="text-sm font-medium text-primary dark:text-blue-400 font-arabic">إجمالي الدروس</p>
                     <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{stats.totalCours}</p>
                   </div>
                 </div>
@@ -133,7 +133,7 @@ const Dashboard = () => {
                     <CheckCircle className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-green-600 dark:text-green-400 font-arabic">الدروس المقبولة</p>
+                    <p className="text-sm font-medium text-success dark:text-green-400 font-arabic">الدروس المقبولة</p>
                     <p className="text-2xl font-bold text-green-700 dark:text-green-300">{stats.coursApprouves}</p>
                   </div>
                 </div>
@@ -147,7 +147,7 @@ const Dashboard = () => {
                     <Clock className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400 font-arabic">في الانتظار</p>
+                    <p className="text-sm font-medium text-warning dark:text-yellow-400 font-arabic">في الانتظار</p>
                     <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{stats.coursEnAttente}</p>
                   </div>
                 </div>
@@ -161,7 +161,7 @@ const Dashboard = () => {
                     <GraduationCap className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-purple-600 dark:text-purple-400 font-arabic">البرامج</p>
+                    <p className="text-sm font-medium text-secondary dark:text-purple-400 font-arabic">البرامج</p>
                     <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{stats.totalProgrammes}</p>
                   </div>
                 </div>
@@ -174,37 +174,37 @@ const Dashboard = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 font-arabic">
-                  <Building className="w-5 h-5 text-blue-600" />
+                  <Building className="w-5 h-5 text-primary" />
                   معلومات المؤسسة
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid gap-3">
                   <div className="flex items-center gap-3">
-                    <MapPin className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400 font-arabic">{etablissementInfo.adresse}</span>
+                    <MapPin className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">{etablissementInfo.adresse}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Phone className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">{etablissementInfo.telephone}</span>
+                    <Phone className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground dark:text-muted-foreground">{etablissementInfo.telephone}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Mail className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">{etablissementInfo.email}</span>
+                    <Mail className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground dark:text-muted-foreground">{etablissementInfo.email}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Globe className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">{etablissementInfo.website}</span>
+                    <Globe className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground dark:text-muted-foreground">{etablissementInfo.website}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Calendar className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                    <Calendar className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                       تاريخ الإنشاء: {etablissementInfo.dateCreation}
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Users className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                    <Users className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                       المدير: {etablissementInfo.directeur}
                     </span>
                   </div>
@@ -215,26 +215,26 @@ const Dashboard = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 font-arabic">
-                  <TrendingUp className="w-5 h-5 text-green-600" />
+                  <TrendingUp className="w-5 h-5 text-success" />
                   إحصائيات إضافية
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid gap-3">
-                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">التخصصات</span>
+                  <div className="theme-transition-colors flex items-center justify-between p-3 bg-background-secondary dark:bg-gray-800 rounded-lg">
+                    <span className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">التخصصات</span>
                     <Badge variant="secondary">{stats.specialites}</Badge>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الفروع</span>
+                  <div className="theme-transition-colors flex items-center justify-between p-3 bg-background-secondary dark:bg-gray-800 rounded-lg">
+                    <span className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الفروع</span>
                     <Badge variant="secondary">{stats.branches}</Badge>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الأساتذة</span>
+                  <div className="theme-transition-colors flex items-center justify-between p-3 bg-background-secondary dark:bg-gray-800 rounded-lg">
+                    <span className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الأساتذة</span>
                     <Badge variant="secondary">{stats.enseignants}</Badge>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الطلاب</span>
+                  <div className="theme-transition-colors flex items-center justify-between p-3 bg-background-secondary dark:bg-gray-800 rounded-lg">
+                    <span className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الطلاب</span>
                     <Badge variant="secondary">{stats.etudiants}</Badge>
                   </div>
                 </div>
@@ -246,16 +246,16 @@ const Dashboard = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 font-arabic">
-                <Users className="w-5 h-5 text-purple-600" />
+                <Users className="w-5 h-5 text-secondary" />
                 المؤسسات المشاركة ({etablissementsParticipants.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-3">
                 {etablissementsParticipants.map((etab, index) => (
-                  <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                  <div key={index} className="border border-border dark:border-gray-700 rounded-lg p-4">
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-gray-900 dark:text-white font-arabic">
+                      <h3 className="font-semibold text-foreground dark:text-white font-arabic">
                         {etab.nom}
                       </h3>
                       <Badge 
@@ -265,7 +265,7 @@ const Dashboard = () => {
                         {etab.status}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                       {etab.region}
                     </p>
                   </div>

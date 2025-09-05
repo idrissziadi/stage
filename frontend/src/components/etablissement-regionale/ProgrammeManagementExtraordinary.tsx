@@ -276,14 +276,14 @@ const ProgrammeManagementExtraordinary = () => {
       {/* Extraordinary Header */}
       <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 rounded-3xl p-8 text-white shadow-2xl">
         <div className="absolute inset-0 bg-black/10"></div>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
+        <div className="theme-transition-colors absolute top-0 right-0 w-64 h-64 bg-card/10 rounded-full -translate-y-32 translate-x-32"></div>
+        <div className="theme-transition-colors absolute bottom-0 left-0 w-48 h-48 bg-card/5 rounded-full translate-y-24 -translate-x-24"></div>
         
         <div className="relative z-10">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
+                <div className="theme-transition-colors p-3 bg-card/20 rounded-2xl backdrop-blur-sm">
                   <Sparkles className="w-8 h-8" />
                 </div>
                 <div>
@@ -298,7 +298,7 @@ const ProgrammeManagementExtraordinary = () => {
                 <div className="text-3xl font-bold">{stats.total}</div>
                 <div className="text-blue-100 text-sm">إجمالي البرامج</div>
               </div>
-              <div className="w-px h-12 bg-white/30"></div>
+              <div className="theme-transition-colors w-px h-12 bg-card/30"></div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-green-300">{stats.approved}</div>
                 <div className="text-blue-100 text-sm">مقبولة</div>
@@ -338,12 +338,12 @@ const ProgrammeManagementExtraordinary = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-blue-600 mb-1">إجمالي البرامج</p>
+                    <p className="text-sm font-medium text-primary mb-1">إجمالي البرامج</p>
                     <p className="text-3xl font-bold text-blue-700">{stats.total}</p>
                     <p className="text-xs text-blue-500 mt-1">+12% من الشهر الماضي</p>
                   </div>
                   <div className="p-3 bg-blue-200/50 rounded-2xl">
-                    <BookOpen className="w-6 h-6 text-blue-600" />
+                    <BookOpen className="w-6 h-6 text-primary" />
                   </div>
                 </div>
               </CardContent>
@@ -353,12 +353,12 @@ const ProgrammeManagementExtraordinary = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-yellow-600 mb-1">في الانتظار</p>
+                    <p className="text-sm font-medium text-warning mb-1">في الانتظار</p>
                     <p className="text-3xl font-bold text-yellow-700">{stats.pending}</p>
                     <p className="text-xs text-yellow-500 mt-1">قيد المراجعة</p>
                   </div>
                   <div className="p-3 bg-yellow-200/50 rounded-2xl">
-                    <Clock className="w-6 h-6 text-yellow-600" />
+                    <Clock className="w-6 h-6 text-warning" />
                   </div>
                 </div>
               </CardContent>
@@ -368,12 +368,12 @@ const ProgrammeManagementExtraordinary = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-green-600 mb-1">مقبولة</p>
+                    <p className="text-sm font-medium text-success mb-1">مقبولة</p>
                     <p className="text-3xl font-bold text-green-700">{stats.approved}</p>
                     <p className="text-xs text-green-500 mt-1">نشطة ومعتمدة</p>
                   </div>
                   <div className="p-3 bg-green-200/50 rounded-2xl">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
+                    <CheckCircle className="w-6 h-6 text-success" />
                   </div>
                 </div>
               </CardContent>
@@ -383,12 +383,12 @@ const ProgrammeManagementExtraordinary = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-red-600 mb-1">مرفوضة</p>
+                    <p className="text-sm font-medium text-error mb-1">مرفوضة</p>
                     <p className="text-3xl font-bold text-red-700">{stats.rejected}</p>
                     <p className="text-xs text-red-500 mt-1">تحتاج مراجعة</p>
                   </div>
                   <div className="p-3 bg-red-200/50 rounded-2xl">
-                    <XCircle className="w-6 h-6 text-red-600" />
+                    <XCircle className="w-6 h-6 text-error" />
                   </div>
                 </div>
               </CardContent>
@@ -401,17 +401,17 @@ const ProgrammeManagementExtraordinary = () => {
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1">
                   <div className="relative">
-                    <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                     <Input
                       placeholder="البحث في البرامج..."
                       value={filters.search}
                       onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value, offset: 0 }))}
-                      className="pr-12 h-12 text-lg border-0 bg-gray-100 focus:bg-white transition-colors"
+                      className="pr-12 h-12 text-lg border-0 bg-muted focus:bg-card transition-colors"
                     />
                   </div>
                 </div>
                 <Select value={filters.status} onValueChange={(value) => setFilters(prev => ({ ...prev, status: value, offset: 0 }))}>
-                  <SelectTrigger className="w-64 h-12 border-0 bg-gray-100">
+                  <SelectTrigger className="w-64 h-12 border-0 bg-muted">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -430,7 +430,7 @@ const ProgrammeManagementExtraordinary = () => {
             <div className="flex items-center justify-center h-64">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mx-auto mb-4"></div>
-                <p className="text-gray-600 text-lg">جارٍ تحميل البرامج...</p>
+                <p className="text-muted-foreground text-lg">جارٍ تحميل البرامج...</p>
               </div>
             </div>
           ) : (
@@ -446,13 +446,13 @@ const ProgrammeManagementExtraordinary = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <div className="p-2 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg">
-                              <BookOpen className="w-4 h-4 text-blue-600" />
+                              <BookOpen className="w-4 h-4 text-primary" />
                             </div>
-                            <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                            <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-full">
                               {programme.code_programme}
                             </span>
                           </div>
-                          <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                          <h3 className="text-lg font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
                             {programme.titre_ar || programme.titre_fr}
                           </h3>
                         </div>
@@ -461,32 +461,32 @@ const ProgrammeManagementExtraordinary = () => {
 
                       {/* Progress Bar */}
                       <div className="space-y-2">
-                        <div className="flex justify-between text-xs text-gray-500">
+                        <div className="flex justify-between text-xs text-muted-foreground">
                           <span>حالة البرنامج</span>
                           <span>{getStatusProgress(programme.status)}%</span>
                         </div>
                         <Progress 
                           value={getStatusProgress(programme.status)} 
-                          className="h-2 bg-gray-200"
+                          className="h-2 bg-muted-secondary"
                         />
                       </div>
 
                       {/* Details */}
                       <div className="space-y-3 text-sm">
-                        <div className="flex items-center gap-2 text-gray-600">
+                        <div className="flex items-center gap-2 text-muted-foreground">
                           <Hash className="w-4 h-4 text-blue-500" />
                           <span>{programme.module?.designation_ar || 'غير محدد'}</span>
                         </div>
                         
                         {programme.etablissementRegionale && (
-                          <div className="flex items-center gap-2 text-gray-600">
+                          <div className="flex items-center gap-2 text-muted-foreground">
                             <Building className="w-4 h-4 text-green-500" />
                             <span>{programme.etablissementRegionale.nom_ar}</span>
                           </div>
                         )}
 
                         {programme.fichierpdf && (
-                          <div className="flex items-center gap-2 text-gray-600">
+                          <div className="flex items-center gap-2 text-muted-foreground">
                             <FileText className="w-4 h-4 text-purple-500" />
                             <span className="text-xs">ملف PDF مرفق</span>
                           </div>
@@ -515,7 +515,7 @@ const ProgrammeManagementExtraordinary = () => {
                             setSelectedProgramme(programme);
                             setIsViewDialogOpen(true);
                           }}
-                          className="flex-1 group-hover:border-blue-300 group-hover:text-blue-600 transition-colors"
+                          className="flex-1 group-hover:border-blue-300 group-hover:text-primary transition-colors"
                         >
                           <Eye className="w-4 h-4 mr-1" />
                           عرض
@@ -525,7 +525,7 @@ const ProgrammeManagementExtraordinary = () => {
                             variant="outline"
                             size="sm"
                             onClick={() => handleOpenPDF(programme)}
-                            className="text-purple-600 hover:text-purple-700 hover:border-purple-300"
+                            className="text-secondary hover:text-purple-700 hover:border-purple-300"
                           >
                             <Download className="w-4 h-4" />
                           </Button>
@@ -534,7 +534,7 @@ const ProgrammeManagementExtraordinary = () => {
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteProgramme(programme.id_programme)}
-                          className="text-red-600 hover:text-red-700 hover:border-red-300"
+                          className="text-error hover:text-red-700 hover:border-red-300"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -553,13 +553,13 @@ const ProgrammeManagementExtraordinary = () => {
                 variant="outline"
                 disabled={filters.offset === 0}
                 onClick={() => handlePageChange(Math.max(0, filters.offset - filters.limit))}
-                className="bg-white shadow-md hover:shadow-lg"
+                className="bg-card shadow-md hover:shadow-lg"
               >
                 <ChevronRight className="w-4 h-4 mr-2" />
                 السابق
               </Button>
               <div className="px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg">
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-foreground">
                   {filters.offset + 1} - {Math.min(filters.offset + filters.limit, total)} من {total}
                 </span>
               </div>
@@ -567,7 +567,7 @@ const ProgrammeManagementExtraordinary = () => {
                 variant="outline"
                 disabled={filters.offset + filters.limit >= total}
                 onClick={() => handlePageChange(filters.offset + filters.limit)}
-                className="bg-white shadow-md hover:shadow-lg"
+                className="bg-card shadow-md hover:shadow-lg"
               >
                 التالي
                 <ChevronLeft className="w-4 h-4 ml-2" />
@@ -580,10 +580,10 @@ const ProgrammeManagementExtraordinary = () => {
               <CardContent className="text-center py-16">
                 <div className="max-w-md mx-auto">
                   <div className="w-32 h-32 bg-gradient-to-br from-blue-100 via-purple-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <BookOpen className="h-16 w-16 text-blue-600" />
+                    <BookOpen className="h-16 w-16 text-primary" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3">لا توجد برامج</h3>
-                  <p className="text-gray-600 mb-6 text-lg">
+                  <h3 className="text-2xl font-bold text-foreground mb-3">لا توجد برامج</h3>
+                  <p className="text-muted-foreground mb-6 text-lg">
                     {filters.search || filters.status !== 'all' 
                       ? 'لا توجد برامج تطابق معايير البحث.'
                       : 'ابدأ بإنشاء برنامج تعليمي جديد.'
@@ -611,7 +611,7 @@ const ProgrammeManagementExtraordinary = () => {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold flex items-center">
-              <BookOpen className="w-6 h-6 mr-3 text-blue-600" />
+              <BookOpen className="w-6 h-6 mr-3 text-primary" />
               تفاصيل البرنامج
             </DialogTitle>
             <DialogDescription>
@@ -624,25 +624,25 @@ const ProgrammeManagementExtraordinary = () => {
                 <Card className="border-0 shadow-md">
                   <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
                     <CardTitle className="text-lg flex items-center">
-                      <BookOpen className="w-5 h-5 mr-2 text-blue-600" />
+                      <BookOpen className="w-5 h-5 mr-2 text-primary" />
                       معلومات أساسية
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-6 space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">رمز البرنامج</Label>
+                      <Label className="text-sm font-medium text-muted-foreground">رمز البرنامج</Label>
                       <p className="text-lg font-semibold">{selectedProgramme.code_programme}</p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">العنوان (عربية)</Label>
+                      <Label className="text-sm font-medium text-muted-foreground">العنوان (عربية)</Label>
                       <p className="text-lg">{selectedProgramme.titre_ar}</p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">العنوان (فرنسية)</Label>
+                      <Label className="text-sm font-medium text-muted-foreground">العنوان (فرنسية)</Label>
                       <p className="text-lg">{selectedProgramme.titre_fr}</p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">الحالة</Label>
+                      <Label className="text-sm font-medium text-muted-foreground">الحالة</Label>
                       <div className="mt-1">{getStatusBadge(selectedProgramme.status)}</div>
                     </div>
                   </CardContent>
@@ -651,24 +651,24 @@ const ProgrammeManagementExtraordinary = () => {
                 <Card className="border-0 shadow-md">
                   <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
                                           <CardTitle className="text-lg flex items-center">
-                        <Hash className="w-5 h-5 mr-2 text-green-600" />
+                        <Hash className="w-5 h-5 mr-2 text-success" />
                         معلومات المادة
                       </CardTitle>
                   </CardHeader>
                   <CardContent className="p-6 space-y-4">
                                           <div>
-                        <Label className="text-sm font-medium text-gray-500">اسم المادة</Label>
+                        <Label className="text-sm font-medium text-muted-foreground">اسم المادة</Label>
                         <p className="text-lg">{selectedProgramme.module?.designation_ar}</p>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">رمز المادة</Label>
+                        <Label className="text-sm font-medium text-muted-foreground">رمز المادة</Label>
                         <p className="text-lg font-mono">{selectedProgramme.module?.code_module}</p>
                       </div>
                     {selectedProgramme.fichierpdf && (
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">ملف PDF</Label>
+                        <Label className="text-sm font-medium text-muted-foreground">ملف PDF</Label>
                         <div className="flex items-center gap-2 mt-1">
-                          <FileText className="w-4 h-4 text-blue-600" />
+                          <FileText className="w-4 h-4 text-primary" />
                           <span className="text-sm">{selectedProgramme.fichierpdf}</span>
                         </div>
                       </div>
@@ -686,7 +686,7 @@ const ProgrammeManagementExtraordinary = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-6">
-                    <p className="text-gray-700 leading-relaxed">{selectedProgramme.observation}</p>
+                    <p className="text-foreground leading-relaxed">{selectedProgramme.observation}</p>
                   </CardContent>
                 </Card>
               )}

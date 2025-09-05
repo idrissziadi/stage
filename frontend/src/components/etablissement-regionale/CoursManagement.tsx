@@ -397,7 +397,7 @@ const CoursManagement = () => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">جارٍ تحميل الدروس...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground">جارٍ تحميل الدروس...</p>
         
 
       </div>
@@ -408,8 +408,8 @@ const CoursManagement = () => {
     return (
       <div className="text-center py-12">
         <AlertCircle className="w-16 h-16 mx-auto text-red-500 mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">خطأ في البيانات</h3>
-        <p className="text-gray-600 mb-4">
+        <h3 className="text-lg font-medium text-foreground mb-2">خطأ في البيانات</h3>
+        <p className="text-muted-foreground mb-4">
           لم يتم العثور على معرف المؤسسة الإقليمية. يرجى إعادة تسجيل الدخول.
         </p>
         <Button onClick={() => window.location.reload()}>
@@ -429,7 +429,7 @@ const CoursManagement = () => {
          <CardHeader className="pb-6">
                        <CardTitle className="flex items-center gap-4">
               <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-xl">
-                <BookOpen className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                <BookOpen className="w-8 h-8 text-primary dark:text-blue-400" />
               </div>
               <div className="text-right flex-1">
                 <h2 className="text-2xl font-bold text-blue-900 dark:text-blue-100 font-arabic mb-2">إدارة الدروس</h2>
@@ -443,7 +443,7 @@ const CoursManagement = () => {
            <div className="grid gap-6 md:grid-cols-4 rtl">
              <div className="flex items-center gap-4 p-4 bg-gradient-to-l from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl border border-blue-200 dark:border-blue-700">
                <div className="p-3 bg-blue-100 dark:bg-blue-800 rounded-full">
-                 <BookOpen className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                 <BookOpen className="w-8 h-8 text-primary dark:text-blue-400" />
                </div>
                <div className="text-right">
                  <p className="text-sm font-medium text-blue-700 dark:text-blue-300 font-arabic mb-1">إجمالي الدروس</p>
@@ -452,7 +452,7 @@ const CoursManagement = () => {
              </div>
              <div className="flex items-center gap-4 p-4 bg-gradient-to-l from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl border border-green-200 dark:border-green-700">
                <div className="p-3 bg-green-100 dark:bg-green-800 rounded-full">
-                 <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+                 <CheckCircle className="w-8 h-8 text-success dark:text-green-400" />
                </div>
                <div className="text-right">
                  <p className="text-sm font-medium text-green-700 dark:text-green-300 font-arabic mb-1">معتمدة</p>
@@ -461,7 +461,7 @@ const CoursManagement = () => {
              </div>
              <div className="flex items-center gap-4 p-4 bg-gradient-to-l from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 rounded-xl border border-yellow-200 dark:border-yellow-700">
                <div className="p-3 bg-yellow-100 dark:bg-yellow-800 rounded-full">
-                 <Clock className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
+                 <Clock className="w-8 h-8 text-warning dark:text-yellow-400" />
                </div>
                <div className="text-right">
                  <p className="text-sm font-medium text-yellow-700 dark:text-yellow-300 font-arabic mb-1">في الانتظار</p>
@@ -470,7 +470,7 @@ const CoursManagement = () => {
              </div>
              <div className="flex items-center gap-4 p-4 bg-gradient-to-l from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border border-red-200 dark:border-red-700">
                <div className="p-3 bg-red-100 dark:bg-red-800 rounded-full">
-                 <XCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
+                 <XCircle className="w-8 h-8 text-error dark:text-red-400" />
                </div>
                <div className="text-right">
                  <p className="text-sm font-medium text-red-700 dark:text-red-300 font-arabic mb-1">مرفوضة</p>
@@ -491,13 +491,13 @@ const CoursManagement = () => {
                  placeholder="البحث في الدروس..."
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
-                 className="pr-12 pl-4 py-4 bg-white dark:bg-gray-700 border-2 border-green-200 dark:border-green-600 rounded-xl text-right font-arabic focus:border-green-400 dark:focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition-all shadow-lg"
+                 className="pr-12 pl-4 py-4 bg-card dark:bg-gray-700 border-2 border-green-200 dark:border-green-600 rounded-xl text-right font-arabic focus:border-green-400 dark:focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition-all shadow-lg"
                  dir="rtl"
                />
              </div>
             
                          <Select value={statusFilter} onValueChange={setStatusFilter}>
-               <SelectTrigger className="bg-white dark:bg-gray-700 border-2 border-green-200 dark:border-green-600 rounded-xl py-4 shadow-lg">
+               <SelectTrigger className="bg-card dark:bg-gray-700 border-2 border-green-200 dark:border-green-600 rounded-xl py-4 shadow-lg">
                  <Filter className="w-4 h-4 ml-2 text-green-500" />
                  <SelectValue placeholder="حالة الدرس" className="font-arabic" />
                </SelectTrigger>
@@ -510,7 +510,7 @@ const CoursManagement = () => {
              </Select>
 
                            <Select value={moduleFilter} onValueChange={setModuleFilter}>
-                <SelectTrigger className="bg-white dark:bg-gray-700 border-2 border-green-200 dark:border-green-600 rounded-xl py-4 shadow-lg">
+                <SelectTrigger className="bg-card dark:bg-gray-700 border-2 border-green-200 dark:border-green-600 rounded-xl py-4 shadow-lg">
                   <BookOpen className="w-4 h-4 ml-2 text-green-500" />
                   <SelectValue placeholder="المادة" className="font-arabic" />
                 </SelectTrigger>
@@ -530,7 +530,7 @@ const CoursManagement = () => {
                       }
                     }).filter(Boolean)
                   ) : (
-                    <SelectItem value="no-modules" disabled className="font-arabic text-gray-400">
+                    <SelectItem value="no-modules" disabled className="font-arabic text-muted-foreground">
                       لا توجد بيانات مواد
                     </SelectItem>
                   )}
@@ -538,7 +538,7 @@ const CoursManagement = () => {
               </Select>
 
                            <Select value={enseignantFilter} onValueChange={setEnseignantFilter}>
-                <SelectTrigger className="bg-white dark:bg-gray-700 border-2 border-green-200 dark:border-green-600 rounded-xl py-4 shadow-lg">
+                <SelectTrigger className="bg-card dark:bg-gray-700 border-2 border-green-200 dark:border-green-600 rounded-xl py-4 shadow-lg">
                   <User className="w-4 h-4 ml-2 text-green-500" />
                   <SelectValue placeholder="الأستاذ" className="font-arabic" />
                 </SelectTrigger>
@@ -558,7 +558,7 @@ const CoursManagement = () => {
                       }
                     }).filter(Boolean)
                   ) : (
-                    <SelectItem value="no-enseignants" disabled className="font-arabic text-gray-400">
+                    <SelectItem value="no-enseignants" disabled className="font-arabic text-muted-foreground">
                       لا توجد بيانات أساتذة
                     </SelectItem>
                   )}
@@ -568,7 +568,7 @@ const CoursManagement = () => {
              <Button 
                onClick={fetchData} 
                variant="outline" 
-               className="bg-white dark:bg-gray-700 border-2 border-green-200 dark:border-green-600 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/20 py-4 shadow-lg transition-all duration-200"
+               className="bg-card dark:bg-gray-700 border-2 border-green-200 dark:border-green-600 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/20 py-4 shadow-lg transition-all duration-200"
              >
                <RefreshCw className="w-4 h-4 ml-2 text-green-500" />
                <span className="font-arabic">تحديث</span>
@@ -578,11 +578,11 @@ const CoursManagement = () => {
       </Card>
 
              {/* Courses List */}
-       <Card className="border-2 border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
+       <Card className="border-2 border-border dark:border-gray-700 rounded-2xl overflow-hidden">
          <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-800/20 border-b border-blue-200 dark:border-blue-700">
                        <CardTitle className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 dark:bg-blue-800 rounded-lg">
-                <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <FileText className="w-6 h-6 text-primary dark:text-blue-400" />
               </div>
               <div className="text-right flex-1">
                 <h3 className="text-xl font-bold text-blue-900 dark:text-blue-100 font-arabic">قائمة الدروس</h3>
@@ -593,11 +593,11 @@ const CoursManagement = () => {
         <CardContent>
                      {filteredCourses.length === 0 ? (
              <div className="text-center py-16">
-               <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center">
-                 <BookOpen className="w-10 h-10 text-gray-400" />
+               <div className="theme-transition-colors p-4 bg-muted dark:bg-gray-800 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+                 <BookOpen className="w-10 h-10 text-muted-foreground" />
                </div>
-               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 font-arabic">لا توجد دروس</h3>
-               <p className="text-gray-600 dark:text-gray-400 font-arabic text-lg">
+               <h3 className="text-xl font-bold text-foreground dark:text-white mb-3 font-arabic">لا توجد دروس</h3>
+               <p className="text-muted-foreground dark:text-muted-foreground font-arabic text-lg">
                  {searchTerm || statusFilter !== 'all' || moduleFilter !== 'all' || enseignantFilter !== 'all'
                    ? 'لا توجد دروس تطابق معايير البحث المحددة'
                    : 'لا توجد دروس مسجلة في النظام حالياً'
@@ -617,7 +617,7 @@ const CoursManagement = () => {
           ) : (
                          <div className="space-y-4">
                                {filteredCourses.map((course) => (
-                  <Card key={course.id_cours} className="hover:shadow-xl transition-all duration-300 border-2 border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl overflow-hidden">
+                  <Card key={course.id_cours} className="hover:shadow-xl transition-all duration-300 border-2 border-border dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl overflow-hidden">
                     <CardContent className="p-8">
                       <div className="flex flex-col lg:flex-row gap-8">
                        {/* Contenu principal */}
@@ -625,10 +625,10 @@ const CoursManagement = () => {
                                                    {/* En-tête avec titre et statut */}
                           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 rtl">
                             <div className="flex-1">
-                              <h3 className="text-2xl font-bold text-gray-900 dark:text-white font-arabic mb-2 leading-tight">
+                              <h3 className="text-2xl font-bold text-foreground dark:text-white font-arabic mb-2 leading-tight">
                                 {course.titre_ar || course.titre_fr || 'بدون عنوان'}
                               </h3>
-                                                             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                                                             <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                                  <span>•</span>
                                  <span>درس رقم: {course.id_cours}</span>
                                  <span>•</span>
@@ -646,7 +646,7 @@ const CoursManagement = () => {
                             {/* Code du cours */}
                             <div className="flex items-center gap-3 p-4 bg-gradient-to-l from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl border border-blue-200 dark:border-blue-700">
                               <div className="p-3 bg-blue-100 dark:bg-blue-800 rounded-full">
-                                <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                <FileText className="w-6 h-6 text-primary dark:text-blue-400" />
                               </div>
                               <div className="text-right flex-1">
                                 <p className="text-sm font-medium text-blue-700 dark:text-blue-300 font-arabic mb-1">كود الدرس</p>
@@ -658,7 +658,7 @@ const CoursManagement = () => {
                             {course.module && (
                               <div className="flex items-center gap-3 p-4 bg-gradient-to-l from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-xl border border-purple-200 dark:border-purple-700">
                                 <div className="p-3 bg-purple-100 dark:bg-purple-800 rounded-full">
-                                  <BookOpen className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                                  <BookOpen className="w-6 h-6 text-secondary dark:text-purple-400" />
                                 </div>
                                 <div className="text-right flex-1">
                                   <p className="text-sm font-medium text-purple-700 dark:text-purple-300 font-arabic mb-1">المادة</p>
@@ -673,7 +673,7 @@ const CoursManagement = () => {
                             {course.enseignant && (
                               <div className="flex items-center gap-3 p-4 bg-gradient-to-l from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl border border-green-200 dark:border-green-700">
                                 <div className="p-3 bg-green-100 dark:bg-green-800 rounded-full">
-                                  <User className="w-6 h-6 text-green-600 dark:text-green-400" />
+                                  <User className="w-6 h-6 text-success dark:text-green-400" />
                                 </div>
                                 <div className="text-right flex-1">
                                   <p className="text-sm font-medium text-green-700 dark:text-green-300 font-arabic mb-1">الأستاذ</p>
@@ -703,18 +703,18 @@ const CoursManagement = () => {
                             <div className="p-5 bg-gradient-to-l from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-800/20 border border-yellow-200 dark:border-yellow-700 rounded-xl">
                               <div className="flex items-center gap-3 mb-3">
                                 <div className="p-2 bg-yellow-100 dark:bg-yellow-800 rounded-full">
-                                  <MessageSquare className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+                                  <MessageSquare className="w-5 h-5 text-warning dark:text-yellow-400" />
                                 </div>
                                 <div className="flex-1">
                                   <span className="font-semibold text-yellow-800 dark:text-yellow-200 font-arabic text-lg">ملاحظات المشرف</span>
                                   {course.updated_at && (
-                                    <p className="text-xs text-yellow-600 dark:text-yellow-400 font-arabic mt-1">
+                                    <p className="text-xs text-warning dark:text-yellow-400 font-arabic mt-1">
                                       آخر تحديث: {formatDateToArabic(course.updated_at)}
                                     </p>
                                   )}
                                 </div>
                               </div>
-                              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-yellow-200 dark:border-yellow-600">
+                              <div className="theme-transition-colors bg-card dark:bg-gray-800 p-4 rounded-lg border border-yellow-200 dark:border-yellow-600">
                                 <p className="text-sm text-yellow-700 dark:text-yellow-300 font-arabic leading-relaxed">{course.observation}</p>
                               </div>
                             </div>
@@ -739,7 +739,7 @@ const CoursManagement = () => {
                                 size="sm" 
                                 variant="outline"
                                 onClick={() => handleStatusChange(course.id_cours, 'مرفوض')}
-                                className="w-full border-2 border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400 font-medium py-3 rounded-xl transition-all duration-200"
+                                className="w-full border-2 border-red-300 text-error hover:bg-red-50 hover:border-red-400 font-medium py-3 rounded-xl transition-all duration-200"
                               >
                                 <XCircle className="w-5 h-5 ml-2" />
                                 رفض الدرس
@@ -758,7 +758,7 @@ const CoursManagement = () => {
                                 setObservationText(course.observation || '');
                                 setIsObservationOpen(true);
                               }}
-                              className="w-full border-2 border-blue-300 text-blue-600 hover:bg-blue-50 hover:border-blue-400 font-medium py-3 rounded-xl transition-all duration-200"
+                              className="w-full border-2 border-blue-300 text-primary hover:bg-background-secondary hover:border-blue-400 font-medium py-3 rounded-xl transition-all duration-200"
                             >
                               <MessageSquare className="w-5 h-5 ml-2" />
                               {course.observation ? 'تعديل الملاحظات' : 'إضافة ملاحظات'}
@@ -774,7 +774,7 @@ const CoursManagement = () => {
                                   size="sm" 
                                   variant="outline"
                                   onClick={() => handleViewPDF(course)}
-                                  className="w-full border-2 border-blue-300 text-blue-600 hover:bg-blue-50 hover:border-blue-400 font-medium py-3 rounded-xl transition-all duration-200"
+                                  className="w-full border-2 border-blue-300 text-primary hover:bg-background-secondary hover:border-blue-400 font-medium py-3 rounded-xl transition-all duration-200"
                                 >
                                   <Eye className="w-5 h-5 ml-2" />
                                   عرض الملف
@@ -783,7 +783,7 @@ const CoursManagement = () => {
                                   size="sm" 
                                   variant="outline"
                                   onClick={() => handleDownloadPDF(course)}
-                                  className="w-full border-2 border-green-300 text-green-600 hover:bg-green-50 hover:border-green-400 font-medium py-3 rounded-xl transition-all duration-200"
+                                  className="w-full border-2 border-green-300 text-success hover:bg-green-50 hover:border-green-400 font-medium py-3 rounded-xl transition-all duration-200"
                                 >
                                   <Download className="w-5 h-5 ml-2" />
                                   تحميل PDF
@@ -806,7 +806,7 @@ const CoursManagement = () => {
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-blue-600" />
+              <MessageSquare className="w-5 h-5 text-primary" />
               {selectedCourse ? `ملاحظات على درس: ${selectedCourse.titre_ar || selectedCourse.titre_fr}` : 'إضافة ملاحظات'}
             </DialogTitle>
           </DialogHeader>

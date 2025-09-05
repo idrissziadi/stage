@@ -40,9 +40,9 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header amélioré avec bouton de déconnexion */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 rounded-xl p-6 border border-blue-100 dark:border-blue-800">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white font-arabic mb-2">
+            <h1 className="text-3xl font-bold text-gray-900 font-arabic mb-2">
               لوحة التحكم
             </h1>
             <p className="text-muted-foreground font-arabic text-lg">

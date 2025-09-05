@@ -392,9 +392,9 @@ const EnseignantDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 rtl">
+    <div className="theme-transition-colors min-h-screen bg-background-secondary dark:bg-gray-900 rtl">
       {/* Modern Header with User Profile */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+      <header className="bg-card dark:bg-gray-800 border-b border-border dark:border-gray-700 shadow-sm">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -402,8 +402,8 @@ const EnseignantDashboard = () => {
                 <Home className="w-6 h-6 text-white" />
               </div>
               <div className="text-start-rtl">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-arabic">لوحة تحكم الأستاذ</h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                <h1 className="text-2xl font-bold text-foreground dark:text-white font-arabic">لوحة تحكم الأستاذ</h1>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                   مرحباً بك في نظام إدارة التدريب
                 </p>
               </div>
@@ -412,13 +412,13 @@ const EnseignantDashboard = () => {
             {/* User Profile Dropdown */}
             <div className="flex items-center gap-4">
               <div className="hidden md:block text-end-rtl">
-                <p className="text-sm font-medium text-gray-900 dark:text-white font-arabic">
+                <p className="text-sm font-medium text-foreground dark:text-white font-arabic">
                   {userProfile?.nom_fr && userProfile?.prenom_fr 
                     ? `${userProfile.prenom_fr} ${userProfile.nom_fr}`
                     : userProfile?.username
                   }
                 </p>
-                <p className="text-xs text-gray-600 dark:text-gray-400 font-arabic">
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground font-arabic">
                   {getRoleInArabic(userProfile?.role)}
                 </p>
               </div>
@@ -471,7 +471,7 @@ const EnseignantDashboard = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem 
                     onClick={() => setIsLogoutConfirmOpen(true)}
-                    className="text-red-600 dark:text-red-400 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-900/20 font-arabic"
+                    className="text-error dark:text-red-400 focus:text-error focus:bg-red-50 dark:focus:bg-red-900/20 font-arabic"
                   >
                     <LogOut className="ml-2 h-4 w-4" />
                     <span>تسجيل الخروج</span>
@@ -485,28 +485,28 @@ const EnseignantDashboard = () => {
 
       <div className="container mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full rtl">
-          <TabsList className="grid w-full grid-cols-6 mb-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-            <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 font-arabic">
+          <TabsList className="grid w-full grid-cols-6 mb-8 bg-card dark:bg-gray-800 border border-border dark:border-gray-700">
+            <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-background-secondary data-[state=active]:text-primary font-arabic">
               <BarChart3 className="w-4 h-4" />
               نظرة عامة
             </TabsTrigger>
-            <TabsTrigger value="cours" className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 font-arabic">
+            <TabsTrigger value="cours" className="flex items-center gap-2 data-[state=active]:bg-background-secondary data-[state=active]:text-primary font-arabic">
               <Upload className="w-4 h-4" />
               الدروس
             </TabsTrigger>
-            <TabsTrigger value="collaborative" className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 font-arabic">
+            <TabsTrigger value="collaborative" className="flex items-center gap-2 data-[state=active]:bg-background-secondary data-[state=active]:text-primary font-arabic">
               <Users className="w-4 h-4" />
               دروس تعاونية
             </TabsTrigger>
-            <TabsTrigger value="modules" className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 font-arabic">
+            <TabsTrigger value="modules" className="flex items-center gap-2 data-[state=active]:bg-background-secondary data-[state=active]:text-primary font-arabic">
               <BookOpen className="w-4 h-4" />
               المواد
             </TabsTrigger>
-            <TabsTrigger value="programmes" className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 font-arabic">
+            <TabsTrigger value="programmes" className="flex items-center gap-2 data-[state=active]:bg-background-secondary data-[state=active]:text-primary font-arabic">
               <FileText className="w-4 h-4" />
               البرامج
             </TabsTrigger>
-            <TabsTrigger value="memoires" className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600 font-arabic">
+            <TabsTrigger value="memoires" className="flex items-center gap-2 data-[state=active]:bg-background-secondary data-[state=active]:text-primary font-arabic">
               <FileText className="w-4 h-4" />
               المذكرات
             </TabsTrigger>
@@ -519,11 +519,11 @@ const EnseignantDashboard = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="text-start-rtl">
-                      <p className="text-sm font-medium text-blue-600 dark:text-blue-400 font-arabic">إجمالي الدروس</p>
+                      <p className="text-sm font-medium text-primary dark:text-blue-400 font-arabic">إجمالي الدروس</p>
                       <p className="text-3xl font-bold text-blue-700 dark:text-blue-300 font-arabic">{loading ? '-' : stats.totalCours}</p>
                     </div>
                     <div className="p-3 bg-blue-200 dark:bg-blue-800/50 rounded-full">
-                      <BookOpen className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      <BookOpen className="w-6 h-6 text-primary dark:text-blue-400" />
                     </div>
                   </div>
                 </CardContent>
@@ -533,11 +533,11 @@ const EnseignantDashboard = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="text-start-rtl">
-                      <p className="text-sm font-medium text-green-600 dark:text-green-400 font-arabic">دروس معتمدة</p>
+                      <p className="text-sm font-medium text-success dark:text-green-400 font-arabic">دروس معتمدة</p>
                       <p className="text-3xl font-bold text-green-700 dark:text-green-300 font-arabic">{loading ? '-' : stats.coursValides}</p>
                     </div>
                     <div className="p-3 bg-green-200 dark:bg-green-800/50 rounded-full">
-                      <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+                      <CheckCircle className="w-6 h-6 text-success dark:text-green-400" />
                     </div>
                   </div>
                 </CardContent>
@@ -547,11 +547,11 @@ const EnseignantDashboard = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="text-start-rtl">
-                      <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400 font-arabic">في الانتظار</p>
+                      <p className="text-sm font-medium text-warning dark:text-yellow-400 font-arabic">في الانتظار</p>
                       <p className="text-3xl font-bold text-yellow-700 dark:text-yellow-300 font-arabic">{loading ? '-' : stats.coursEnAttente}</p>
                     </div>
                     <div className="p-3 bg-yellow-200 dark:bg-yellow-800/50 rounded-full">
-                      <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+                      <Clock className="w-6 h-6 text-warning dark:text-yellow-400" />
                     </div>
                   </div>
                 </CardContent>
@@ -561,11 +561,11 @@ const EnseignantDashboard = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="text-start-rtl">
-                      <p className="text-sm font-medium text-purple-600 dark:text-purple-400 font-arabic">المواد</p>
+                      <p className="text-sm font-medium text-secondary dark:text-purple-400 font-arabic">المواد</p>
                       <p className="text-3xl font-bold text-purple-700 dark:text-purple-300 font-arabic">{loading ? '-' : stats.modulesEnseignes}</p>
                     </div>
                     <div className="p-3 bg-purple-200 dark:bg-purple-800/50 rounded-full">
-                      <TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                      <TrendingUp className="w-6 h-6 text-secondary dark:text-purple-400" />
                     </div>
                   </div>
                 </CardContent>
@@ -578,7 +578,7 @@ const EnseignantDashboard = () => {
                 <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700">
                   <CardTitle className="flex items-center gap-3">
                     <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-                      <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                      <User className="w-5 h-5 text-primary dark:text-blue-400" />
                     </div>
                     <span className="font-arabic">معلومات الملف الشخصي</span>
                   </CardTitle>
@@ -587,17 +587,17 @@ const EnseignantDashboard = () => {
                   <div className="grid gap-6 md:grid-cols-2">
                     {/* Basic Information */}
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2">المعلومات الأساسية</h3>
+                      <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic border-b pb-2">المعلومات الأساسية</h3>
                       
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">اسم المستخدم</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{userProfile?.username || 'غير محدد'}</p>
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اسم المستخدم</p>
+                        <p className="text-lg font-semibold text-foreground dark:text-white">{userProfile?.username || 'غير محدد'}</p>
                       </div>
                       
                       <div className="grid gap-4">
                         <div>
-                          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الاسم الكامل بالفرنسية</p>
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                          <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الاسم الكامل بالفرنسية</p>
+                          <p className="text-lg font-semibold text-foreground dark:text-white">
                             {userProfile?.prenom_fr && userProfile?.nom_fr 
                               ? `${userProfile.prenom_fr} ${userProfile.nom_fr}`
                               : 'غير محدد'
@@ -606,8 +606,8 @@ const EnseignantDashboard = () => {
                         </div>
                         
                         <div>
-                          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الاسم الكامل بالعربية</p>
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                          <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الاسم الكامل بالعربية</p>
+                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                             {userProfile?.prenom_ar && userProfile?.nom_ar 
                               ? `${userProfile.prenom_ar} ${userProfile.nom_ar}`
                               : 'غير محدد'
@@ -617,8 +617,8 @@ const EnseignantDashboard = () => {
                       </div>
                       
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ الميلاد</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">تاريخ الميلاد</p>
+                        <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                           {userProfile?.date_naissance 
                             ? formatDate(userProfile.date_naissance)
                             : 'غير محدد'
@@ -629,46 +629,46 @@ const EnseignantDashboard = () => {
                     
                     {/* Contact & Professional Information */}
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2">معلومات الاتصال والعمل</h3>
+                      <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic border-b pb-2">معلومات الاتصال والعمل</h3>
                       
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">البريد الإلكتروني</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white" dir="ltr">
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">البريد الإلكتروني</p>
+                        <p className="text-lg font-semibold text-foreground dark:text-white" dir="ltr">
                           {userProfile?.email || 'غير محدد'}
                         </p>
                       </div>
                       
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">رقم الهاتف</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white" dir="ltr">
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">رقم الهاتف</p>
+                        <p className="text-lg font-semibold text-foreground dark:text-white" dir="ltr">
                           {userProfile?.telephone || 'غير محدد'}
                         </p>
                       </div>
                       
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الدرجة العلمية</p>
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الدرجة العلمية</p>
                         <Badge variant="secondary" className="mt-1 bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200 font-arabic">
                           {userProfile?.grade || 'غير محدد'}
                         </Badge>
                       </div>
                       
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">مؤسسة التكوين</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">مؤسسة التكوين</p>
+                        <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                           {userProfile?.etablissement_formation || 'غير محدد'}
                         </p>
                       </div>
                       
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الدور</p>
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الدور</p>
                         <Badge variant="secondary" className="mt-1 bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200 font-arabic">
                           {getRoleInArabic(userProfile?.role)}
                         </Badge>
                       </div>
                       
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ إنشاء الحساب</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">تاريخ إنشاء الحساب</p>
+                        <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                           {userProfile?.created_at 
                             ? formatDate(userProfile.created_at)
                             : 'غير محدد'
@@ -679,24 +679,24 @@ const EnseignantDashboard = () => {
                   </div>
                   
                   {/* Summary Statistics */}
-                  <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic mb-4">إحصائيات سريعة</h3>
+                  <div className="mt-6 pt-6 border-t border-border dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic mb-4">إحصائيات سريعة</h3>
                     <div className="grid gap-4 md:grid-cols-4">
-                      <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
-                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.totalCours}</p>
-                        <p className="text-sm text-blue-600 dark:text-blue-400 font-arabic">إجمالي الدروس</p>
+                      <div className="theme-transition-colors bg-background-secondary dark:bg-blue-900/20 p-4 rounded-lg text-center">
+                        <p className="text-2xl font-bold text-primary dark:text-blue-400">{stats.totalCours}</p>
+                        <p className="text-sm text-primary dark:text-blue-400 font-arabic">إجمالي الدروس</p>
                       </div>
                       <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center">
-                        <p className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.coursValides}</p>
-                        <p className="text-sm text-green-600 dark:text-green-400 font-arabic">دروس معتمدة</p>
+                        <p className="text-2xl font-bold text-success dark:text-green-400">{stats.coursValides}</p>
+                        <p className="text-sm text-success dark:text-green-400 font-arabic">دروس معتمدة</p>
                       </div>
                       <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg text-center">
-                        <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{stats.coursEnAttente}</p>
-                        <p className="text-sm text-yellow-600 dark:text-yellow-400 font-arabic">في الانتظار</p>
+                        <p className="text-2xl font-bold text-warning dark:text-yellow-400">{stats.coursEnAttente}</p>
+                        <p className="text-sm text-warning dark:text-yellow-400 font-arabic">في الانتظار</p>
                       </div>
                       <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg text-center">
-                        <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{stats.modulesEnseignes}</p>
-                        <p className="text-sm text-purple-600 dark:text-purple-400 font-arabic">المواد</p>
+                        <p className="text-2xl font-bold text-secondary dark:text-purple-400">{stats.modulesEnseignes}</p>
+                        <p className="text-sm text-secondary dark:text-purple-400 font-arabic">المواد</p>
                       </div>
                     </div>
                   </div>
@@ -708,7 +708,7 @@ const EnseignantDashboard = () => {
                 <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700">
                   <CardTitle className="flex items-center gap-3">
                     <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
-                      <Activity className="w-5 h-5 text-green-600 dark:text-green-400" />
+                      <Activity className="w-5 h-5 text-success dark:text-green-400" />
                     </div>
                     إجراءات سريعة
                   </CardTitle>
@@ -717,7 +717,7 @@ const EnseignantDashboard = () => {
                   <Button 
                     onClick={() => setActiveTab('cours')}
                     variant="outline" 
-                    className="w-full justify-start hover:bg-blue-50 hover:border-blue-200 dark:hover:bg-blue-900/20"
+                    className="w-full justify-start hover:bg-background-secondary hover:border-blue-200 dark:hover:bg-blue-900/20"
                   >
                     <Upload className="w-4 h-4 mr-2" />
                     إدارة الدروس
@@ -764,25 +764,25 @@ const EnseignantDashboard = () => {
                 {loading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600 dark:text-gray-400">جارٍ تحميل الأنشطة...</p>
+                    <p className="mt-4 text-muted-foreground dark:text-muted-foreground">جارٍ تحميل الأنشطة...</p>
                   </div>
                 ) : recentActivities.length > 0 ? (
                   <div className="space-y-4">
                     {recentActivities.map((activity) => (
-                      <div key={activity.id} className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                      <div key={activity.id} className="theme-transition-colors flex items-start gap-4 p-4 bg-background-secondary dark:bg-gray-800/50 rounded-lg">
                         <div className={`p-2 rounded-full ${
                           activity.type === 'course_validated' ? 'bg-green-100 dark:bg-green-900/50' :
                           activity.type === 'course_rejected' ? 'bg-red-100 dark:bg-red-900/50' :
                           'bg-blue-100 dark:bg-blue-900/50'
                         }`}>
-                          {activity.type === 'course_validated' ? <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400" /> :
-                           activity.type === 'course_rejected' ? <XCircle className="w-4 h-4 text-red-600 dark:text-red-400" /> :
-                           <Upload className="w-4 h-4 text-blue-600 dark:text-blue-400" />}
+                          {activity.type === 'course_validated' ? <CheckCircle className="w-4 h-4 text-success dark:text-green-400" /> :
+                           activity.type === 'course_rejected' ? <XCircle className="w-4 h-4 text-error dark:text-red-400" /> :
+                           <Upload className="w-4 h-4 text-primary dark:text-blue-400" />}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-gray-900 dark:text-white">{activity.title}</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{activity.description}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                          <p className="font-medium text-foreground dark:text-white">{activity.title}</p>
+                          <p className="text-sm text-muted-foreground dark:text-muted-foreground">{activity.description}</p>
+                          <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">
                                                         {formatDate(activity.date)}
                           </p>
                         </div>
@@ -799,8 +799,8 @@ const EnseignantDashboard = () => {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <Activity className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-                    <p className="text-gray-600 dark:text-gray-400">لا توجد أنشطة حديثة</p>
+                    <Activity className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground dark:text-muted-foreground">لا توجد أنشطة حديثة</p>
                   </div>
                 )}
               </CardContent>
@@ -837,7 +837,7 @@ const EnseignantDashboard = () => {
                 <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700">
                   <CardTitle className="flex items-center gap-3">
                     <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-                      <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                      <User className="w-5 h-5 text-primary dark:text-blue-400" />
                     </div>
                     <span className="font-arabic">معلومات الملف الشخصي المفصلة</span>
                   </CardTitle>
@@ -845,41 +845,41 @@ const EnseignantDashboard = () => {
                 <CardContent className="p-6 space-y-6">
                   {/* Personal Information Section */}
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic mb-4 border-b pb-2">المعلومات الشخصية</h3>
+                    <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic mb-4 border-b pb-2">المعلومات الشخصية</h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">اسم المستخدم</label>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{userProfile?.username || 'غير محدد'}</p>
+                        <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اسم المستخدم</label>
+                        <p className="text-lg font-semibold text-foreground dark:text-white">{userProfile?.username || 'غير محدد'}</p>
                       </div>
                       
                       <div className="grid gap-4 md:grid-cols-2">
                         <div>
-                          <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الاسم بالفرنسية</label>
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white">{userProfile?.prenom_fr || 'غير محدد'}</p>
+                          <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الاسم بالفرنسية</label>
+                          <p className="text-lg font-semibold text-foreground dark:text-white">{userProfile?.prenom_fr || 'غير محدد'}</p>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">اللقب بالفرنسية</label>
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white">{userProfile?.nom_fr || 'غير محدد'}</p>
+                          <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اللقب بالفرنسية</label>
+                          <p className="text-lg font-semibold text-foreground dark:text-white">{userProfile?.nom_fr || 'غير محدد'}</p>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الاسم بالعربية</label>
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">{userProfile?.prenom_ar || 'غير محدد'}</p>
+                          <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الاسم بالعربية</label>
+                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">{userProfile?.prenom_ar || 'غير محدد'}</p>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">اللقب بالعربية</label>
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">{userProfile?.nom_ar || 'غير محدد'}</p>
+                          <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اللقب بالعربية</label>
+                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">{userProfile?.nom_ar || 'غير محدد'}</p>
                         </div>
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ الميلاد</label>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                        <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">تاريخ الميلاد</label>
+                        <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                           {userProfile?.date_naissance 
                             ? formatDate(userProfile.date_naissance)
                             : 'غير محدد'
                           }
                           {userProfile?.date_naissance && (
-                            <span className="text-sm text-gray-500 mr-2">
+                            <span className="text-sm text-muted-foreground mr-2">
                               ({new Date().getFullYear() - new Date(userProfile.date_naissance).getFullYear()} سنة)
                             </span>
                           )}
@@ -890,18 +890,18 @@ const EnseignantDashboard = () => {
                   
                   {/* Contact Information Section */}
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic mb-4 border-b pb-2">معلومات الاتصال</h3>
+                    <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic mb-4 border-b pb-2">معلومات الاتصال</h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">البريد الإلكتروني</label>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white" dir="ltr">
+                        <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">البريد الإلكتروني</label>
+                        <p className="text-lg font-semibold text-foreground dark:text-white" dir="ltr">
                           {userProfile?.email || 'غير محدد'}
                         </p>
                       </div>
                       
                       <div>
-                        <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">رقم الهاتف</label>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white" dir="ltr">
+                        <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">رقم الهاتف</label>
+                        <p className="text-lg font-semibold text-foreground dark:text-white" dir="ltr">
                           {userProfile?.telephone || 'غير محدد'}
                         </p>
                       </div>
@@ -922,7 +922,7 @@ const EnseignantDashboard = () => {
                 <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700">
                   <CardTitle className="flex items-center gap-3">
                     <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
-                      <Settings className="w-5 h-5 text-green-600 dark:text-green-400" />
+                      <Settings className="w-5 h-5 text-success dark:text-green-400" />
                     </div>
                     <span className="font-arabic">المعلومات المهنية وإعدادات الحساب</span>
                   </CardTitle>
@@ -931,10 +931,10 @@ const EnseignantDashboard = () => {
                   {/* Professional Information */}
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic mb-4 border-b pb-2">المعلومات المهنية</h3>
+                      <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic mb-4 border-b pb-2">المعلومات المهنية</h3>
                       <div className="space-y-4">
                         <div>
-                          <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الدرجة العلمية</label>
+                          <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الدرجة العلمية</label>
                           <div className="mt-1">
                             <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200 font-arabic">
                               {userProfile?.grade || 'غير محدد'}
@@ -943,14 +943,14 @@ const EnseignantDashboard = () => {
                         </div>
                         
                         <div>
-                          <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">مؤسسة التكوين</label>
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                          <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">مؤسسة التكوين</label>
+                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                             {userProfile?.etablissement_formation || 'غير محدد'}
                           </p>
                         </div>
                         
                         <div>
-                          <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الدور في النظام</label>
+                          <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الدور في النظام</label>
                           <div className="mt-1">
                             <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200 font-arabic">
                               {getRoleInArabic(userProfile?.role)}
@@ -959,8 +959,8 @@ const EnseignantDashboard = () => {
                         </div>
                         
                         <div>
-                          <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ إنشاء الحساب</label>
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                          <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">تاريخ إنشاء الحساب</label>
+                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                                                       {userProfile?.created_at 
                             ? formatDate(userProfile.created_at)
                             : 'غير محدد'
@@ -969,8 +969,8 @@ const EnseignantDashboard = () => {
                         </div>
                         
                         <div>
-                          <label className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">آخر تحديث</label>
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                          <label className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">آخر تحديث</label>
+                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                                                       {userProfile?.updated_at 
                             ? formatDate(userProfile.updated_at)
                             : 'غير محدد'
@@ -982,7 +982,7 @@ const EnseignantDashboard = () => {
                     
                     {/* Account Actions */}
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic mb-4 border-b pb-2">إجراءات الحساب</h3>
+                      <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic mb-4 border-b pb-2">إجراءات الحساب</h3>
                       <div className="space-y-4">
                         <Button 
                           variant="outline" 
@@ -1045,7 +1045,7 @@ const EnseignantDashboard = () => {
           <div className="space-y-6">
             {/* Account Information Section */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic mb-4 border-b pb-2">معلومات الحساب</h3>
+              <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic mb-4 border-b pb-2">معلومات الحساب</h3>
               <div className="grid gap-4">
                 <div>
                   <Label htmlFor="username" className="form-label-rtl font-arabic">اسم المستخدم</Label>
@@ -1085,7 +1085,7 @@ const EnseignantDashboard = () => {
 
             {/* Personal Information Section */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic mb-4 border-b pb-2">المعلومات الشخصية</h3>
+              <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic mb-4 border-b pb-2">المعلومات الشخصية</h3>
               <div className="grid gap-4">
                 <div className="grid grid-cols-2 gap-2">
                   <div>
@@ -1151,7 +1151,7 @@ const EnseignantDashboard = () => {
 
             {/* Professional Information Section */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic mb-4 border-b pb-2">المعلومات المهنية</h3>
+              <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic mb-4 border-b pb-2">المعلومات المهنية</h3>
               <div className="grid gap-4">
                 <div>
                   <Label htmlFor="grade" className="form-label-rtl font-arabic">الدرجة العلمية</Label>
@@ -1412,20 +1412,20 @@ const EnseignantDashboard = () => {
             <div className="mx-auto mb-6 w-20 h-20 bg-gradient-to-r from-red-500 via-pink-500 to-red-600 rounded-full flex items-center justify-center shadow-lg animate-pulse">
               <LogOut className="w-10 h-10 text-white animate-bounce" />
             </div>
-            <AlertDialogTitle className="text-2xl font-bold text-gray-900 dark:text-white font-arabic mb-2">
+            <AlertDialogTitle className="text-2xl font-bold text-foreground dark:text-white font-arabic mb-2">
               تأكيد تسجيل الخروج
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-600 dark:text-gray-400 font-arabic leading-relaxed text-base">
+            <AlertDialogDescription className="text-muted-foreground dark:text-muted-foreground font-arabic leading-relaxed text-base">
               هل أنت متأكد من أنك تريد تسجيل الخروج من النظام؟ 
               <br />
-              <span className="text-sm text-gray-500 dark:text-gray-500 mt-2 block">
+              <span className="text-sm text-muted-foreground dark:text-muted-foreground mt-2 block">
                 سيتم إغلاق جلسة العمل الخاصة بك
               </span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex flex-col sm:flex-row gap-3 pt-6">
             <AlertDialogCancel 
-              className="font-arabic w-full sm:w-auto order-2 sm:order-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 px-8 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:scale-105 font-medium"
+              className="font-arabic w-full sm:w-auto order-2 sm:order-1 hover:bg-muted dark:hover:bg-gray-800 transition-all duration-300 px-8 py-3 rounded-xl border-2 border-border-medium dark:border-gray-600 hover:border-border-heavy dark:hover:border-gray-500 hover:scale-105 font-medium"
             >
               إلغاء
             </AlertDialogCancel>

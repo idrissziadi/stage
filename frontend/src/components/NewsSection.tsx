@@ -29,7 +29,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({ news }) => {
   }, [news.length]);
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-card">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -38,8 +38,8 @@ const NewsSection: React.FC<NewsSectionProps> = ({ news }) => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">الأخبار والتحديثات</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-4xl font-bold text-foreground mb-6">الأخبار والتحديثات</h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             ابق على اطلاع بأحدث الأخبار والتحديثات في منصة الجودة
           </p>
         </motion.div>
@@ -57,13 +57,13 @@ const NewsSection: React.FC<NewsSectionProps> = ({ news }) => {
               <div className="bg-gradient-to-br from-blue-600 to-green-600 rounded-3xl p-8 text-white overflow-hidden">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16"></div>
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-12 -translate-x-12"></div>
+                  <div className="theme-transition-colors absolute top-0 right-0 w-32 h-32 bg-card rounded-full -translate-y-16 translate-x-16"></div>
+                  <div className="theme-transition-colors absolute bottom-0 left-0 w-24 h-24 bg-card rounded-full translate-y-12 -translate-x-12"></div>
                 </div>
                 
                 <div className="relative">
                   <div className="flex items-center space-x-3 space-x-reverse mb-4">
-                    <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
+                    <span className="bg-card/20 px-3 py-1 rounded-full text-sm font-medium">
                       {news[currentNewsIndex]?.category}
                     </span>
                     {news[currentNewsIndex]?.isImportant && (
@@ -98,7 +98,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({ news }) => {
                         href={news[currentNewsIndex].link}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 space-x-reverse"
+                        className="bg-card/20 hover:bg-card/30 px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 space-x-reverse"
                       >
                         <span>اقرأ المزيد</span>
                         <ExternalLink className="w-4 h-4" />
@@ -119,7 +119,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({ news }) => {
               viewport={{ once: true }}
               className="text-center lg:text-right"
             >
-              <h3 className="text-xl font-semibold text-gray-900 mb-6">أخبار أخرى</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-6">أخبار أخرى</h3>
             </motion.div>
             
             {news.slice(0, 3).map((item, index) => (
@@ -130,21 +130,21 @@ const NewsSection: React.FC<NewsSectionProps> = ({ news }) => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ x: -10 }}
-                className="bg-gray-50 hover:bg-gray-100 rounded-xl p-4 transition-all duration-300 cursor-pointer group"
+                className="bg-background-secondary hover:bg-muted rounded-xl p-4 transition-all duration-300 cursor-pointer group"
               >
                 <div className="flex items-start space-x-3 space-x-reverse">
                   <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-green-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                    <h4 className="font-medium text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                       {item.title}
                     </h4>
-                    <div className="flex items-center space-x-3 space-x-reverse text-sm text-gray-500">
+                    <div className="flex items-center space-x-3 space-x-reverse text-sm text-muted-foreground">
                       <span>{item.date}</span>
                       <span>•</span>
                       <span>{item.category}</span>
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0" />
+                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
                 </div>
               </motion.div>
             ))}
@@ -159,7 +159,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({ news }) => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                className="text-primary hover:text-blue-700 font-medium transition-colors"
               >
                 عرض جميع الأخبار
               </motion.button>

@@ -290,7 +290,7 @@ const MemoireManagement = () => {
       case 'مرفوض':
         return 'bg-red-100 text-red-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-muted text-foreground';
     }
   };
 
@@ -329,8 +329,8 @@ const MemoireManagement = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white font-arabic">إدارة المذكرات</h2>
-          <p className="text-gray-600 dark:text-gray-400 font-arabic">
+          <h2 className="text-2xl font-bold text-foreground dark:text-white font-arabic">إدارة المذكرات</h2>
+          <p className="text-muted-foreground dark:text-muted-foreground font-arabic">
             تخصيص ومتابعة مذكرات التخرج للمتدربين
           </p>
         </div>
@@ -407,10 +407,10 @@ const MemoireManagement = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
-              <FileText className="w-8 h-8 text-blue-600" />
+              <FileText className="w-8 h-8 text-primary" />
               <div>
-                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
-                <p className="text-sm text-gray-600 font-arabic">إجمالي المذكرات</p>
+                <p className="text-2xl font-bold text-foreground">{stats.total}</p>
+                <p className="text-sm text-muted-foreground font-arabic">إجمالي المذكرات</p>
               </div>
             </div>
           </CardContent>
@@ -419,10 +419,10 @@ const MemoireManagement = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
-              <UserCheck className="w-8 h-8 text-green-600" />
+              <UserCheck className="w-8 h-8 text-success" />
               <div>
-                <p className="text-2xl font-bold text-gray-900">{stats.assigned}</p>
-                <p className="text-sm text-gray-600 font-arabic">مخصصة</p>
+                <p className="text-2xl font-bold text-foreground">{stats.assigned}</p>
+                <p className="text-sm text-muted-foreground font-arabic">مخصصة</p>
               </div>
             </div>
           </CardContent>
@@ -433,8 +433,8 @@ const MemoireManagement = () => {
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
               <Users className="w-8 h-8 text-orange-600" />
               <div>
-                <p className="text-2xl font-bold text-gray-900">{stats.unassigned}</p>
-                <p className="text-sm text-gray-600 font-arabic">غير مخصصة</p>
+                <p className="text-2xl font-bold text-foreground">{stats.unassigned}</p>
+                <p className="text-sm text-muted-foreground font-arabic">غير مخصصة</p>
               </div>
             </div>
           </CardContent>
@@ -443,10 +443,10 @@ const MemoireManagement = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
-              <CheckCircle className="w-8 h-8 text-purple-600" />
+              <CheckCircle className="w-8 h-8 text-secondary" />
               <div>
-                <p className="text-2xl font-bold text-gray-900">{stats.completed}</p>
-                <p className="text-sm text-gray-600 font-arabic">مكتملة</p>
+                <p className="text-2xl font-bold text-foreground">{stats.completed}</p>
+                <p className="text-sm text-muted-foreground font-arabic">مكتملة</p>
               </div>
             </div>
           </CardContent>
@@ -458,7 +458,7 @@ const MemoireManagement = () => {
         <CardContent className="p-4">
           <div className="flex items-center gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder="البحث بعنوان المذكرة أو اسم المتدرب..."
                 value={searchTerm}
@@ -500,13 +500,13 @@ const MemoireManagement = () => {
           {loading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600">جاري التحميل...</p>
+              <p className="mt-4 text-muted-foreground">جاري التحميل...</p>
             </div>
           ) : filteredMemoires.length === 0 ? (
             <div className="text-center py-8">
-              <FileText className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2 font-arabic">لا توجد مذكرات</h3>
-              <p className="text-gray-600 font-arabic">لم يتم العثور على أي مذكرات</p>
+              <FileText className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2 font-arabic">لا توجد مذكرات</h3>
+              <p className="text-muted-foreground font-arabic">لم يتم العثور على أي مذكرات</p>
             </div>
           ) : (
             <Table>
@@ -527,16 +527,16 @@ const MemoireManagement = () => {
                       <div>
                         <p className="font-semibold">{memoire.titre_ar || memoire.titre_fr || 'بدون عنوان'}</p>
                         {memoire.titre_fr && memoire.titre_ar && (
-                          <p className="text-sm text-gray-600">{memoire.titre_fr}</p>
+                          <p className="text-sm text-muted-foreground">{memoire.titre_fr}</p>
                         )}
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-gray-500" />
+                        <User className="w-4 h-4 text-muted-foreground" />
                         <div>
                           <p className="font-medium">{memoire.stagiaire.prenom_fr} {memoire.stagiaire.nom_fr}</p>
-                          <p className="text-sm text-gray-600 font-arabic">{memoire.stagiaire.prenom_ar} {memoire.stagiaire.nom_ar}</p>
+                          <p className="text-sm text-muted-foreground font-arabic">{memoire.stagiaire.prenom_ar} {memoire.stagiaire.nom_ar}</p>
                         </div>
                       </div>
                     </TableCell>
@@ -544,10 +544,10 @@ const MemoireManagement = () => {
                       {memoire.enseignant ? (
                         <div>
                           <p className="font-medium">{memoire.enseignant.prenom_fr} {memoire.enseignant.nom_fr}</p>
-                          <p className="text-sm text-gray-600 font-arabic">{memoire.enseignant.prenom_ar} {memoire.enseignant.nom_ar}</p>
+                          <p className="text-sm text-muted-foreground font-arabic">{memoire.enseignant.prenom_ar} {memoire.enseignant.nom_ar}</p>
                         </div>
                       ) : (
-                        <span className="text-gray-400 font-arabic">غير مخصص</span>
+                        <span className="text-muted-foreground font-arabic">غير مخصص</span>
                       )}
                     </TableCell>
                     <TableCell>
@@ -558,7 +558,7 @@ const MemoireManagement = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-gray-500" />
+                        <Calendar className="w-4 h-4 text-muted-foreground" />
                         <span className="text-sm">
                           {formatDate(memoire.createdAt)}
                         </span>

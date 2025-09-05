@@ -34,10 +34,10 @@ const LogoutCard: React.FC<LogoutCardProps> = ({
         <div className="mx-auto mb-4 w-16 h-16 bg-gradient-to-r from-red-500 via-pink-500 to-red-600 rounded-full flex items-center justify-center shadow-lg">
           <LogOut className="w-8 h-8 text-white" />
         </div>
-        <CardTitle className="text-xl font-bold text-gray-900 dark:text-white font-arabic">
+        <CardTitle className="text-xl font-bold text-foreground dark:text-white font-arabic">
           تسجيل الخروج
         </CardTitle>
-        <CardDescription className="text-gray-600 dark:text-gray-400 font-arabic">
+        <CardDescription className="text-muted-foreground dark:text-muted-foreground font-arabic">
           إغلاق جلسة العمل الخاصة بك
         </CardDescription>
       </CardHeader>
@@ -45,14 +45,14 @@ const LogoutCard: React.FC<LogoutCardProps> = ({
       <CardContent className="space-y-4">
         {/* Informations utilisateur */}
         {username && (
-          <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 border border-red-200 dark:border-red-800">
-            <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <div className="theme-transition-colors bg-card/50 dark:bg-gray-800/50 rounded-lg p-3 border border-red-200 dark:border-red-800">
+            <div className="flex items-center gap-2 text-sm text-foreground dark:text-gray-300">
               <User className="w-4 h-4 text-red-500" />
               <span className="font-medium font-arabic">المستخدم:</span>
               <span className="font-semibold">{username}</span>
             </div>
             {role && (
-              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground mt-1">
                 <Shield className="w-4 h-4 text-pink-500" />
                 <span className="font-medium font-arabic">الدور:</span>
                 <span className="font-semibold">{getRoleInArabic(role)}</span>
@@ -74,7 +74,7 @@ const LogoutCard: React.FC<LogoutCardProps> = ({
 
         {/* Message d'avertissement */}
         <div className="text-center">
-          <p className="text-xs text-gray-500 dark:text-gray-400 font-arabic">
+          <p className="text-xs text-muted-foreground dark:text-muted-foreground font-arabic">
             ⚠️ سيتم إغلاق جميع الجلسات المفتوحة
           </p>
         </div>

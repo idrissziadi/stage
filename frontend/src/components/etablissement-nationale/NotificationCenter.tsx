@@ -85,13 +85,13 @@ const NotificationCenter = () => {
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'programme_submitted':
-        return <FileText className="w-5 h-5 text-blue-600" />;
+        return <FileText className="w-5 h-5 text-primary" />;
       case 'programme_approved':
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
+        return <CheckCircle className="w-5 h-5 text-success" />;
       case 'programme_rejected':
-        return <XCircle className="w-5 h-5 text-red-600" />;
+        return <XCircle className="w-5 h-5 text-error" />;
       default:
-        return <Bell className="w-5 h-5 text-gray-600" />;
+        return <Bell className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -126,14 +126,14 @@ const NotificationCenter = () => {
         {notifications.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center">
-              <Bell className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2 font-arabic">لا توجد إشعارات</h3>
-              <p className="text-gray-500 font-arabic">لا توجد إشعارات حالياً</p>
+              <Bell className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2 font-arabic">لا توجد إشعارات</h3>
+              <p className="text-muted-foreground font-arabic">لا توجد إشعارات حالياً</p>
             </CardContent>
           </Card>
         ) : (
           notifications.map((notification) => (
-            <Card key={notification.id} className={`transition-all duration-200 ${!notification.read ? 'border-r-4 border-r-blue-500 bg-blue-50/50' : ''}`}>
+            <Card key={notification.id} className={`transition-all duration-200 ${!notification.read ? 'border-r-4 border-r-blue-500 bg-background-secondary/50' : ''}`}>
               <CardContent className="p-4">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
@@ -141,13 +141,13 @@ const NotificationCenter = () => {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-medium text-gray-900 font-arabic">{notification.title}</h4>
+                      <h4 className="font-medium text-foreground font-arabic">{notification.title}</h4>
                       {!notification.read && (
                         <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 mb-2 font-arabic">{notification.message}</p>
-                    <div className="text-xs text-gray-500 font-arabic">
+                    <p className="text-sm text-muted-foreground mb-2 font-arabic">{notification.message}</p>
+                    <div className="text-xs text-muted-foreground font-arabic">
                       {formatDate(notification.created_at)}
                     </div>
                   </div>
@@ -156,7 +156,7 @@ const NotificationCenter = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => markAsRead(notification.id)}
-                      className="text-blue-600 hover:text-blue-700 font-arabic"
+                      className="text-primary hover:text-blue-700 font-arabic"
                     >
                       تحديد كمقروء
                     </Button>

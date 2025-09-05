@@ -162,7 +162,7 @@ export const HeroGradient: React.FC<{ children: React.ReactNode }> = ({ children
             repeat: Infinity,
             ease: "easeInOut"
           }}
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-card rounded-full"
         />
       </div>
       

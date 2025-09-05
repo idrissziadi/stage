@@ -469,13 +469,13 @@ const EtablissementRegionaleDashboardPage = () => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">Chargement du profil...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground">Chargement du profil...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900" dir="rtl">
+    <div className="theme-transition-colors min-h-screen bg-background-secondary dark:bg-gray-900" dir="rtl">
       {/* Universal Navbar */}
                              <UniversalNavbar 
            onTabChange={setActiveTab} 
@@ -509,7 +509,7 @@ const EtablissementRegionaleDashboardPage = () => {
             {loading ? (
               <div className="text-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="mt-4 text-gray-600 dark:text-gray-400 font-arabic">جارٍ تحميل الإحصائيات...</p>
+                <p className="mt-4 text-muted-foreground dark:text-muted-foreground font-arabic">جارٍ تحميل الإحصائيات...</p>
               </div>
             ) : (
               <>
@@ -567,7 +567,7 @@ const EtablissementRegionaleDashboardPage = () => {
                     <CardTitle className="flex items-center gap-3 justify-start rtl">
                       <span className="font-arabic text-right">معلومات المؤسسة الإقليمية</span>
                       <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
-                        <Building className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        <Building className="w-5 h-5 text-secondary dark:text-purple-400" />
                       </div>
                     </CardTitle>
                   </CardHeader>
@@ -575,35 +575,35 @@ const EtablissementRegionaleDashboardPage = () => {
                     <div className="grid gap-6 md:grid-cols-2 rtl">
                       {/* Basic Information */}
                       <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2 text-right">المعلومات الأساسية</h3>
+                        <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic border-b pb-2 text-right">المعلومات الأساسية</h3>
                         
                         <div className="space-y-3">
                           <div className="text-right">
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">اسم المستخدم</p>
-                            <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">{userProfile?.username || 'غير محدد'}</p>
+                            <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اسم المستخدم</p>
+                            <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">{userProfile?.username || 'غير محدد'}</p>
                           </div>
                           
                           <div className="text-right">
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">اسم المؤسسة بالفرنسية</p>
-                            <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                            <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اسم المؤسسة بالفرنسية</p>
+                            <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                               {userProfile?.nom_fr || 'غير محدد'}
                             </p>
                           </div>
 
                           <div className="text-right">
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">اسم المؤسسة بالعربية</p>
-                            <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                            <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اسم المؤسسة بالعربية</p>
+                            <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                               {userProfile?.nom_ar || 'غير محدد'}
                             </p>
                           </div>
 
                           <div className="text-right">
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الدور</p>
+                            <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الدور</p>
                             <div className="flex items-center gap-2 justify-end">
                               <Badge variant="secondary" className="font-arabic">
                                 مؤسسة إقليمية
                               </Badge>
-                              <IdCard className="w-4 h-4 text-gray-500" />
+                              <IdCard className="w-4 h-4 text-muted-foreground" />
                             </div>
                           </div>
                         </div>
@@ -611,43 +611,43 @@ const EtablissementRegionaleDashboardPage = () => {
 
                       {/* Contact Information */}
                       <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2 text-right">معلومات الاتصال</h3>
+                        <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic border-b pb-2 text-right">معلومات الاتصال</h3>
                         
                         <div className="space-y-3">
                           <div className="text-right">
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">البريد الإلكتروني</p>
+                            <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">البريد الإلكتروني</p>
                             <div className="flex items-center gap-2 justify-end">
-                              <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                              <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                                 {userProfile?.email || 'غير محدد'}
                               </p>
-                              <Mail className="w-4 h-4 text-gray-500" />
+                              <Mail className="w-4 h-4 text-muted-foreground" />
                             </div>
                           </div>
                           
                           <div className="text-right">
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">رقم الهاتف</p>
+                            <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">رقم الهاتف</p>
                             <div className="flex items-center gap-2 justify-end">
-                              <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                              <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                                 {userProfile?.telephone || 'غير محدد'}
                               </p>
-                              <Phone className="w-4 h-4 text-gray-500" />
+                              <Phone className="w-4 h-4 text-muted-foreground" />
                             </div>
                           </div>
 
                           <div className="text-right">
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">العنوان</p>
+                            <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">العنوان</p>
                             <div className="flex items-center gap-2 justify-end">
-                              <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                              <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                                 {userProfile?.adresse_ar || userProfile?.adresse_fr || 'غير محدد'}
                               </p>
-                              <MapPin className="w-4 h-4 text-gray-500" />
+                              <MapPin className="w-4 h-4 text-muted-foreground" />
                             </div>
                           </div>
 
                           <div className="text-right">
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ التسجيل</p>
+                            <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">تاريخ التسجيل</p>
                             <div className="flex items-center gap-2 justify-end">
-                              <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                              <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                                 {userProfile?.created_at 
                                   ? new Date(userProfile.created_at).toLocaleDateString('ar-DZ', {
                                       year: 'numeric',
@@ -657,7 +657,7 @@ const EtablissementRegionaleDashboardPage = () => {
                                   : 'غير محدد'
                                 }
                               </p>
-                              <Calendar className="w-4 h-4 text-gray-500" />
+                              <Calendar className="w-4 h-4 text-muted-foreground" />
                             </div>
                           </div>
                         </div>
@@ -681,7 +681,7 @@ const EtablissementRegionaleDashboardPage = () => {
             {infrastructureLoading ? (
               <div className="text-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="mt-4 text-gray-600 dark:text-gray-400 font-arabic">جارٍ تحميل بيانات البنية التحتية...</p>
+                <p className="mt-4 text-muted-foreground dark:text-muted-foreground font-arabic">جارٍ تحميل بيانات البنية التحتية...</p>
               </div>
             ) : (
               <div className="space-y-6">
@@ -690,7 +690,7 @@ const EtablissementRegionaleDashboardPage = () => {
                   <CardHeader className="text-center pb-4">
                     <CardTitle className="flex items-center justify-center gap-3 text-2xl">
                       <div className="p-3 bg-blue-100 rounded-full">
-                        <Building className="w-8 h-8 text-blue-600" />
+                        <Building className="w-8 h-8 text-primary" />
                       </div>
                       <span className="font-arabic text-blue-900">نظرة عامة على البنية التحتية</span>
                     </CardTitle>
@@ -698,17 +698,17 @@ const EtablissementRegionaleDashboardPage = () => {
                   </CardHeader>
                   <CardContent className="p-6">
                     <div className="grid gap-6 md:grid-cols-3 rtl">
-                      <div className="text-center p-4 bg-white rounded-lg shadow-sm border border-blue-100">
-                        <div className="text-4xl font-bold text-blue-600 mb-2">{stats.totalBranches}</div>
+                      <div className="theme-transition-colors text-center p-4 bg-card rounded-lg shadow-sm border border-blue-100">
+                        <div className="text-4xl font-bold text-primary mb-2">{stats.totalBranches}</div>
                         <p className="text-lg font-semibold text-blue-800 font-arabic">إجمالي الفروع</p>
-                        <p className="text-sm text-blue-600 font-arabic">تقسيمات رئيسية</p>
+                        <p className="text-sm text-primary font-arabic">تقسيمات رئيسية</p>
                       </div>
-                      <div className="text-center p-4 bg-white rounded-lg shadow-sm border border-green-100">
-                        <div className="text-4xl font-bold text-green-600 mb-2">{stats.totalSpecialites}</div>
+                      <div className="theme-transition-colors text-center p-4 bg-card rounded-lg shadow-sm border border-green-100">
+                        <div className="text-4xl font-bold text-success mb-2">{stats.totalSpecialites}</div>
                         <p className="text-lg font-semibold text-green-800 font-arabic">إجمالي التخصصات</p>
-                        <p className="text-sm text-green-600 font-arabic">مجالات تعليمية</p>
+                        <p className="text-sm text-success font-arabic">مجالات تعليمية</p>
                       </div>
-                      <div className="text-center p-4 bg-white rounded-lg shadow-sm border border-orange-100">
+                      <div className="theme-transition-colors text-center p-4 bg-card rounded-lg shadow-sm border border-orange-100">
                         <div className="text-4xl font-bold text-orange-600 mb-2">{stats.totalModules}</div>
                         <p className="text-lg font-semibold text-orange-800 font-arabic">إجمالي المواد</p>
                         <p className="text-sm text-orange-600 font-arabic">وحدات تعليمية</p>
@@ -767,7 +767,7 @@ const EtablissementRegionaleDashboardPage = () => {
                     <div className="text-center space-y-4">
                       <div className="flex items-center justify-center gap-3 mb-4">
                         <div className="p-2 bg-green-100 rounded-full">
-                          <Building className="w-6 h-6 text-green-600" />
+                          <Building className="w-6 h-6 text-success" />
                         </div>
                         <h4 className="text-xl font-semibold text-green-900 font-arabic">
                           دليل الاستخدام - واجهة محسنة
@@ -775,17 +775,17 @@ const EtablissementRegionaleDashboardPage = () => {
                       </div>
                       
                       <div className="grid gap-4 md:grid-cols-3 text-sm">
-                        <div className="p-3 bg-white rounded-lg border border-green-200">
+                        <div className="theme-transition-colors p-3 bg-card rounded-lg border border-green-200">
                           <h5 className="font-semibold text-green-800 mb-2 font-arabic">1. التنقل السهل</h5>
                           <p className="text-green-700 font-arabic">استخدم الشجرة على اليسار للتنقل بين المستويات</p>
                         </div>
                         
-                        <div className="p-3 bg-white rounded-lg border border-green-200">
+                        <div className="theme-transition-colors p-3 bg-card rounded-lg border border-green-200">
                           <h5 className="font-semibold text-green-800 mb-2 font-arabic">2. التفاصيل الكاملة</h5>
                           <p className="text-green-700 font-arabic">عرض معلومات مفصلة في اللوحة اليمنى</p>
                         </div>
                         
-                        <div className="p-3 bg-white rounded-lg border border-green-200">
+                        <div className="theme-transition-colors p-3 bg-card rounded-lg border border-green-200">
                           <h5 className="font-semibold text-green-800 mb-2 font-arabic">3. الاستشارة والمراجعة</h5>
                           <p className="text-green-700 font-arabic">عرض المعلومات للاستشارة والمراجعة فقط</p>
                         </div>

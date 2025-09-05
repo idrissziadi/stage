@@ -276,9 +276,9 @@ const EtablissementFormationDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 rtl">
+    <div className="theme-transition-colors min-h-screen bg-background-secondary dark:bg-gray-900 rtl">
       {/* Modern Header with Institution Profile */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+      <header className="bg-card dark:bg-gray-800 border-b border-border dark:border-gray-700 shadow-sm">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -286,8 +286,8 @@ const EtablissementFormationDashboard = () => {
                 <Home className="w-6 h-6 text-white" />
               </div>
               <div className="text-start-rtl">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-arabic">لوحة مؤسسة التكوين</h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                <h1 className="text-2xl font-bold text-foreground dark:text-white font-arabic">لوحة مؤسسة التكوين</h1>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                   إدارة شاملة للنشاطات التعليمية والإدارية
                 </p>
               </div>
@@ -296,10 +296,10 @@ const EtablissementFormationDashboard = () => {
             {/* User Profile Dropdown */}
             <div className="flex items-center gap-4">
               <div className="hidden md:block text-end-rtl">
-                <p className="text-sm font-medium text-gray-900 dark:text-white font-arabic">
+                <p className="text-sm font-medium text-foreground dark:text-white font-arabic">
                   {userProfile?.nom_ar || userProfile?.nom_fr || userProfile?.code}
                 </p>
-                <p className="text-xs text-gray-600 dark:text-gray-400 font-arabic">
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground font-arabic">
                   {getRoleInArabic(userProfile?.role)}
                 </p>
               </div>
@@ -308,7 +308,7 @@ const EtablissementFormationDashboard = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar className="h-10 w-10">
-                      <AvatarFallback className="bg-green-100 text-green-600 font-semibold">
+                      <AvatarFallback className="bg-green-100 text-success font-semibold">
                         {getInitials(userProfile?.code)}
                       </AvatarFallback>
                     </Avatar>
@@ -340,7 +340,7 @@ const EtablissementFormationDashboard = () => {
                     <span>المساعدة والدعم</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => setIsLogoutConfirmOpen(true)} className="font-arabic text-red-600">
+                  <DropdownMenuItem onClick={() => setIsLogoutConfirmOpen(true)} className="font-arabic text-error">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>تسجيل الخروج</span>
                   </DropdownMenuItem>
@@ -355,7 +355,7 @@ const EtablissementFormationDashboard = () => {
       <div className="container mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           {/* Navigation Tabs - Following conciseness memory */}
-          <TabsList className="grid w-full grid-cols-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <TabsList className="grid w-full grid-cols-4 bg-card dark:bg-gray-800 border border-border dark:border-gray-700">
             <TabsTrigger value="overview" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-700 font-arabic">
               <BarChart3 className="w-4 h-4 ml-2" />
               نظرة عامة
@@ -498,20 +498,20 @@ const EtablissementFormationDashboard = () => {
             <div className="mx-auto mb-6 w-20 h-20 bg-gradient-to-r from-red-500 via-pink-500 to-red-600 rounded-full flex items-center justify-center shadow-lg animate-pulse">
               <LogOut className="w-10 h-10 text-white animate-bounce" />
             </div>
-            <AlertDialogTitle className="text-2xl font-bold text-gray-900 dark:text-white font-arabic mb-2">
+            <AlertDialogTitle className="text-2xl font-bold text-foreground dark:text-white font-arabic mb-2">
               تأكيد تسجيل الخروج
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-600 dark:text-gray-400 font-arabic leading-relaxed text-base">
+            <AlertDialogDescription className="text-muted-foreground dark:text-muted-foreground font-arabic leading-relaxed text-base">
               هل أنت متأكد من أنك تريد تسجيل الخروج من النظام؟ 
               <br />
-              <span className="text-sm text-gray-500 dark:text-gray-500 mt-2 block">
+              <span className="text-sm text-muted-foreground dark:text-muted-foreground mt-2 block">
                 سيتم إغلاق جلسة العمل الخاصة بك
               </span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex flex-col sm:flex-row gap-3 pt-6">
             <AlertDialogCancel 
-              className="font-arabic w-full sm:w-auto order-2 sm:order-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 px-8 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:scale-105 font-medium"
+              className="font-arabic w-full sm:w-auto order-2 sm:order-1 hover:bg-muted dark:hover:bg-gray-800 transition-all duration-300 px-8 py-3 rounded-xl border-2 border-border-medium dark:border-gray-600 hover:border-border-heavy dark:hover:border-gray-500 hover:scale-105 font-medium"
             >
               إلغاء
             </AlertDialogCancel>
@@ -548,7 +548,7 @@ const EtablissementFormationDashboard = () => {
           <div className="space-y-6">
             {/* Basic Information */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic mb-4 border-b pb-2">المعلومات الأساسية</h3>
+              <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic mb-4 border-b pb-2">المعلومات الأساسية</h3>
               <div className="grid gap-4">
                 <div>
                   <Label htmlFor="code" className="form-label-rtl font-arabic">رمز المؤسسة</Label>
@@ -589,7 +589,7 @@ const EtablissementFormationDashboard = () => {
 
             {/* Contact Information */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic mb-4 border-b pb-2">معلومات الاتصال</h3>
+              <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic mb-4 border-b pb-2">معلومات الاتصال</h3>
               <div className="grid gap-4">
                 <div>
                   <Label htmlFor="email" className="form-label-rtl font-arabic">البريد الإلكتروني</Label>
@@ -619,7 +619,7 @@ const EtablissementFormationDashboard = () => {
 
             {/* Address Information */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic mb-4 border-b pb-2">العنوان</h3>
+              <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic mb-4 border-b pb-2">العنوان</h3>
               <div className="grid gap-4">
                 <div>
                   <Label htmlFor="adresse_fr" className="form-label-rtl font-arabic">العنوان (فرنسية)</Label>

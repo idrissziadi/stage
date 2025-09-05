@@ -44,15 +44,15 @@ const StyledSnackbar: React.FC<StyledSnackbarProps> = ({
   const getIcon = () => {
     switch (type) {
       case 'success':
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
+        return <CheckCircle className="w-5 h-5 text-success" />;
       case 'error':
-        return <XCircle className="w-5 h-5 text-red-600" />;
+        return <XCircle className="w-5 h-5 text-error" />;
       case 'warning':
-        return <AlertCircle className="w-5 h-5 text-yellow-600" />;
+        return <AlertCircle className="w-5 h-5 text-warning" />;
       case 'info':
-        return <Info className="w-5 h-5 text-blue-600" />;
+        return <Info className="w-5 h-5 text-primary" />;
       default:
-        return <Info className="w-5 h-5 text-blue-600" />;
+        return <Info className="w-5 h-5 text-primary" />;
     }
   };
 
@@ -112,11 +112,11 @@ const StyledSnackbar: React.FC<StyledSnackbarProps> = ({
           </div>
           
           <div className="flex-1 min-w-0">
-            <h4 className="text-sm font-semibold text-gray-900 font-arabic">
+            <h4 className="text-sm font-semibold text-foreground font-arabic">
               {title}
             </h4>
             {description && (
-              <p className="mt-1 text-sm text-gray-600 font-arabic leading-relaxed">
+              <p className="mt-1 text-sm text-muted-foreground font-arabic leading-relaxed">
                 {description}
               </p>
             )}
@@ -124,14 +124,14 @@ const StyledSnackbar: React.FC<StyledSnackbarProps> = ({
           
           <button
             onClick={handleClose}
-            className="flex-shrink-0 p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
+            className="theme-transition-colors flex-shrink-0 p-1 rounded-full hover:bg-muted transition-colors duration-200"
           >
-            <X className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+            <X className="w-4 h-4 text-muted-foreground hover:text-muted-foreground" />
           </button>
         </div>
         
         {/* Progress bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200 rounded-b-xl overflow-hidden">
+        <div className="theme-transition-colors absolute bottom-0 left-0 right-0 h-1 bg-muted-secondary rounded-b-xl overflow-hidden">
           <div
             className={cn(
               'h-full transition-all duration-300 ease-linear',

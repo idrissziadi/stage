@@ -12,14 +12,14 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
+    <header className="bg-card shadow-sm border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo et navigation */}
           <nav className="flex space-x-8 rtl:space-x-reverse">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <h1 className="text-xl font-bold text-gray-900">نظام إدارة التدريب</h1>
+                <h1 className="text-xl font-bold text-foreground">نظام إدارة التدريب</h1>
               </div>
             </div>
           </nav>
@@ -29,10 +29,10 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
             {user ? (
               <>
                 <div className="hidden md:block text-right">
-                  <p className="text-sm font-medium text-gray-900 font-arabic">
+                  <p className="text-sm font-medium text-foreground font-arabic">
                     {user.prenom} {user.nom}
                   </p>
-                  <p className="text-xs text-gray-500 capitalize font-arabic">
+                  <p className="text-xs text-muted-foreground capitalize font-arabic">
                     {user.role === 'admin' && 'مدير'}
                     {user.role === 'enseignant' && 'أستاذ'}
                     {user.role === 'stagiaire' && 'متدرب'}
@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                 <div className="relative">
                   <button
                     onClick={onLogout}
-                    className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 font-arabic"
+                    className="theme-transition-colors bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 font-arabic"
                   >
                     <LogOut className="w-4 h-4" />
                     تسجيل الخروج

@@ -268,7 +268,7 @@ const CollaborativeMemoires = () => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">جارٍ تحميل مذكرات الزملاء...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground">جارٍ تحميل مذكرات الزملاء...</p>
       </div>
     );
   }
@@ -280,11 +280,11 @@ const CollaborativeMemoires = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
             <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
-              <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              <Users className="w-6 h-6 text-secondary dark:text-purple-400" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white font-arabic">مذكرات الزملاء</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+              <h2 className="text-xl font-bold text-foreground dark:text-white font-arabic">مذكرات الزملاء</h2>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                 استعرض المذكرات المعتمدة من زملائك في نفس عروض التكوين
               </p>
             </div>
@@ -295,21 +295,21 @@ const CollaborativeMemoires = () => {
             <div className="flex items-center gap-3">
               <GraduationCap className="w-8 h-8 text-purple-500" />
               <div>
-                <p className="text-sm font-medium text-gray-600 font-arabic">التخصصات المسجل بها</p>
+                <p className="text-sm font-medium text-muted-foreground font-arabic">التخصصات المسجل بها</p>
                 <p className="text-2xl font-bold text-purple-700">{specialiteStats.length}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <FileText className="w-8 h-8 text-pink-500" />
               <div>
-                <p className="text-sm font-medium text-gray-600 font-arabic">مذكرات الزملاء</p>
+                <p className="text-sm font-medium text-muted-foreground font-arabic">مذكرات الزملاء</p>
                 <p className="text-2xl font-bold text-pink-700">{memoires.length}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Users className="w-8 h-8 text-indigo-500" />
               <div>
-                <p className="text-sm font-medium text-gray-600 font-arabic">الزملاء المشاركون</p>
+                <p className="text-sm font-medium text-muted-foreground font-arabic">الزملاء المشاركون</p>
                 <p className="text-2xl font-bold text-indigo-700">
                   {[...new Set(memoires.map(m => `${m.stagiaire?.prenom_fr} ${m.stagiaire?.nom_fr}`))].length}
                 </p>
@@ -328,14 +328,14 @@ const CollaborativeMemoires = () => {
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {specialiteStats.map((specialite, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-4">
+                <div key={index} className="border border-border rounded-lg p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 font-arabic">
+                      <h3 className="font-semibold text-foreground font-arabic">
                         {specialite.designation_ar || specialite.designation_fr}
                       </h3>
                       {specialite.designation_fr && specialite.designation_ar && (
-                        <p className="text-sm text-gray-600">{specialite.designation_fr}</p>
+                        <p className="text-sm text-muted-foreground">{specialite.designation_fr}</p>
                       )}
                     </div>
                     <Badge variant="secondary">
@@ -355,16 +355,16 @@ const CollaborativeMemoires = () => {
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
             <div className="relative flex-1">
-              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
               <Input
                 placeholder="ابحث في مذكرات الزملاء... 🔍"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pr-12 pl-4 py-3 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-right font-arabic focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all"
+                className="pr-12 pl-4 py-3 bg-card dark:bg-gray-700 border-2 border-border dark:border-gray-600 rounded-xl text-right font-arabic focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all"
                 dir="rtl"
               />
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
               <Filter className="w-4 h-4" />
               <span className="font-arabic">البحث في العناوين، الأسماء، والمشرفين</span>
             </div>
@@ -375,7 +375,7 @@ const CollaborativeMemoires = () => {
       {/* Social Media Style Feed */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white font-arabic">
+          <h2 className="text-xl font-bold text-foreground dark:text-white font-arabic">
             مذكرات الزملاء ({filteredMemoires.length})
           </h2>
         </div>
@@ -383,9 +383,9 @@ const CollaborativeMemoires = () => {
         {filteredMemoires.length === 0 ? (
           <Card className="text-center py-12">
             <CardContent>
-              <Users className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2 font-arabic">لا توجد مذكرات متاحة</h3>
-              <p className="text-gray-600 font-arabic">
+              <Users className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2 font-arabic">لا توجد مذكرات متاحة</h3>
+              <p className="text-muted-foreground font-arabic">
                 {searchTerm 
                   ? 'لا توجد مذكرات تطابق معايير البحث'
                   : 'لا توجد مذكرات معتمدة من زملائك في نفس عروض التكوين حالياً'
@@ -396,7 +396,7 @@ const CollaborativeMemoires = () => {
         ) : (
           <div className="space-y-6">
             {filteredMemoires.map((memoire) => (
-              <Card key={memoire.id_memoire} className="bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700">
+              <Card key={memoire.id_memoire} className="bg-card dark:bg-gray-800 shadow-md hover:shadow-lg transition-all duration-300 border border-border dark:border-gray-700">
                 <CardContent className="p-0">
                   {/* Post Header - Facebook Style */}
                   <div className="p-4 border-b border-gray-100 dark:border-gray-700">
@@ -412,14 +412,14 @@ const CollaborativeMemoires = () => {
                         {/* User Info */}
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-gray-900 dark:text-white text-base">
+                            <h3 className="font-semibold text-foreground dark:text-white text-base">
                               {memoire.stagiaire?.prenom_fr} {memoire.stagiaire?.nom_fr}
                             </h3>
                             <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-xs">
                               زميل
                             </Badge>
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
                             <Clock className="w-4 h-4" />
                             <span className="font-arabic">{getTimeAgo(memoire.createdAt)}</span>
                             <span className="mx-1">•</span>
@@ -432,7 +432,7 @@ const CollaborativeMemoires = () => {
                       </div>
                       
                       {/* Post Options */}
-                      <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">
+                      <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-muted-foreground">
                         <MoreHorizontal className="w-5 h-5" />
                       </Button>
                     </div>
@@ -442,13 +442,13 @@ const CollaborativeMemoires = () => {
                   <div className="p-4">
                     {/* Memoire Title */}
                     <div className="mb-4">
-                      <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2 font-arabic leading-relaxed">
+                      <h2 className="text-lg font-bold text-foreground dark:text-white mb-2 font-arabic leading-relaxed">
                         {memoire.titre_ar || memoire.titre_fr || 'بدون عنوان'}
                       </h2>
                       
                       {/* French Title if different */}
                       {memoire.titre_fr && memoire.titre_ar && memoire.titre_fr !== memoire.titre_ar && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 italic">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground italic">
                           {memoire.titre_fr}
                         </p>
                       )}
@@ -456,8 +456,8 @@ const CollaborativeMemoires = () => {
                     
                     {/* Memoire Description/Observation */}
                     {memoire.observation && (
-                      <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-l-4 border-blue-400">
-                        <p className="text-sm text-gray-700 dark:text-gray-300 font-arabic leading-relaxed">
+                      <div className="theme-transition-colors mb-4 p-3 bg-background-secondary dark:bg-gray-700 rounded-lg border-l-4 border-blue-400">
+                        <p className="text-sm text-foreground dark:text-gray-300 font-arabic leading-relaxed">
                           {memoire.observation}
                         </p>
                       </div>
@@ -468,11 +468,11 @@ const CollaborativeMemoires = () => {
                       {memoire.enseignant && (
                         <div className="flex items-center gap-2 text-sm">
                           <div className="p-1 bg-blue-100 dark:bg-blue-800 rounded-full">
-                            <GraduationCap className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                            <GraduationCap className="w-4 h-4 text-primary dark:text-blue-400" />
                           </div>
                           <div>
-                            <span className="font-medium text-gray-600 dark:text-gray-400 font-arabic">المشرف:</span>
-                            <p className="text-gray-900 dark:text-white font-medium">
+                            <span className="font-medium text-muted-foreground dark:text-muted-foreground font-arabic">المشرف:</span>
+                            <p className="text-foreground dark:text-white font-medium">
                               {memoire.enseignant.prenom_fr} {memoire.enseignant.nom_fr}
                             </p>
                           </div>
@@ -481,11 +481,11 @@ const CollaborativeMemoires = () => {
                       
                       <div className="flex items-center gap-2 text-sm">
                         <div className="p-1 bg-green-100 dark:bg-green-800 rounded-full">
-                          <Calendar className="w-4 h-4 text-green-600 dark:text-green-400" />
+                          <Calendar className="w-4 h-4 text-success dark:text-green-400" />
                         </div>
                         <div>
-                          <span className="font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ الاعتماد:</span>
-                          <p className="text-gray-900 dark:text-white font-medium font-arabic">
+                          <span className="font-medium text-muted-foreground dark:text-muted-foreground font-arabic">تاريخ الاعتماد:</span>
+                          <p className="text-foreground dark:text-white font-medium font-arabic">
                             {formatApprovalDate(memoire)}
                           </p>
                         </div>
@@ -504,7 +504,7 @@ const CollaborativeMemoires = () => {
                               variant="ghost" 
                               size="sm"
                               onClick={() => handleViewPDF(memoire)}
-                              className="flex items-center gap-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-4 py-2 rounded-lg transition-colors"
+                              className="flex items-center gap-2 text-primary hover:bg-background-secondary dark:hover:bg-blue-900/20 px-4 py-2 rounded-lg transition-colors"
                             >
                               <Eye className="w-4 h-4" />
                               <span className="font-arabic text-sm">عرض</span>
@@ -514,7 +514,7 @@ const CollaborativeMemoires = () => {
                               variant="ghost" 
                               size="sm"
                               onClick={() => handleDownloadPDF(memoire)}
-                              className="flex items-center gap-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 px-4 py-2 rounded-lg transition-colors"
+                              className="flex items-center gap-2 text-success hover:bg-green-50 dark:hover:bg-green-900/20 px-4 py-2 rounded-lg transition-colors"
                             >
                               <Download className="w-4 h-4" />
                               <span className="font-arabic text-sm">تحميل</span>
@@ -525,7 +525,7 @@ const CollaborativeMemoires = () => {
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          className="flex items-center gap-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 px-4 py-2 rounded-lg transition-colors"
+                          className="flex items-center gap-2 text-secondary hover:bg-purple-50 dark:hover:bg-purple-900/20 px-4 py-2 rounded-lg transition-colors"
                         >
                           <Share2 className="w-4 h-4" />
                           <span className="font-arabic text-sm">مشاركة</span>
@@ -533,7 +533,7 @@ const CollaborativeMemoires = () => {
                       </div>
                       
                       {/* Reading Status */}
-                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 px-3 py-1 rounded-full">
+                      <div className="theme-transition-colors flex items-center gap-2 text-xs text-muted-foreground dark:text-muted-foreground bg-background-secondary dark:bg-gray-700 px-3 py-1 rounded-full">
                         <BookOpen className="w-3 h-3" />
                         <span className="font-arabic">متاح للقراءة</span>
                       </div>
@@ -547,10 +547,10 @@ const CollaborativeMemoires = () => {
       </div>
 
       {/* Educational Note */}
-      <Card className="bg-blue-50 border-blue-200">
+      <Card className="bg-background-secondary border-blue-200">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <BookOpen className="w-5 h-5 text-blue-600 mt-0.5" />
+            <BookOpen className="w-5 h-5 text-primary mt-0.5" />
             <div className="flex-1">
               <h4 className="font-medium text-blue-900 mb-1 font-arabic">ملاحظة تعليمية</h4>
               <p className="text-sm text-blue-800 font-arabic">

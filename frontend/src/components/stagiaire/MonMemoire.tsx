@@ -294,7 +294,7 @@ const MonMemoire = () => {
         };
       default:
         return {
-          color: 'bg-gray-100 text-gray-800',
+          color: 'bg-muted text-foreground',
           icon: <FileText className="w-4 h-4" />,
           description: 'مسودة - لم يتم تقديم المذكرة بعد'
         };
@@ -305,7 +305,7 @@ const MonMemoire = () => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">جارٍ تحميل مذكرتك...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground">جارٍ تحميل مذكرتك...</p>
       </div>
     );
   }
@@ -320,8 +320,8 @@ const MonMemoire = () => {
                 <FileText className="w-6 h-6 text-orange-600 dark:text-orange-400" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white font-arabic">مذكرتي</h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                <h2 className="text-xl font-bold text-foreground dark:text-white font-arabic">مذكرتي</h2>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                   إدارة وتحديث مذكرة التخرج
                 </p>
               </div>
@@ -352,9 +352,9 @@ const MonMemoire = () => {
 
         <Card>
           <CardContent className="text-center py-12">
-            <FileText className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2 font-arabic">انتظار تخصيص المذكرة</h3>
-            <p className="text-gray-600 mb-4 font-arabic">
+            <FileText className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-lg font-medium text-foreground mb-2 font-arabic">انتظار تخصيص المذكرة</h3>
+            <p className="text-muted-foreground mb-4 font-arabic">
               يرجى انتظار قيام مؤسسة التكوين بإنشاء مذكرة لك وتعيين مشرف
             </p>
             <Button onClick={fetchMemoire} variant="outline">
@@ -379,8 +379,8 @@ const MonMemoire = () => {
               <FileText className="w-6 h-6 text-orange-600 dark:text-orange-400" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white font-arabic">مذكرتي</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+              <h2 className="text-xl font-bold text-foreground dark:text-white font-arabic">مذكرتي</h2>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                 إدارة وتحديث مذكرة التخرج
               </p>
             </div>
@@ -393,7 +393,7 @@ const MonMemoire = () => {
                 {statusInfo.icon}
                 <span className="mr-1">{memoire.status}</span>
               </Badge>
-              <p className="text-sm text-gray-600 font-arabic">{statusInfo.description}</p>
+              <p className="text-sm text-muted-foreground font-arabic">{statusInfo.description}</p>
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -433,7 +433,7 @@ const MonMemoire = () => {
       {/* Status-specific alerts */}
       {memoire.status === 'مقبول' && (
         <Alert className="border-green-200 bg-green-50">
-          <CheckCircle className="h-4 w-4 text-green-600" />
+          <CheckCircle className="h-4 w-4 text-success" />
           <AlertDescription className="font-arabic">
             <strong>تهانينا!</strong> تم قبول مذكرتك من قبل المشرف. لا يمكن تعديل المذكرة بعد الآن.
           </AlertDescription>
@@ -442,7 +442,7 @@ const MonMemoire = () => {
 
       {memoire.status === 'مرفوض' && (
         <Alert className="border-red-200 bg-red-50">
-          <AlertTriangle className="h-4 w-4 text-red-600" />
+          <AlertTriangle className="h-4 w-4 text-error" />
           <AlertDescription className="font-arabic">
             <strong>تم رفض المذكرة.</strong> يرجى مراجعة ملاحظات المشرف أدناه وإجراء التعديلات المطلوبة.
           </AlertDescription>
@@ -451,7 +451,7 @@ const MonMemoire = () => {
 
       {!memoire.fichierpdf && (
         <Alert className="border-yellow-200 bg-yellow-50">
-          <Upload className="h-4 w-4 text-yellow-600" />
+          <Upload className="h-4 w-4 text-warning" />
           <AlertDescription className="font-arabic">
             <strong>لم يتم رفع ملف المذكرة بعد.</strong> يرجى رفع ملف PDF لمذكرتك لبدء عملية المراجعة.
           </AlertDescription>
@@ -482,7 +482,7 @@ const MonMemoire = () => {
                   يجب أن يكون العنوان بالعربية مكتوباً باللغة العربية فقط
                 </p>
               )}
-              <p className="text-xs text-gray-500 mt-1 font-arabic">
+              <p className="text-xs text-muted-foreground mt-1 font-arabic">
                 مثال: دراسة تأثير التكنولوجيا على التعليم في المغرب
               </p>
             </div>
@@ -502,7 +502,7 @@ const MonMemoire = () => {
                   يجب أن يكون العنوان بالفرنسية مكتوباً باللغة الفرنسية فقط
                 </p>
               )}
-              <p className="text-xs text-gray-500 mt-1 font-arabic">
+              <p className="text-xs text-muted-foreground mt-1 font-arabic">
                 مثال: Étude de l'impact de la technologie sur l'éducation au Maroc
               </p>
             </div>
@@ -510,9 +510,9 @@ const MonMemoire = () => {
 
           {/* Supervisor Information */}
           {memoire.enseignant && (
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="theme-transition-colors bg-background-secondary p-4 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <User className="w-4 h-4 text-blue-600" />
+                <User className="w-4 h-4 text-primary" />
                 <span className="font-medium text-blue-900 font-arabic">المشرف</span>
               </div>
               <p className="text-blue-800">
@@ -528,7 +528,7 @@ const MonMemoire = () => {
               <Label className="font-arabic text-blue-700">
                 ملاحظات المشرف
               </Label>
-              <div className="mt-1 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="theme-transition-colors mt-1 p-3 bg-background-secondary border border-blue-200 rounded-lg">
                 <p className="text-sm text-blue-800 font-arabic">
                   {memoire.observation}
                 </p>
@@ -548,9 +548,9 @@ const MonMemoire = () => {
                   type="file"
                   accept=".pdf"
                   onChange={handleFileSelect}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  className="theme-transition-colors block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-background-secondary file:text-blue-700 hover:file:bg-blue-100"
                 />
-                <p className="text-xs text-gray-500 mt-1 font-arabic">
+                <p className="text-xs text-muted-foreground mt-1 font-arabic">
                   يجب أن يكون الملف من نوع PDF وأقل من 10 ميجابايت
                 </p>
                 {selectedFile && (
@@ -566,13 +566,13 @@ const MonMemoire = () => {
 
           {/* Current File Info */}
           {memoire.fichierpdf && !isEditing && (
-            <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="theme-transition-colors bg-background-secondary p-4 rounded-lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <FileCheck className="w-5 h-5 text-green-600" />
+                  <FileCheck className="w-5 h-5 text-success" />
                   <div>
-                    <p className="font-medium text-gray-900 font-arabic">ملف المذكرة متوفر</p>
-                    <p className="text-sm text-gray-600 font-arabic">تم رفع ملف PDF للمذكرة</p>
+                    <p className="font-medium text-foreground font-arabic">ملف المذكرة متوفر</p>
+                    <p className="text-sm text-muted-foreground font-arabic">تم رفع ملف PDF للمذكرة</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -590,14 +590,14 @@ const MonMemoire = () => {
           )}
 
           {/* Metadata */}
-          <div className="grid gap-4 md:grid-cols-2 pt-4 border-t border-gray-200">
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+          <div className="grid gap-4 md:grid-cols-2 pt-4 border-t border-border">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Calendar className="w-4 h-4" />
               <span className="font-medium">تاريخ الإنشاء:</span>
               <span>{formatDate(memoire.createdAt)}</span>
             </div>
             {memoire.updatedAt && (
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Clock className="w-4 h-4" />
                 <span className="font-medium">آخر تحديث:</span>
                 <span>{formatDate(memoire.updatedAt)}</span>
@@ -607,7 +607,7 @@ const MonMemoire = () => {
 
           {/* Action Buttons */}
           {isEditing && memoire.status !== 'مقبول' && (
-            <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
+            <div className="flex items-center gap-3 pt-4 border-t border-border">
               <Button
                 onClick={handleSave}
                 disabled={saving || !titreAr.trim() || !isArabicText(titreAr) || (titreFr.trim() && !isFrenchText(titreFr))}
@@ -643,10 +643,10 @@ const MonMemoire = () => {
       </Card>
 
       {/* Instructions Card */}
-      <Card className="bg-blue-50 border-blue-200">
+      <Card className="bg-background-secondary border-blue-200">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <Info className="w-5 h-5 text-blue-600 mt-0.5" />
+            <Info className="w-5 h-5 text-primary mt-0.5" />
             <div className="flex-1">
               <h4 className="font-medium text-blue-900 mb-1 font-arabic">تعليمات مهمة</h4>
               <ul className="text-sm text-blue-800 space-y-1 font-arabic">

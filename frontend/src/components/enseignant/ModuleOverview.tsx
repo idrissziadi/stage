@@ -174,7 +174,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
       case 'مرفوض':
         return 'bg-red-100 text-red-800 hover:bg-red-200';
       default:
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+        return 'bg-muted text-foreground hover:bg-muted-secondary';
     }
   };
 
@@ -262,7 +262,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">جارٍ تحميل المواد...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground">جارٍ تحميل المواد...</p>
       </div>
     );
   }
@@ -275,7 +275,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-blue-600">إجمالي المواد</p>
+                <p className="text-sm font-medium text-primary">إجمالي المواد</p>
                 <p className="text-2xl font-bold text-blue-700">{modules.length}</p>
               </div>
               <BookOpen className="w-8 h-8 text-blue-500" />
@@ -287,7 +287,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-green-600">الدروس المعتمدة</p>
+                <p className="text-sm font-medium text-success">الدروس المعتمدة</p>
                 <p className="text-2xl font-bold text-green-700">
                   {courses.filter(c => c.status === 'مقبول').length}
                 </p>
@@ -301,7 +301,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-yellow-600">في الانتظار</p>
+                <p className="text-sm font-medium text-warning">في الانتظار</p>
                 <p className="text-2xl font-bold text-yellow-700">
                   {courses.filter(c => c.status === 'في_الانتظار').length}
                 </p>
@@ -318,7 +318,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
         <Card key="modules-list-card" className="lg:col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-blue-600" />
+              <BookOpen className="w-5 h-5 text-primary" />
               المواد التي تدرسها
             </CardTitle>
           </CardHeader>
@@ -327,16 +327,16 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
               if (modules.length === 0) {
                 return (
                   <div key="no-modules" className="text-center py-8">
-                    <BookOpen className="w-12 h-12 mx-auto text-gray-400 mb-2" />
-                    <p className="text-gray-600 dark:text-gray-400">لا توجد مواد مُعيّّه</p>
-                                         <div className="mt-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-xs text-gray-600 dark:text-gray-400">
+                    <BookOpen className="w-12 h-12 mx-auto text-muted-foreground mb-2" />
+                    <p className="text-muted-foreground dark:text-muted-foreground">لا توجد مواد مُعيّّه</p>
+                                         <div className="theme-transition-colors mt-4 p-3 bg-muted dark:bg-gray-800 rounded-lg text-xs text-muted-foreground dark:text-muted-foreground">
                        <p>Debug Info:</p>
                        <p>userProfile.id_enseignant: {userProfile?.id_enseignant || 'undefined'}</p>
                        <p>modules array length: {modules.length}</p>
                        <p>courses array length: {courses.length}</p>
                        <p>loading state: {loading ? 'true' : 'false'}</p>
                        {modules.length > 0 && (
-                         <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded border">
+                         <div className="theme-transition-colors mt-2 p-2 bg-background-secondary dark:bg-blue-900/20 rounded border">
                            <p className="font-medium">First Module:</p>
                            <p>ID: {modules[0].id_module}</p>
                            <p>Code: {modules[0].code_module}</p>
@@ -365,8 +365,8 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                          key={module.id_module}
                          className={`group relative p-4 rounded-lg border cursor-pointer transition-all duration-200 ${
                            selectedModule?.id_module === module.id_module
-                             ? 'bg-blue-50 border-blue-300 dark:bg-blue-900/30 dark:border-blue-600 shadow-md'
-                             : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/10 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md'
+                             ? 'bg-background-secondary border-blue-300 dark:bg-blue-900/30 dark:border-blue-600 shadow-md'
+                             : 'bg-card dark:bg-gray-800 border-border dark:border-gray-700 hover:bg-background-secondary dark:hover:bg-blue-900/10 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-md'
                          }`}
                          onClick={() => setSelectedModule(module)}
                        >
@@ -375,12 +375,12 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                              <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
                                selectedModule?.id_module === module.id_module
                                  ? 'bg-blue-100 dark:bg-blue-800'
-                                 : 'bg-gray-100 dark:bg-gray-700 group-hover:bg-blue-100 dark:group-hover:bg-blue-800'
+                                 : 'bg-muted dark:bg-gray-700 group-hover:bg-blue-100 dark:group-hover:bg-blue-800'
                              }`}>
                                <BookOpen className={`w-6 h-6 ${
                                  selectedModule?.id_module === module.id_module
-                                   ? 'text-blue-600 dark:text-blue-400'
-                                   : 'text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400'
+                                   ? 'text-primary dark:text-blue-400'
+                                   : 'text-muted-foreground dark:text-muted-foreground group-hover:text-primary dark:group-hover:text-blue-400'
                                }`} />
                              </div>
                            </div>
@@ -389,18 +389,18 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                              <h3 className={`font-semibold text-lg mb-1 ${
                                selectedModule?.id_module === module.id_module
                                  ? 'text-blue-900 dark:text-blue-100'
-                                 : 'text-gray-900 dark:text-white group-hover:text-blue-900 dark:group-hover:text-blue-100'
+                                 : 'text-foreground dark:text-white group-hover:text-blue-900 dark:group-hover:text-blue-100'
                              }`}>
                                {module.designation_ar || module.designation_fr}
                              </h3>
-                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                             <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-3">
                                {module.code_module}
                              </p>
                              
                              <div className="flex items-center gap-2">
                                <Badge 
                                  variant="secondary" 
-                                 className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                                 className="text-xs px-2 py-1 bg-muted dark:bg-gray-700 text-foreground dark:text-gray-300"
                                >
                                  {moduleCourses.length} درس
                                </Badge>
@@ -410,7 +410,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                                    className={`text-xs px-2 py-1 ${
                                      moduleCourses.filter(c => c.status === 'مقبول').length > 0 
                                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
-                                       : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+                                       : 'bg-muted text-muted-foreground dark:bg-gray-700 dark:text-muted-foreground'
                                    }`}
                                  >
                                    {moduleCourses.filter(c => c.status === 'مقبول').length} معتمد
@@ -446,7 +446,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
         <Card key="module-details-card" className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <FileText className="w-5 h-5 text-purple-600" />
+              <FileText className="w-5 h-5 text-secondary" />
               {(() => {
                 if (selectedModule) {
                   return <span key="selected-module-title">مادة: {selectedModule.designation_ar || selectedModule.designation_fr}</span>;
@@ -460,8 +460,8 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
               if (!selectedModule) {
                 return (
                   <div key="no-selected-module" className="text-center py-8">
-                    <BookOpen className="w-12 h-12 mx-auto text-gray-400 mb-2" />
-                    <p className="text-gray-600 dark:text-gray-400">اختر مادةً لعرض تفاصيلها</p>
+                    <BookOpen className="w-12 h-12 mx-auto text-muted-foreground mb-2" />
+                    <p className="text-muted-foreground dark:text-muted-foreground">اختر مادةً لعرض تفاصيلها</p>
                   </div>
                 );
               }
@@ -469,15 +469,15 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
               return (
                 <div key="module-details" className="space-y-4">
                   {/* Module Info */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  <div className="theme-transition-colors bg-background-secondary dark:bg-gray-800/50 p-4 rounded-lg">
+                    <h3 className="font-semibold text-foreground dark:text-white mb-2">
                       {selectedModule.designation_ar || selectedModule.designation_fr}
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                       كود المادة: {selectedModule.code_module}
                     </p>
                     {selectedModule.designation_fr && selectedModule.designation_ar && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                         بالفرنسية: {selectedModule.designation_fr}
                       </p>
                     )}
@@ -485,14 +485,14 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
 
                   {/* Module Courses */}
                   <div>
-                    <h4 className="font-medium text-gray-900 dark:text-white mb-3">الدروس المرتبطة</h4>
+                    <h4 className="font-medium text-foreground dark:text-white mb-3">الدروس المرتبطة</h4>
                     {(() => {
                       const moduleCourses = getModuleCourses(selectedModule.id_module);
                       if (moduleCourses.length === 0) {
                         return (
                           <div key="no-courses" className="text-center py-8">
-                            <FileText className="w-12 h-12 mx-auto text-gray-400 mb-2" />
-                            <p className="text-gray-600 dark:text-gray-400">لا توجد دروس مرفوعة لهذه المادة</p>
+                            <FileText className="w-12 h-12 mx-auto text-muted-foreground mb-2" />
+                            <p className="text-muted-foreground dark:text-muted-foreground">لا توجد دروس مرفوعة لهذه المادة</p>
                             <Button className="mt-4" size="sm" onClick={() => onTabChange?.('cours')}>
                               <TrendingUp className="w-4 h-4 mr-2" />
                               رفع درس جديد
@@ -504,29 +504,29 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                       return (
                         <div key="courses-list" className="space-y-3">
                                                      {moduleCourses.map((course) => (
-                             <div key={course.id_cours} className="group relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-all duration-200">
+                             <div key={course.id_cours} className="theme-transition-colors group relative bg-card dark:bg-gray-800 border border-border dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-all duration-200">
                                <div className="flex items-start justify-between">
                                  <div className="flex-1 min-w-0">
                                    <div className="flex items-center gap-3 mb-2">
                                      <div className="flex-shrink-0">
                                        <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                                         <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                         <FileText className="w-5 h-5 text-primary dark:text-blue-400" />
                                        </div>
                                      </div>
                                      <div className="flex-1 min-w-0">
-                                       <h5 className="font-semibold text-gray-900 dark:text-white text-lg mb-1">
+                                       <h5 className="font-semibold text-foreground dark:text-white text-lg mb-1">
                                          {course.titre_ar || course.titre_fr}
                                        </h5>
-                                       <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                       <div className="flex items-center gap-4 text-sm text-muted-foreground dark:text-muted-foreground">
                                          <span className="flex items-center gap-1">
                                            <span className="font-medium">الكود:</span>
-                                           <span className="font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                                           <span className="font-mono bg-muted dark:bg-gray-700 px-2 py-1 rounded">
                                              {course.code_cours}
                                            </span>
                                          </span>
                                          <span className="flex items-center gap-1">
                                            <span className="font-medium">التاريخ:</span>
-                                           <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                                           <span className="bg-muted dark:bg-gray-700 px-2 py-1 rounded">
                                              {formatCourseDateSafe(course)}
                                            </span>
                                          </span>
@@ -586,13 +586,13 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
 
               {/* Course Details */}
               <div className="space-y-3 text-right font-arabic mb-4">
-                <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="theme-transition-colors bg-background-secondary p-4 rounded-lg">
                   <h3 className="font-semibold text-lg mb-3">
                     {selectedCourse.titre_ar || selectedCourse.titre_fr || 'بدون عنوان'}
                   </h3>
                   
                   {selectedCourse.titre_fr && selectedCourse.titre_ar && selectedCourse.titre_fr !== selectedCourse.titre_ar && (
-                    <p className="text-sm text-gray-600 mb-3 italic">
+                    <p className="text-sm text-muted-foreground mb-3 italic">
                       {selectedCourse.titre_fr}
                     </p>
                   )}
@@ -600,14 +600,14 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                   <div className="grid gap-2 text-sm">
                     {selectedCourse.code_cours && (
                       <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-blue-600" />
+                        <FileText className="w-4 h-4 text-primary" />
                         <span className="font-medium">الكود:</span> {selectedCourse.code_cours}
                       </div>
                     )}
                     
                     {selectedModule && (
                       <div className="flex items-center gap-2">
-                        <BookOpen className="w-4 h-4 text-green-600" />
+                        <BookOpen className="w-4 h-4 text-success" />
                         <span className="font-medium">المادة:</span> 
                         {selectedModule.designation_ar || selectedModule.designation_fr} ({selectedModule.code_module})
                       </div>
@@ -615,7 +615,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                     
                     {userProfile && (
                       <div className="flex items-center gap-2">
-                        <GraduationCap className="w-4 h-4 text-purple-600" />
+                        <GraduationCap className="w-4 h-4 text-secondary" />
                         <span className="font-medium">الأستاذ:</span> 
                         {userProfile.prenom_fr} {userProfile.nom_fr}
                       </div>
@@ -628,7 +628,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                   </div>
 
                   {selectedCourse.observation && (
-                    <div className="mt-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                    <div className="theme-transition-colors mt-3 p-3 bg-background-secondary rounded-lg border-l-4 border-blue-400">
                       <p className="text-sm text-blue-800">
                         <span className="font-medium">ملاحظات:</span> {selectedCourse.observation}
                       </p>
@@ -671,7 +671,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                     {/* Aperçu PDF intégré */}
                     {pdfUrl && (
                       <div className="border rounded-lg overflow-hidden">
-                        <div className="bg-gray-50 p-3 border-b">
+                        <div className="theme-transition-colors bg-background-secondary p-3 border-b">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-arabic">معاينة المستند</span>
                             <div className="flex items-center gap-2">
@@ -687,7 +687,7 @@ const ModuleOverview = ({ onTabChange }: ModuleOverviewProps) => {
                           </div>
                         </div>
                         
-                        <div className="h-96 bg-gray-100 flex items-center justify-center">
+                        <div className="theme-transition-colors h-96 bg-muted flex items-center justify-center">
                           <iframe
                             src={`${pdfUrl}?token=${encodeURIComponent(localStorage.getItem('auth_token') || '')}#toolbar=1&navpanes=1&scrollbar=1`}
                             className="w-full h-full border-0"

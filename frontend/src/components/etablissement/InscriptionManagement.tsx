@@ -262,7 +262,7 @@ const InscriptionManagement = () => {
       case 'en_attente':
         return 'bg-yellow-100 text-yellow-800';
       case 'annulee':
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-muted text-foreground';
       default:
         return 'bg-blue-100 text-blue-800';
     }
@@ -326,8 +326,8 @@ const InscriptionManagement = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white font-arabic">إدارة التسجيلات</h2>
-          <p className="text-gray-600 dark:text-gray-400 font-arabic">
+          <h2 className="text-2xl font-bold text-foreground dark:text-white font-arabic">إدارة التسجيلات</h2>
+          <p className="text-muted-foreground dark:text-muted-foreground font-arabic">
             مراجعة وإدارة طلبات التسجيل في عروض التكوين
           </p>
         </div>
@@ -358,7 +358,7 @@ const InscriptionManagement = () => {
         <CardContent className="p-4">
           <div className="flex items-center gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder="البحث بالاسم أو البريد الإلكتروني أو عرض التكوين..."
                 value={searchTerm}
@@ -389,7 +389,7 @@ const InscriptionManagement = () => {
           <CardTitle className="font-arabic">
             طلبات التسجيل ({totalInscriptions})
             {selectedInscriptions.length > 0 && (
-              <span className="text-blue-600"> - محدد: {selectedInscriptions.length}</span>
+              <span className="text-primary"> - محدد: {selectedInscriptions.length}</span>
             )}
           </CardTitle>
         </CardHeader>
@@ -397,13 +397,13 @@ const InscriptionManagement = () => {
           {loading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600">جاري التحميل...</p>
+              <p className="mt-4 text-muted-foreground">جاري التحميل...</p>
             </div>
           ) : filteredInscriptions.length === 0 ? (
             <div className="text-center py-8">
-              <UserCheck className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2 font-arabic">لا توجد طلبات تسجيل</h3>
-              <p className="text-gray-600 font-arabic">لم يتم العثور على أي طلبات تسجيل</p>
+              <UserCheck className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2 font-arabic">لا توجد طلبات تسجيل</h3>
+              <p className="text-muted-foreground font-arabic">لم يتم العثور على أي طلبات تسجيل</p>
             </div>
           ) : (
             <>
@@ -449,27 +449,27 @@ const InscriptionManagement = () => {
                         <TableCell>
                           <div className="flex items-center gap-3">
                             <div className="p-2 bg-blue-100 rounded-full">
-                              <User className="w-4 h-4 text-blue-600" />
+                              <User className="w-4 h-4 text-primary" />
                             </div>
                             <div>
                               <p className="font-semibold">
                                 {inscription.stagiaire.prenom_fr} {inscription.stagiaire.nom_fr}
                               </p>
-                              <p className="text-sm text-gray-600 font-arabic">
+                              <p className="text-sm text-muted-foreground font-arabic">
                                 {inscription.stagiaire.prenom_ar} {inscription.stagiaire.nom_ar}
                               </p>
-                              <p className="text-sm text-gray-500">{inscription.stagiaire.email}</p>
+                              <p className="text-sm text-muted-foreground">{inscription.stagiaire.email}</p>
                             </div>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div>
                             <p className="font-semibold">{offreDesignation_fr}</p>
-                            <p className="text-sm text-gray-600 font-arabic">{offreDesignation_ar}</p>
+                            <p className="text-sm text-muted-foreground font-arabic">{offreDesignation_ar}</p>
                             {inscription.offre.specialite && (
                               <div className="flex items-center gap-1 mt-1">
-                                <GraduationCap className="w-3 h-3 text-gray-500" />
-                                <span className="text-xs text-gray-500 font-arabic">
+                                <GraduationCap className="w-3 h-3 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground font-arabic">
                                   {inscription.offre.specialite.designation_ar || inscription.offre.specialite.designation_fr}
                                 </span>
                               </div>
@@ -478,7 +478,7 @@ const InscriptionManagement = () => {
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-gray-500" />
+                            <Calendar className="w-4 h-4 text-muted-foreground" />
                             <span className="text-sm">
                               {formatDate(inscription.date_inscription)}
                             </span>
@@ -531,7 +531,7 @@ const InscriptionManagement = () => {
               {/* Pagination */}
               {totalInscriptions > limit && (
                 <div className="flex items-center justify-between mt-4">
-                  <div className="text-sm text-gray-600 font-arabic">
+                  <div className="text-sm text-muted-foreground font-arabic">
                     عرض {currentPage * limit + 1} إلى {Math.min((currentPage + 1) * limit, totalInscriptions)} من {totalInscriptions}
                   </div>
                   <div className="flex gap-2">
@@ -662,24 +662,24 @@ const InscriptionManagement = () => {
                 <h3 className="font-semibold mb-3 font-arabic">معلومات المتدرب</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-600 font-arabic">الاسم الكامل</label>
+                    <label className="text-sm font-medium text-muted-foreground font-arabic">الاسم الكامل</label>
                     <p className="font-medium">
                       {selectedInscription.stagiaire.prenom_fr} {selectedInscription.stagiaire.nom_fr}
                     </p>
-                    <p className="text-sm text-gray-600 font-arabic">
+                    <p className="text-sm text-muted-foreground font-arabic">
                       {selectedInscription.stagiaire.prenom_ar} {selectedInscription.stagiaire.nom_ar}
                     </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600 font-arabic">البريد الإلكتروني</label>
+                    <label className="text-sm font-medium text-muted-foreground font-arabic">البريد الإلكتروني</label>
                     <p className="font-medium">{selectedInscription.stagiaire.email}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600 font-arabic">اسم المستخدم</label>
+                    <label className="text-sm font-medium text-muted-foreground font-arabic">اسم المستخدم</label>
                     <p className="font-medium">{selectedInscription.stagiaire.Compte.username}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600 font-arabic">رقم الهاتف</label>
+                    <label className="text-sm font-medium text-muted-foreground font-arabic">رقم الهاتف</label>
                     <p className="font-medium">{selectedInscription.stagiaire.telephone || 'غير محدد'}</p>
                   </div>
                 </div>
@@ -690,7 +690,7 @@ const InscriptionManagement = () => {
                 <h3 className="font-semibold mb-3 font-arabic">معلومات عرض التكوين</h3>
                 <div className="space-y-2">
                   <div>
-                    <label className="text-sm font-medium text-gray-600 font-arabic">عنوان العرض</label>
+                    <label className="text-sm font-medium text-muted-foreground font-arabic">عنوان العرض</label>
                     <p className="font-medium">
                       {selectedInscription.offre.specialite && selectedInscription.offre.diplome 
                         ? `${selectedInscription.offre.specialite.designation_fr} - ${selectedInscription.offre.diplome.designation_fr}`
@@ -699,14 +699,14 @@ const InscriptionManagement = () => {
                           : 'Formation'}
                     </p>
                     {selectedInscription.offre.specialite && (
-                      <p className="text-sm text-gray-600 font-arabic">
+                      <p className="text-sm text-muted-foreground font-arabic">
                         {selectedInscription.offre.specialite.designation_ar || selectedInscription.offre.specialite.designation_fr}
                       </p>
                     )}
                   </div>
                   {selectedInscription.offre.specialite && (
                     <div>
-                      <label className="text-sm font-medium text-gray-600 font-arabic">التخصص</label>
+                      <label className="text-sm font-medium text-muted-foreground font-arabic">التخصص</label>
                       <p className="font-medium font-arabic">
                         {selectedInscription.offre.specialite.designation_ar || selectedInscription.offre.specialite.designation_fr}
                       </p>
@@ -720,13 +720,13 @@ const InscriptionManagement = () => {
                 <h3 className="font-semibold mb-3 font-arabic">معلومات التسجيل</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-600 font-arabic">تاريخ التسجيل</label>
+                    <label className="text-sm font-medium text-muted-foreground font-arabic">تاريخ التسجيل</label>
                     <p className="font-medium">
                       {formatDate(selectedInscription.date_inscription)}
                     </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600 font-arabic">الحالة الحالية</label>
+                    <label className="text-sm font-medium text-muted-foreground font-arabic">الحالة الحالية</label>
                     <Badge className={`${getStatusColor(selectedInscription.statut)} gap-1 font-arabic`}>
                       {getStatusIcon(selectedInscription.statut)}
                       {getStatusLabel(selectedInscription.statut)}
@@ -734,7 +734,7 @@ const InscriptionManagement = () => {
                   </div>
                   {selectedInscription.date_decision && (
                     <div>
-                      <label className="text-sm font-medium text-gray-600 font-arabic">تاريخ القرار</label>
+                      <label className="text-sm font-medium text-muted-foreground font-arabic">تاريخ القرار</label>
                       <p className="font-medium">
                         {formatDate(selectedInscription.date_decision)}
                       </p>
@@ -742,7 +742,7 @@ const InscriptionManagement = () => {
                   )}
                   {selectedInscription.observation && (
                     <div className="col-span-2">
-                      <label className="text-sm font-medium text-gray-600 font-arabic">ملاحظات</label>
+                      <label className="text-sm font-medium text-muted-foreground font-arabic">ملاحظات</label>
                       <p className="font-medium font-arabic">{selectedInscription.observation}</p>
                     </div>
                   )}

@@ -29,7 +29,7 @@ const MinistryFooter: React.FC<MinistryFooterProps> = ({ onHelpClick }) => {
           {/* About Section */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold flex items-center gap-2 font-arabic">
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+              <div className="theme-transition-colors w-8 h-8 bg-card/20 rounded-full flex items-center justify-center">
                 <BookOpen className="w-4 h-4" />
               </div>
               حول النظام
@@ -38,16 +38,16 @@ const MinistryFooter: React.FC<MinistryFooterProps> = ({ onHelpClick }) => {
               منصة شاملة لإدارة التكوين والتعليم المهني، تهدف إلى تطوير المهارات وتحسين جودة التعليم المهني في الجزائر
             </p>
             <div className="flex flex-wrap gap-2">
-              <Badge variant="secondary" className="bg-white/20 text-white border-white/30 font-arabic">إدارة الدروس</Badge>
-              <Badge variant="secondary" className="bg-white/20 text-white border-white/30 font-arabic">متابعة الطلاب</Badge>
-              <Badge variant="secondary" className="bg-white/20 text-white border-white/30 font-arabic">تقييم المذكرات</Badge>
+              <Badge variant="secondary" className="bg-card/20 text-white border-white/30 font-arabic">إدارة الدروس</Badge>
+              <Badge variant="secondary" className="bg-card/20 text-white border-white/30 font-arabic">متابعة الطلاب</Badge>
+              <Badge variant="secondary" className="bg-card/20 text-white border-white/30 font-arabic">تقييم المذكرات</Badge>
             </div>
           </div>
           
           {/* Quick Links Section */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold flex items-center gap-2 font-arabic">
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+              <div className="theme-transition-colors w-8 h-8 bg-card/20 rounded-full flex items-center justify-center">
                 <Link className="w-4 h-4" />
               </div>
               روابط مفيدة
@@ -57,9 +57,9 @@ const MinistryFooter: React.FC<MinistryFooterProps> = ({ onHelpClick }) => {
                 href="https://mfp.gov.dz/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm hover:bg-white/10 p-2 rounded-lg transition-colors font-arabic"
+                className="flex items-center gap-3 text-sm hover:bg-card/10 p-2 rounded-lg transition-colors font-arabic"
               >
-                <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="theme-transition-colors w-6 h-6 bg-card/20 rounded-full flex items-center justify-center">
                   <Home className="w-3 h-3" />
                 </div>
                 الموقع الرسمي للوزارة
@@ -68,9 +68,9 @@ const MinistryFooter: React.FC<MinistryFooterProps> = ({ onHelpClick }) => {
                 href="https://mail.mfep.gov.dz/hpronto/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm hover:bg-white/10 p-2 rounded-lg transition-colors font-arabic"
+                className="flex items-center gap-3 text-sm hover:bg-card/10 p-2 rounded-lg transition-colors font-arabic"
               >
-                <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="theme-transition-colors w-6 h-6 bg-card/20 rounded-full flex items-center justify-center">
                   <Mail className="w-3 h-3" />
                 </div>
                 البريد الإلكتروني
@@ -78,9 +78,9 @@ const MinistryFooter: React.FC<MinistryFooterProps> = ({ onHelpClick }) => {
               {onHelpClick && (
                 <button 
                   onClick={onHelpClick}
-                  className="flex items-center gap-3 text-sm hover:bg-white/10 p-2 rounded-lg transition-colors w-full text-right font-arabic"
+                  className="theme-transition-colors flex items-center gap-3 text-sm hover:bg-card/10 p-2 rounded-lg transition-colors w-full text-right font-arabic"
                 >
-                  <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                  <div className="theme-transition-colors w-6 h-6 bg-card/20 rounded-full flex items-center justify-center">
                     <HelpCircle className="w-3 h-3" />
                   </div>
                   المساعدة والدعم
@@ -92,7 +92,7 @@ const MinistryFooter: React.FC<MinistryFooterProps> = ({ onHelpClick }) => {
           {/* Social Media Section */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold flex items-center gap-2 font-arabic">
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+              <div className="theme-transition-colors w-8 h-8 bg-card/20 rounded-full flex items-center justify-center">
                 <Share2 className="w-4 h-4" />
               </div>
               تابعنا على
@@ -102,7 +102,7 @@ const MinistryFooter: React.FC<MinistryFooterProps> = ({ onHelpClick }) => {
                 href="https://www.facebook.com/GOVMFEPDZ/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm hover:bg-white/10 p-3 rounded-lg transition-colors font-arabic"
+                className="flex items-center gap-2 text-sm hover:bg-card/10 p-3 rounded-lg transition-colors font-arabic"
               >
                 <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                   <svg className="w-4 h-4" fill="white" viewBox="0 0 24 24">
@@ -115,7 +115,7 @@ const MinistryFooter: React.FC<MinistryFooterProps> = ({ onHelpClick }) => {
                 href="https://www.instagram.com/mfepgovdz/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm hover:bg-white/10 p-3 rounded-lg transition-colors font-arabic"
+                className="flex items-center gap-2 text-sm hover:bg-card/10 p-3 rounded-lg transition-colors font-arabic"
               >
                 <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
                   <svg className="w-4 h-4" fill="white" viewBox="0 0 24 24">
@@ -128,7 +128,7 @@ const MinistryFooter: React.FC<MinistryFooterProps> = ({ onHelpClick }) => {
                 href="https://x.com/mfepgov" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm hover:bg-white/10 p-3 rounded-lg transition-colors font-arabic"
+                className="flex items-center gap-2 text-sm hover:bg-card/10 p-3 rounded-lg transition-colors font-arabic"
               >
                 <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                   <svg className="w-4 h-4" fill="white" viewBox="0 0 24 24">
@@ -141,7 +141,7 @@ const MinistryFooter: React.FC<MinistryFooterProps> = ({ onHelpClick }) => {
                 href="https://www.youtube.com/channel/UCMPdsYQSn3eOOBz0vyTv4-A" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm hover:bg-white/10 p-3 rounded-lg transition-colors font-arabic"
+                className="flex items-center gap-2 text-sm hover:bg-card/10 p-3 rounded-lg transition-colors font-arabic"
               >
                 <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
                   <svg className="w-4 h-4" fill="white" viewBox="0 0 24 24">

@@ -27,13 +27,13 @@ const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, c
     return (
       <Card className={className}>
         <CardHeader className="text-center">
-          <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-            <FileText className="w-8 h-8 text-gray-400" />
+          <div className="theme-transition-colors mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+            <FileText className="w-8 h-8 text-muted-foreground" />
           </div>
-          <CardTitle className="text-xl font-arabic text-gray-500">
+          <CardTitle className="text-xl font-arabic text-muted-foreground">
             اختر عنصراً لعرض تفاصيله
           </CardTitle>
-          <p className="text-gray-400 font-arabic">
+          <p className="text-muted-foreground font-arabic">
             استخدم الشجرة على اليسار لاختيار فرع أو تخصص أو مادة
           </p>
         </CardHeader>
@@ -44,13 +44,13 @@ const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, c
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'branch':
-        return <Building className="w-8 h-8 text-blue-600" />;
+        return <Building className="w-8 h-8 text-primary" />;
       case 'speciality':
-        return <GraduationCap className="w-8 h-8 text-green-600" />;
+        return <GraduationCap className="w-8 h-8 text-success" />;
       case 'module':
         return <BookOpen className="w-8 h-8 text-orange-600" />;
       default:
-        return <FileText className="w-8 h-8 text-gray-600" />;
+        return <FileText className="w-8 h-8 text-muted-foreground" />;
     }
   };
 
@@ -68,7 +68,7 @@ const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, c
       case 'branch': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'speciality': return 'bg-green-100 text-green-800 border-green-200';
       case 'module': return 'bg-orange-100 text-orange-800 border-orange-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      default: return 'bg-muted text-foreground border-border';
     }
   };
 
@@ -86,13 +86,13 @@ const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, c
       <CardHeader className="pb-4">
         {/* Header avec icône et informations principales */}
         <div className="flex items-start gap-4">
-          <div className="p-3 bg-gray-50 rounded-lg">
+          <div className="theme-transition-colors p-3 bg-background-secondary rounded-lg">
             {getTypeIcon(selectedNode.type)}
           </div>
           
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-2">
-              <CardTitle className="text-2xl font-arabic text-gray-900">
+              <CardTitle className="text-2xl font-arabic text-foreground">
                 {selectedNode.labelAr || selectedNode.label}
               </CardTitle>
               <Badge variant="secondary" className={cn('text-sm', getTypeColor(selectedNode.type))}>
@@ -101,12 +101,12 @@ const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, c
             </div>
             
             {selectedNode.labelFr && (
-              <p className="text-lg text-gray-600 mb-2">
+              <p className="text-lg text-muted-foreground mb-2">
                 {selectedNode.labelFr}
               </p>
             )}
             
-            <p className="text-sm text-gray-500 font-arabic">
+            <p className="text-sm text-muted-foreground font-arabic">
               {getTypeDescription(selectedNode.type)}
             </p>
           </div>
@@ -117,33 +117,33 @@ const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, c
         {/* Informations essentielles */}
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-3">
-            <h4 className="font-semibold text-gray-900 font-arabic border-b pb-2">
+            <h4 className="font-semibold text-foreground font-arabic border-b pb-2">
               المعلومات الأساسية
             </h4>
             
             <div className="space-y-3">
               {selectedNode.code && (
                 <div className="flex items-center gap-2">
-                  <Code className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm font-medium text-gray-600 font-arabic">الكود:</span>
-                  <span className="text-sm font-mono bg-gray-100 px-2 py-1 rounded">
+                  <Code className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm font-medium text-muted-foreground font-arabic">الكود:</span>
+                  <span className="text-sm font-mono bg-muted px-2 py-1 rounded">
                     {selectedNode.code}
                   </span>
                 </div>
               )}
               
               <div className="flex items-center gap-2">
-                <Hash className="w-4 h-4 text-gray-500" />
-                <span className="text-sm font-medium text-gray-600 font-arabic">المعرف:</span>
-                <span className="text-sm font-mono bg-gray-100 px-2 py-1 rounded">
+                <Hash className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm font-medium text-muted-foreground font-arabic">المعرف:</span>
+                <span className="text-sm font-mono bg-muted px-2 py-1 rounded">
                   {selectedNode.id}
                 </span>
               </div>
               
               {selectedNode.count !== undefined && (
                 <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm font-medium text-gray-600 font-arabic">عدد العناصر:</span>
+                  <Users className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm font-medium text-muted-foreground font-arabic">عدد العناصر:</span>
                   <Badge variant="outline" className="text-sm">
                     {selectedNode.count} عنصر
                   </Badge>
@@ -154,20 +154,20 @@ const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, c
 
           {/* Statistiques et contenu */}
           <div className="space-y-3">
-            <h4 className="font-semibold text-gray-900 font-arabic border-b pb-2">
+            <h4 className="font-semibold text-foreground font-arabic border-b pb-2">
               المحتويات والإحصائيات
             </h4>
             
             {selectedNode.children && selectedNode.children.length > 0 ? (
               <div className="space-y-2">
-                <p className="text-sm text-gray-600 font-arabic">
+                <p className="text-sm text-muted-foreground font-arabic">
                   يحتوي على {selectedNode.children.length} عنصر:
                 </p>
                 <div className="space-y-1">
                   {selectedNode.children.slice(0, 3).map((child) => (
-                    <div key={child.id} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                    <div key={child.id} className="theme-transition-colors flex items-center gap-2 p-2 bg-background-secondary rounded">
                       {getTypeIcon(child.type)}
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-foreground">
                         {child.labelAr || child.label}
                       </span>
                       {child.count !== undefined && (
@@ -178,14 +178,14 @@ const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, c
                     </div>
                   ))}
                   {selectedNode.children.length > 3 && (
-                    <p className="text-xs text-gray-500 text-center">
+                    <p className="text-xs text-muted-foreground text-center">
                       و {selectedNode.children.length - 3} عنصر آخر...
                     </p>
                   )}
                 </div>
               </div>
             ) : (
-              <div className="text-center py-4 text-gray-500">
+              <div className="text-center py-4 text-muted-foreground">
                 <p className="font-arabic">لا توجد عناصر فرعية</p>
               </div>
             )}
@@ -196,12 +196,12 @@ const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, c
 
         {/* Informations de consultation uniquement */}
         <div className="space-y-3">
-          <h4 className="font-semibold text-gray-900 font-arabic border-b pb-2">
+          <h4 className="font-semibold text-foreground font-arabic border-b pb-2">
             معلومات إضافية للاستشارة
           </h4>
           
           <div className="text-center py-4">
-            <p className="text-sm text-gray-600 font-arabic">
+            <p className="text-sm text-muted-foreground font-arabic">
               هذه المعلومات متاحة للاستشارة والمراجعة فقط
             </p>
           </div>
@@ -211,12 +211,12 @@ const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, c
         <Separator />
         
         <div className="space-y-3">
-          <h4 className="font-semibold text-gray-900 font-arabic border-b pb-2">
+          <h4 className="font-semibold text-foreground font-arabic border-b pb-2">
             معلومات إضافية
           </h4>
           
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="p-3 bg-blue-50 rounded-lg">
+            <div className="theme-transition-colors p-3 bg-background-secondary rounded-lg">
               <h5 className="font-medium text-blue-900 mb-2 font-arabic">الحالة</h5>
               <p className="text-sm text-blue-700 font-arabic">نشط ومتاح للاستخدام</p>
             </div>

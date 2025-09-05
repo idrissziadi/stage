@@ -33,7 +33,7 @@ const UserGuide = () => {
           <CardHeader className="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
             <CardTitle className="flex items-center gap-3 font-arabic">
               <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
-                <Building className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <Building className="w-5 h-5 text-secondary dark:text-purple-400" />
               </div>
               <span className="font-arabic">نظرة عامة - الصفحة الرئيسية</span>
             </CardTitle>
@@ -42,33 +42,33 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <CheckCircle className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">الإحصائيات الشاملة</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">الإحصائيات الشاملة</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     عرض إحصائيات البرامج والمؤسسات والمواد التدريبية
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <FileText className="w-4 h-4 text-blue-600" />
+                  <FileText className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">إدارة البرامج</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">إدارة البرامج</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     مراجعة واعتماد أو رفض البرامج المقدمة من المؤسسات الإقليمية
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-purple-100 dark:bg-purple-900/50 rounded">
-                  <Clock className="w-4 h-4 text-purple-600" />
+                  <Clock className="w-4 h-4 text-secondary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">المراقبة المستمرة</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">المراقبة المستمرة</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     متابعة حالة البرامج والأنشطة في جميع المؤسسات
                   </p>
                 </div>
@@ -82,7 +82,7 @@ const UserGuide = () => {
           <CardHeader className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
             <CardTitle className="flex items-center gap-3">
               <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
-                <FileText className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <FileText className="w-5 h-5 text-success dark:text-green-400" />
               </div>
               <span className="font-arabic">إدارة البرامج</span>
             </CardTitle>
@@ -91,33 +91,33 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <Eye className="w-4 h-4 text-blue-600" />
+                  <Eye className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">مراجعة البرامج</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">مراجعة البرامج</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     عرض تفاصيل البرامج المقدمة وفحص محتواها
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <CheckCircle className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">اعتماد البرامج</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">اعتماد البرامج</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     اعتماد البرامج التي تلبي المعايير المطلوبة
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-red-100 dark:bg-red-900/50 rounded">
-                  <AlertTriangle className="w-4 h-4 text-red-600" />
+                  <AlertTriangle className="w-4 h-4 text-error" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">رفض البرامج</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">رفض البرامج</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     رفض البرامج التي لا تلبي المعايير مع إضافة ملاحظات
                   </p>
                 </div>
@@ -131,7 +131,7 @@ const UserGuide = () => {
           <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
             <CardTitle className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-                <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <TrendingUp className="w-5 h-5 text-primary dark:text-blue-400" />
               </div>
               <span className="font-arabic">الإحصائيات والتحليلات</span>
             </CardTitle>
@@ -140,33 +140,33 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-purple-100 dark:bg-purple-900/50 rounded">
-                  <FileText className="w-4 h-4 text-purple-600" />
+                  <FileText className="w-4 h-4 text-secondary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">إحصائيات البرامج</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">إحصائيات البرامج</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     عرض عدد البرامج المعتمدة والمرفوضة والمعلقة
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-indigo-100 dark:bg-indigo-900/50 rounded">
-                  <Users className="w-4 h-4 text-indigo-600" />
+                  <Users className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">إحصائيات المؤسسات</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">إحصائيات المؤسسات</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     متابعة أداء المؤسسات الإقليمية وعدد البرامج المقدمة
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-yellow-100 dark:bg-yellow-900/50 rounded">
-                  <Award className="w-4 h-4 text-yellow-600" />
+                  <Award className="w-4 h-4 text-warning" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">تقارير الأداء</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">تقارير الأداء</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     تقارير مفصلة عن أداء النظام والمؤسسات
                   </p>
                 </div>
@@ -189,33 +189,33 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <Users className="w-4 h-4 text-blue-600" />
+                  <Users className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">إدارة المستخدمين</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">إدارة المستخدمين</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     إدارة حسابات المستخدمين والصلاحيات
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <Building className="w-4 h-4 text-green-600" />
+                  <Building className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">إدارة المؤسسات</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">إدارة المؤسسات</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     إضافة وتعديل وحذف المؤسسات الإقليمية
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-purple-100 dark:bg-purple-900/50 rounded">
-                  <Settings className="w-4 h-4 text-purple-600" />
+                  <Settings className="w-4 h-4 text-secondary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">إعدادات النظام</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">إعدادات النظام</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     تكوين إعدادات النظام والمعايير
                   </p>
                 </div>
@@ -229,26 +229,26 @@ const UserGuide = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Award className="w-5 h-5 text-purple-600" />
+            <Award className="w-5 h-5 text-secondary" />
             <span className="font-arabic">الإجراءات السريعة</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid gap-4 md:grid-cols-3">
             <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
-              <FileText className="w-6 h-6 text-blue-600" />
+              <FileText className="w-6 h-6 text-primary" />
               <span className="font-medium font-arabic">مراجعة البرامج الجديدة</span>
-              <span className="text-sm text-gray-500 font-arabic">فحص البرامج المقدمة حديثاً</span>
+              <span className="text-sm text-muted-foreground font-arabic">فحص البرامج المقدمة حديثاً</span>
             </Button>
             <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
-              <TrendingUp className="w-6 h-6 text-green-600" />
+              <TrendingUp className="w-6 h-6 text-success" />
               <span className="font-medium font-arabic">عرض الإحصائيات</span>
-              <span className="text-sm text-gray-500 font-arabic">متابعة أداء النظام</span>
+              <span className="text-sm text-muted-foreground font-arabic">متابعة أداء النظام</span>
             </Button>
             <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
-              <Users className="w-6 h-6 text-purple-600" />
+              <Users className="w-6 h-6 text-secondary" />
               <span className="font-medium font-arabic">إدارة المؤسسات</span>
-              <span className="text-sm text-gray-500 font-arabic">إدارة المؤسسات الإقليمية</span>
+              <span className="text-sm text-muted-foreground font-arabic">إدارة المؤسسات الإقليمية</span>
             </Button>
           </div>
         </CardContent>
@@ -265,21 +265,21 @@ const UserGuide = () => {
         <CardContent className="p-6">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <h4 className="font-medium text-gray-900 font-arabic">الدعم التقني</h4>
-              <p className="text-sm text-gray-600 font-arabic">
+              <h4 className="font-medium text-foreground font-arabic">الدعم التقني</h4>
+              <p className="text-sm text-muted-foreground font-arabic">
                 للاستفسارات التقنية أو المشاكل في النظام، يرجى التواصل مع فريق الدعم التقني
               </p>
-              <div className="flex items-center gap-2 text-sm text-blue-600">
+              <div className="flex items-center gap-2 text-sm text-primary">
                 <span className="font-arabic">البريد الإلكتروني:</span>
                 <span>support@formation.gov.dz</span>
               </div>
             </div>
             <div className="space-y-2">
-              <h4 className="font-medium text-gray-900 font-arabic">الدليل الإلكتروني</h4>
-              <p className="text-sm text-gray-600 font-arabic">
+              <h4 className="font-medium text-foreground font-arabic">الدليل الإلكتروني</h4>
+              <p className="text-sm text-muted-foreground font-arabic">
                 يمكنك الوصول إلى الدليل الإلكتروني الكامل للنظام عبر الرابط التالي
               </p>
-              <Button variant="link" className="p-0 h-auto text-blue-600 font-arabic">
+              <Button variant="link" className="p-0 h-auto text-primary font-arabic">
                 دليل النظام الإلكتروني →
               </Button>
             </div>

@@ -457,7 +457,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900" dir="rtl">
+    <div className="theme-transition-colors min-h-screen bg-background-secondary dark:bg-gray-900" dir="rtl">
       {/* Universal Navbar */}
               <UniversalNavbar 
           onTabChange={setActiveTab} 
@@ -468,12 +468,12 @@ const EtablissementNationaleDashboard: React.FC = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
-            <TabsTrigger value="overview" className="flex items-center gap-2 font-arabic data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-sm">
+          <TabsList className="grid w-full grid-cols-2 bg-muted dark:bg-gray-800 p-1 rounded-lg">
+            <TabsTrigger value="overview" className="flex items-center gap-2 font-arabic data-[state=active]:bg-card data-[state=active]:text-secondary data-[state=active]:shadow-sm">
               <BarChart3 className="h-4 w-4" />
               نظرة عامة
             </TabsTrigger>
-            <TabsTrigger value="programmes" className="flex items-center gap-2 font-arabic data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-sm">
+            <TabsTrigger value="programmes" className="flex items-center gap-2 font-arabic data-[state=active]:bg-card data-[state=active]:text-secondary data-[state=active]:shadow-sm">
               <FileText className="h-4 w-4" />
               إدارة البرامج
             </TabsTrigger>
@@ -486,12 +486,12 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="text-right">
-                      <p className="text-sm font-medium text-blue-600 dark:text-blue-400 font-arabic">إجمالي البرامج</p>
+                      <p className="text-sm font-medium text-primary dark:text-blue-400 font-arabic">إجمالي البرامج</p>
                       <p className="text-3xl font-bold text-blue-700 dark:text-blue-300 font-arabic">{stats.totalProgrammes}</p>
                       <p className="text-xs text-blue-500 font-arabic">تم إنشاؤها</p>
                     </div>
                     <div className="p-3 bg-blue-200 dark:bg-blue-800/50 rounded-full">
-                      <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      <FileText className="w-6 h-6 text-primary dark:text-blue-400" />
                     </div>
                   </div>
                 </CardContent>
@@ -501,12 +501,12 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="text-right">
-                      <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400 font-arabic">في الانتظار</p>
+                      <p className="text-sm font-medium text-warning dark:text-yellow-400 font-arabic">في الانتظار</p>
                       <p className="text-3xl font-bold text-yellow-700 dark:text-yellow-300 font-arabic">{stats.programmesEnAttente}</p>
                       <p className="text-xs text-yellow-500 font-arabic">بانتظار المراجعة</p>
                     </div>
                     <div className="p-3 bg-yellow-200 dark:bg-yellow-800/50 rounded-full">
-                      <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+                      <Clock className="w-6 h-6 text-warning dark:text-yellow-400" />
                     </div>
                   </div>
                 </CardContent>
@@ -516,12 +516,12 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="text-right">
-                      <p className="text-sm font-medium text-green-600 dark:text-green-400 font-arabic">معتمدة</p>
+                      <p className="text-sm font-medium text-success dark:text-green-400 font-arabic">معتمدة</p>
                       <p className="text-3xl font-bold text-green-700 dark:text-green-300 font-arabic">{stats.programmesValides}</p>
                       <p className="text-xs text-green-500 font-arabic">تم اعتمادها</p>
                     </div>
                     <div className="p-3 bg-green-200 dark:bg-green-800/50 rounded-full">
-                      <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+                      <CheckCircle className="w-6 h-6 text-success dark:text-green-400" />
                     </div>
                   </div>
                 </CardContent>
@@ -531,12 +531,12 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="text-right">
-                      <p className="text-sm font-medium text-red-600 dark:text-red-400 font-arabic">مرفوضة</p>
+                      <p className="text-sm font-medium text-error dark:text-red-400 font-arabic">مرفوضة</p>
                       <p className="text-3xl font-bold text-red-700 dark:text-red-300 font-arabic">{stats.programmesRefuses}</p>
                       <p className="text-xs text-red-500 font-arabic">تم رفضها</p>
                     </div>
                     <div className="p-3 bg-red-200 dark:bg-red-800/50 rounded-full">
-                      <XCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                      <XCircle className="w-6 h-6 text-error dark:text-red-400" />
                     </div>
                   </div>
                 </CardContent>
@@ -553,8 +553,8 @@ const EtablissementNationaleDashboard: React.FC = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-indigo-600">{stats.totalEtablissements}</div>
-                  <p className="text-sm text-gray-600 mt-2 font-arabic">عدد المؤسسات التي قدمت برامج</p>
+                  <div className="text-3xl font-bold text-primary">{stats.totalEtablissements}</div>
+                  <p className="text-sm text-muted-foreground mt-2 font-arabic">عدد المؤسسات التي قدمت برامج</p>
                 </CardContent>
               </Card>
 
@@ -567,7 +567,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-emerald-600">{stats.totalModules}</div>
-                  <p className="text-sm text-gray-600 mt-2 font-arabic">عدد المواد التي لها برامج</p>
+                  <p className="text-sm text-muted-foreground mt-2 font-arabic">عدد المواد التي لها برامج</p>
                 </CardContent>
               </Card>
             </div>
@@ -582,8 +582,8 @@ const EtablissementNationaleDashboard: React.FC = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-purple-600">{stats.institutionsWithProgrammes}</div>
-                  <p className="text-sm text-gray-600 mt-2 font-arabic">عدد المؤسسات التي قدمت برامج فعلياً</p>
+                  <div className="text-3xl font-bold text-secondary">{stats.institutionsWithProgrammes}</div>
+                  <p className="text-sm text-muted-foreground mt-2 font-arabic">عدد المؤسسات التي قدمت برامج فعلياً</p>
                 </CardContent>
               </Card>
 
@@ -600,7 +600,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
                       ? Math.round((stats.institutionsWithProgrammes / stats.totalEtablissements) * 100)
                       : 0}%
                   </div>
-                  <p className="text-sm text-gray-600 mt-2 font-arabic">نسبة المؤسسات النشطة من إجمالي المؤسسات</p>
+                  <p className="text-sm text-muted-foreground mt-2 font-arabic">نسبة المؤسسات النشطة من إجمالي المؤسسات</p>
                 </CardContent>
               </Card>
             </div>
@@ -611,7 +611,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 <CardTitle className="flex items-center justify-end">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
-                      <Building className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                      <Building className="w-5 h-5 text-secondary dark:text-purple-400" />
                     </div>
                     <span className="font-arabic">معلومات المؤسسة الوطنية</span>
                   </div>
@@ -621,42 +621,42 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 <div className="grid gap-6 md:grid-cols-2 rtl">
                   {/* Basic Information */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2 text-right">المعلومات الأساسية</h3>
+                    <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic border-b pb-2 text-right">المعلومات الأساسية</h3>
                     
                     <div className="space-y-3">
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">اسم المستخدم</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{userProfile?.username || 'غير محدد'}</p>
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اسم المستخدم</p>
+                        <p className="text-lg font-semibold text-foreground dark:text-white">{userProfile?.username || 'غير محدد'}</p>
                       </div>
                       
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">اسم المؤسسة بالفرنسية</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اسم المؤسسة بالفرنسية</p>
+                        <p className="text-lg font-semibold text-foreground dark:text-white">
                           {userProfile?.nom_fr || 'غير محدد'}
                         </p>
                       </div>
                       
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">اسم المؤسسة بالعربية</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">اسم المؤسسة بالعربية</p>
+                        <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                           {userProfile?.nom_ar || 'غير محدد'}
                         </p>
                       </div>
                       
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">رمز الإدارة</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">رمز الإدارة</p>
+                        <p className="text-lg font-semibold text-foreground dark:text-white">
                           {userProfile?.code || 'غير محدد'}
                         </p>
                       </div>
 
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">الدور</p>
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الدور</p>
                         <div className="flex items-center gap-2 justify-end">
                           <Badge variant="secondary" className="font-arabic">
                             مؤسسة وطنية
                           </Badge>
-                          <IdCard className="w-4 h-4 text-gray-500" />
+                          <IdCard className="w-4 h-4 text-muted-foreground" />
                         </div>
                       </div>
                     </div>
@@ -664,43 +664,43 @@ const EtablissementNationaleDashboard: React.FC = () => {
 
                   {/* Contact Information */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2 text-right">معلومات الاتصال</h3>
+                    <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic border-b pb-2 text-right">معلومات الاتصال</h3>
                     
                     <div className="space-y-3">
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">البريد الإلكتروني</p>
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">البريد الإلكتروني</p>
                         <div className="flex items-center gap-2 justify-end">
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                          <p className="text-lg font-semibold text-foreground dark:text-white">
                             {userProfile?.email || userProfile?.email_for_auth || 'غير محدد'}
                           </p>
-                          <Mail className="w-4 h-4 text-gray-500" />
+                          <Mail className="w-4 h-4 text-muted-foreground" />
                         </div>
                       </div>
                       
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">رقم الهاتف</p>
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">رقم الهاتف</p>
                         <div className="flex items-center gap-2 justify-end">
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                          <p className="text-lg font-semibold text-foreground dark:text-white">
                             {userProfile?.telephone || 'غير محدد'}
                           </p>
-                          <Phone className="w-4 h-4 text-gray-500" />
+                          <Phone className="w-4 h-4 text-muted-foreground" />
                         </div>
                       </div>
 
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">العنوان</p>
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">العنوان</p>
                         <div className="flex items-center gap-2 justify-end">
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                             {userProfile?.adresse_ar || userProfile?.adresse_fr || 'غير محدد'}
                           </p>
-                          <MapPin className="w-4 h-4 text-gray-500" />
+                          <MapPin className="w-4 h-4 text-muted-foreground" />
                         </div>
                       </div>
 
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ التسجيل</p>
+                        <p className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">تاريخ التسجيل</p>
                         <div className="flex items-center gap-2 justify-end">
-                          <p className="text-lg font-semibold text-gray-900 dark:text-white font-arabic">
+                          <p className="text-lg font-semibold text-foreground dark:text-white font-arabic">
                             {userProfile?.created_at 
                               ? new Date(userProfile.created_at).toLocaleDateString('ar-DZ', {
                                   year: 'numeric',
@@ -710,7 +710,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
                               : 'غير محدد'
                             }
                           </p>
-                          <Calendar className="w-4 h-4 text-gray-500" />
+                          <Calendar className="w-4 h-4 text-muted-foreground" />
                         </div>
                       </div>
                     </div>
@@ -749,26 +749,26 @@ const EtablissementNationaleDashboard: React.FC = () => {
           <div className="space-y-6 py-4">
             {/* Basic Information */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2 text-right">
+              <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic border-b pb-2 text-right">
                 المعلومات الأساسية
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="username" className="text-sm font-medium text-gray-700 dark:text-gray-300 font-arabic text-right">
+                  <Label htmlFor="username" className="text-sm font-medium text-foreground dark:text-gray-300 font-arabic text-right">
                     اسم المستخدم
                   </Label>
                   <Input
                     id="username"
                     value={userProfile?.username || ''}
-                    className="text-right font-arabic bg-gray-100"
+                    className="text-right font-arabic bg-muted"
                     disabled
                     placeholder="اسم المستخدم"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="nom_fr" className="text-sm font-medium text-gray-700 dark:text-gray-300 font-arabic text-right">
+                  <Label htmlFor="nom_fr" className="text-sm font-medium text-foreground dark:text-gray-300 font-arabic text-right">
                     اسم المؤسسة بالفرنسية
                   </Label>
                   <Input
@@ -783,7 +783,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="nom_ar" className="text-sm font-medium text-gray-700 dark:text-gray-300 font-arabic text-right">
+                  <Label htmlFor="nom_ar" className="text-sm font-medium text-foreground dark:text-gray-300 font-arabic text-right">
                     اسم المؤسسة بالعربية
                   </Label>
                   <Input
@@ -796,7 +796,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="code" className="text-sm font-medium text-gray-700 dark:text-gray-300 font-arabic text-right">
+                  <Label htmlFor="code" className="text-sm font-medium text-foreground dark:text-gray-300 font-arabic text-right">
                     رمز الإدارة
                   </Label>
                   <Input
@@ -812,13 +812,13 @@ const EtablissementNationaleDashboard: React.FC = () => {
 
             {/* Contact Information */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2 text-right">
+              <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic border-b pb-2 text-right">
                 معلومات الاتصال
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300 font-arabic text-right">
+                  <Label htmlFor="email" className="text-sm font-medium text-foreground dark:text-gray-300 font-arabic text-right">
                     البريد الإلكتروني
                   </Label>
                   <Input
@@ -832,7 +832,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="telephone" className="text-sm font-medium text-gray-700 dark:text-gray-300 font-arabic text-right">
+                  <Label htmlFor="telephone" className="text-sm font-medium text-foreground dark:text-gray-300 font-arabic text-right">
                     رقم الهاتف
                   </Label>
                   <Input
@@ -848,13 +848,13 @@ const EtablissementNationaleDashboard: React.FC = () => {
 
             {/* Address Information */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2 text-right">
+              <h3 className="text-lg font-semibold text-foreground dark:text-white font-arabic border-b pb-2 text-right">
                 معلومات العنوان
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="adresse_fr" className="text-sm font-medium text-gray-700 dark:text-gray-300 font-arabic text-right">
+                  <Label htmlFor="adresse_fr" className="text-sm font-medium text-foreground dark:text-gray-300 font-arabic text-right">
                     العنوان بالفرنسية
                   </Label>
                   <Input
@@ -867,7 +867,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="adresse_ar" className="text-sm font-medium text-gray-700 dark:text-gray-300 font-arabic text-right">
+                  <Label htmlFor="adresse_ar" className="text-sm font-medium text-foreground dark:text-gray-300 font-arabic text-right">
                     العنوان بالعربية
                   </Label>
                   <Input

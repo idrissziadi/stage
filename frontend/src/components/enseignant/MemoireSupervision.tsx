@@ -164,7 +164,7 @@ const MemoireSupervision = () => {
       case 'مرفوض':
         return 'bg-red-100 text-red-800 hover:bg-red-200';
       default:
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+        return 'bg-muted text-foreground hover:bg-muted-secondary';
     }
   };
 
@@ -321,7 +321,7 @@ const MemoireSupervision = () => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">جارٍ تحميل المذكرات...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground">جارٍ تحميل المذكرات...</p>
       </div>
     );
   }
@@ -334,7 +334,7 @@ const MemoireSupervision = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">إجمالي المذكرات</p>
+                <p className="text-sm font-medium text-muted-foreground">إجمالي المذكرات</p>
                 <p className="text-2xl font-bold text-blue-700">{stats.total}</p>
               </div>
               <FileText className="w-8 h-8 text-blue-500" />
@@ -346,7 +346,7 @@ const MemoireSupervision = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">مقبول</p>
+                <p className="text-sm font-medium text-muted-foreground">مقبول</p>
                 <p className="text-2xl font-bold text-green-700">{stats.approved}</p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-500" />
@@ -358,7 +358,7 @@ const MemoireSupervision = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">في الانتظار</p>
+                <p className="text-sm font-medium text-muted-foreground">في الانتظار</p>
                 <p className="text-2xl font-bold text-yellow-700">{stats.pending}</p>
               </div>
               <Clock className="w-8 h-8 text-yellow-500" />
@@ -370,7 +370,7 @@ const MemoireSupervision = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">مرفوض</p>
+                <p className="text-sm font-medium text-muted-foreground">مرفوض</p>
                 <p className="text-2xl font-bold text-red-700">{stats.rejected}</p>
               </div>
               <XCircle className="w-8 h-8 text-red-500" />
@@ -384,7 +384,7 @@ const MemoireSupervision = () => {
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
                 placeholder="البحث في المذكرات أو أسماء الطلاب..."
                 value={searchTerm}
@@ -417,9 +417,9 @@ const MemoireSupervision = () => {
         <CardContent>
           {filteredMemoires.length === 0 ? (
             <div className="text-center py-12">
-              <FileText className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">لا توجد مذكرات</h3>
-              <p className="text-gray-600">
+              <FileText className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2">لا توجد مذكرات</h3>
+              <p className="text-muted-foreground">
                 {searchTerm || statusFilter !== 'all' 
                   ? 'لا توجد مذكرات تطابق معايير البحث'
                   : 'لا توجد مذكرات تحت إشرافك حالياً'
@@ -429,11 +429,11 @@ const MemoireSupervision = () => {
           ) : (
             <div className="space-y-4">
               {filteredMemoires.map((memoire) => (
-                <div key={memoire.id_memoire} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div key={memoire.id_memoire} className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-foreground">
                           {memoire.titre_ar || memoire.titre_fr || 'بدون عنوان'}
                         </h3>
                         <Badge className={getStatusColor(memoire.status)}>
@@ -442,7 +442,7 @@ const MemoireSupervision = () => {
                         </Badge>
                       </div>
                       
-                      <div className="space-y-1 text-sm text-gray-600 mb-3">
+                      <div className="space-y-1 text-sm text-muted-foreground mb-3">
                         <div className="flex items-center gap-2">
                           <Users className="w-4 h-4" />
                           <span><span className="font-medium">الطالب:</span> {memoire.stagiaire.prenom_fr} {memoire.stagiaire.nom_fr}</span>
@@ -454,7 +454,7 @@ const MemoireSupervision = () => {
                       </div>
                       
                       {memoire.observation && (
-                        <div className="bg-blue-50 border border-blue-200 p-3 rounded-md">
+                        <div className="theme-transition-colors bg-background-secondary border border-blue-200 p-3 rounded-md">
                           <p className="text-sm font-medium text-blue-800 mb-1">ملاحظات المشرف:</p>
                           <p className="text-sm text-blue-700">{memoire.observation}</p>
                         </div>
@@ -516,13 +516,13 @@ const MemoireSupervision = () => {
 
           {selectedMemoire && (
             <div className="space-y-3 text-right font-arabic mb-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="theme-transition-colors bg-background-secondary p-4 rounded-lg">
                 <h3 className="font-semibold text-lg mb-3">
                   {selectedMemoire.titre_ar || selectedMemoire.titre_fr || 'بدون عنوان'}
                 </h3>
                 
                 {selectedMemoire.titre_fr && selectedMemoire.titre_ar && selectedMemoire.titre_fr !== selectedMemoire.titre_ar && (
-                  <p className="text-sm text-gray-600 mb-3 italic">
+                  <p className="text-sm text-muted-foreground mb-3 italic">
                     {selectedMemoire.titre_fr}
                   </p>
                 )}
@@ -530,7 +530,7 @@ const MemoireSupervision = () => {
                 <div className="grid gap-2 text-sm">
                   {selectedMemoire.module && (
                     <div className="flex items-center gap-2">
-                      <BookOpen className="w-4 h-4 text-green-600" />
+                      <BookOpen className="w-4 h-4 text-success" />
                       <span className="font-medium">المادة:</span> 
                       {selectedMemoire.module.designation_ar || selectedMemoire.module.designation_fr} ({selectedMemoire.module.code_module})
                     </div>
@@ -543,14 +543,14 @@ const MemoireSupervision = () => {
                   </div>
                   
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <Calendar className="w-4 h-4 text-primary" />
                     <span className="font-medium">تاريخ التقديم:</span> 
                     {formatDate(selectedMemoire.createdAt)}
                   </div>
                 </div>
 
                 {selectedMemoire.observation && (
-                  <div className="mt-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                  <div className="theme-transition-colors mt-3 p-3 bg-background-secondary rounded-lg border-l-4 border-blue-400">
                     <p className="text-sm text-blue-800">
                       <span className="font-medium">ملاحظات المشرف:</span> {selectedMemoire.observation}
                     </p>
@@ -593,7 +593,7 @@ const MemoireSupervision = () => {
                   {/* Aperçu PDF intégré */}
                   {pdfUrl && (
                     <div className="border rounded-lg overflow-hidden">
-                      <div className="bg-gray-50 p-3 border-b">
+                      <div className="theme-transition-colors bg-background-secondary p-3 border-b">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-arabic">معاينة المستند</span>
                           <div className="flex items-center gap-2">
@@ -609,7 +609,7 @@ const MemoireSupervision = () => {
                         </div>
                       </div>
                       
-                      <div className="h-96 bg-gray-100 flex items-center justify-center">
+                      <div className="theme-transition-colors h-96 bg-muted flex items-center justify-center">
                         <iframe
                           src={`${pdfUrl}?token=${encodeURIComponent(localStorage.getItem('auth_token') || '')}#toolbar=1&navpanes=1&scrollbar=1`}
                           className="w-full h-full border-0"
@@ -651,15 +651,15 @@ const MemoireSupervision = () => {
           </DialogHeader>
           {selectedMemoire && (
             <div className="space-y-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">{selectedMemoire.titre_ar || selectedMemoire.titre_fr || 'بدون عنوان'}</h3>
-                <p className="text-sm text-gray-600">
+              <div className="theme-transition-colors bg-background-secondary p-4 rounded-lg">
+                <h3 className="font-semibold text-foreground mb-2">{selectedMemoire.titre_ar || selectedMemoire.titre_fr || 'بدون عنوان'}</h3>
+                <p className="text-sm text-muted-foreground">
                   الطالب: {selectedMemoire.stagiaire.prenom_fr} {selectedMemoire.stagiaire.nom_fr}
                 </p>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   حالة المذكرة *
                 </label>
                 <Select value={reviewForm.status} onValueChange={(value) => setReviewForm({...reviewForm, status: value})}>
@@ -674,7 +674,7 @@ const MemoireSupervision = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   ملاحظات وتعليقات
                 </label>
                 <Textarea

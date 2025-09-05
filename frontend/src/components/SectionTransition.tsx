@@ -43,7 +43,7 @@ const SectionTransition: React.FC<SectionTransitionProps> = ({
         <div className="absolute inset-0 bg-black/20" />
         <div className="relative z-10 h-full flex items-center justify-center">
           <motion.div
-            className="w-32 h-1 bg-white/30 rounded-full"
+            className="w-32 h-1 bg-card/30 rounded-full"
             animate={{
               scaleX: [0, 1, 0],
               opacity: [0, 1, 0]
@@ -129,7 +129,7 @@ const SectionTransition: React.FC<SectionTransitionProps> = ({
         />
         <div className="relative z-10 h-full flex items-center justify-center">
           <motion.div
-            className="w-20 h-20 bg-white/20 rounded-full"
+            className="w-20 h-20 bg-card/20 rounded-full"
             animate={{
               scale: [0.5, 1, 0.5],
               opacity: [0.5, 1, 0.5]
@@ -176,7 +176,7 @@ const SectionTransition: React.FC<SectionTransitionProps> = ({
         </motion.div>
         <div className="relative z-10 h-full flex items-center justify-center">
           <motion.div
-            className="w-8 h-8 bg-white/40 rounded-full"
+            className="w-8 h-8 bg-card/40 rounded-full"
             animate={{
               rotate: [0, -360],
               scale: [1, 1.5, 1]
@@ -285,7 +285,7 @@ const SectionTransition: React.FC<SectionTransitionProps> = ({
         />
         <div className="relative z-10 h-full flex items-center justify-center">
           <motion.div
-            className="w-20 h-20 bg-white/20 rounded-lg"
+            className="w-20 h-20 bg-card/20 rounded-lg"
             animate={{
               scale: [1, 1.1, 1],
               rotate: [0, 5, -5, 0]

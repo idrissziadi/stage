@@ -229,7 +229,7 @@ const CoursManagement = () => {
       case 'مرفوض':
         return 'bg-red-100 text-red-800 hover:bg-red-200';
       default:
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+        return 'bg-muted text-foreground hover:bg-muted-secondary';
     }
   };
 
@@ -337,7 +337,7 @@ const CoursManagement = () => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">جارٍ تحميل الدروس...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground">جارٍ تحميل الدروس...</p>
       </div>
     );
   }
@@ -350,7 +350,7 @@ const CoursManagement = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">إجمالي الدروس</p>
+                <p className="text-sm font-medium text-muted-foreground">إجمالي الدروس</p>
                 <p className="text-2xl font-bold text-blue-700">{stats.total}</p>
               </div>
               <FileText className="w-8 h-8 text-blue-500" />
@@ -362,7 +362,7 @@ const CoursManagement = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">معتمد</p>
+                <p className="text-sm font-medium text-muted-foreground">معتمد</p>
                 <p className="text-2xl font-bold text-green-700">{stats.approved}</p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-500" />
@@ -374,7 +374,7 @@ const CoursManagement = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">في الانتظار</p>
+                <p className="text-sm font-medium text-muted-foreground">في الانتظار</p>
                 <p className="text-2xl font-bold text-yellow-700">{stats.pending}</p>
               </div>
               <Clock className="w-8 h-8 text-yellow-500" />
@@ -386,7 +386,7 @@ const CoursManagement = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">مرفوض</p>
+                <p className="text-sm font-medium text-muted-foreground">مرفوض</p>
                 <p className="text-2xl font-bold text-red-700">{stats.rejected}</p>
               </div>
               <XCircle className="w-8 h-8 text-red-500" />
@@ -401,7 +401,7 @@ const CoursManagement = () => {
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <div className="flex flex-col sm:flex-row gap-4 flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
                   placeholder="البحث في الدروس..."
                   value={searchTerm}
@@ -437,7 +437,7 @@ const CoursManagement = () => {
                 </DialogHeader>
                 
                 {/* Debug info */}
-                <div className="mb-4 p-2 bg-gray-100 rounded text-xs">
+                <div className="theme-transition-colors mb-4 p-2 bg-muted rounded text-xs">
                   <p>Debug: Modules count: {Array.isArray(modules) ? modules.length : 'Not an array'}</p>
                   <p>Loading: {loading ? 'Yes' : 'No'}</p>
                   <Button 
@@ -485,11 +485,11 @@ const CoursManagement = () => {
                         </SelectContent>
                       </Select>
                       {loading ? (
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           جاري تحميل المواد...
                         </p>
                       ) : Array.isArray(modules) && modules.length === 0 && (
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           لا توجد مواد مخصصة لك حالياً. يرجى الاتصال بإدارة المؤسسة.
                         </p>
                       )}
@@ -523,9 +523,9 @@ const CoursManagement = () => {
                       type="file"
                       accept=".pdf"
                       onChange={(e) => setUploadForm({...uploadForm, file: e.target.files?.[0] || null})}
-                      className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-background-secondary file:text-blue-700 hover:file:bg-blue-100"
                     />
-                    <p className="text-xs text-gray-500 mt-1">الحد الأقصى: 10 ميجابايت</p>
+                    <p className="text-xs text-muted-foreground mt-1">الحد الأقصى: 10 ميجابايت</p>
                   </div>
                   
                   <div className="flex gap-2 pt-4">
@@ -553,9 +553,9 @@ const CoursManagement = () => {
         <CardContent>
           {filteredCourses.length === 0 ? (
             <div className="text-center py-12">
-              <FileText className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">لا توجد دروس</h3>
-              <p className="text-gray-600 mb-4">
+              <FileText className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2">لا توجد دروس</h3>
+              <p className="text-muted-foreground mb-4">
                 {searchTerm || statusFilter !== 'all' 
                   ? 'لا توجد دروس تطابق معايير البحث'
                   : 'لم تقم برفع أي دروس بعد'
@@ -571,11 +571,11 @@ const CoursManagement = () => {
           ) : (
             <div className="space-y-4">
               {filteredCourses.map((course) => (
-                <div key={course.id_cours} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div key={course.id_cours} className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-foreground">
                           {course.titre_ar || course.titre_fr || 'بدون عنوان'}
                         </h3>
                         <Badge className={getStatusColor(course.status)}>
@@ -584,7 +584,7 @@ const CoursManagement = () => {
                         </Badge>
                       </div>
                       
-                      <div className="space-y-1 text-sm text-gray-600">
+                      <div className="space-y-1 text-sm text-muted-foreground">
                         <p><span className="font-medium">كود الدرس:</span> {course.code_cours}</p>
                         {course.module && (
                           <p><span className="font-medium">المادة:</span> {course.module.designation_ar || course.module.designation_fr}</p>

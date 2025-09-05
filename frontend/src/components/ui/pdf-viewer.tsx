@@ -242,7 +242,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ isOpen, onClose, programme, userR
               {/* Aperçu PDF intégré (optionnel) */}
               {pdfUrl && (
                 <div className="border rounded-lg overflow-hidden">
-                  <div className="bg-gray-50 p-3 border-b">
+                  <div className="theme-transition-colors bg-background-secondary p-3 border-b">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-arabic">معاينة المستند</span>
                       <div className="flex items-center gap-2">
@@ -258,7 +258,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ isOpen, onClose, programme, userR
                     </div>
                   </div>
                   
-                  <div className="h-96 bg-gray-100 flex items-center justify-center">
+                  <div className="theme-transition-colors h-96 bg-muted flex items-center justify-center">
                     <iframe
                       src={`${pdfUrl}?token=${encodeURIComponent(localStorage.getItem('auth_token') || '')}#toolbar=1&navpanes=1&scrollbar=1`}
                       className="w-full h-full border-0"

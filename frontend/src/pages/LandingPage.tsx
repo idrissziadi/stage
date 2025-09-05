@@ -120,7 +120,9 @@ import AnimatedSection from '../components/AnimatedSection';
     { icon: Users, value: 15000, label: 'طالب مسجل', suffix: '+' },
     { icon: BookOpen, value: 500, label: 'برنامج تعليمي', suffix: '+' },
     { icon: GraduationCap, value: 200, label: 'مؤسسة تعليمية', suffix: '+' },
-    { icon: BarChart3, value: 98, label: 'معدل الرضا', suffix: '%' }
+    { icon: BarChart3, value: 98, label: 'معدل الرضا', suffix: '%' },
+    { icon: Clock, value: 24, label: 'ساعة دعم فني', suffix: '/7' },
+    { icon: CheckCircle, value: 99, label: 'معدل التوفر', suffix: '%' }
   ];
 
      const features = [
@@ -282,8 +284,9 @@ import AnimatedSection from '../components/AnimatedSection';
             <div className="relative w-full max-w-4xl mx-auto">
                              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-indigo-400/20 rounded-2xl blur-3xl"></div>
               <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-gray-200">
+                {/* Première ligne - 3 statistiques */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {stats.map((stat, index) => (
+                  {stats.slice(0, 3).map((stat, index) => (
                     <motion.div
                       key={stat.label}
                       initial={{ opacity: 0, y: 20 }}
@@ -291,11 +294,35 @@ import AnimatedSection from '../components/AnimatedSection';
                       transition={{ duration: 0.6, delay: index * 0.1 }}
                       className="text-center"
                     >
-                                                                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
                          index === 0 ? 'bg-gradient-to-r from-emerald-500 to-teal-600' :
                          index === 1 ? 'bg-gradient-to-r from-amber-500 to-orange-600' :
-                         index === 2 ? 'bg-gradient-to-r from-rose-500 to-pink-600' :
-                         'bg-gradient-to-r from-violet-500 to-purple-600'
+                         'bg-gradient-to-r from-rose-500 to-pink-600'
+                       }`}>
+                         <stat.icon className="w-8 h-8 text-white" />
+                       </div>
+                      <div className="text-3xl font-bold text-gray-900 mb-2">
+                        {stat.value}{stat.suffix}
+                      </div>
+                      <div className="text-gray-600">{stat.label}</div>
+                    </motion.div>
+                  ))}
+                </div>
+                
+                {/* Deuxième ligne - 3 statistiques */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                  {stats.slice(3, 6).map((stat, index) => (
+                    <motion.div
+                      key={stat.label}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: (index + 3) * 0.1 }}
+                      className="text-center"
+                    >
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
+                         index === 0 ? 'bg-gradient-to-r from-violet-500 to-purple-600' :
+                         index === 1 ? 'bg-gradient-to-r from-blue-500 to-indigo-600' :
+                         'bg-gradient-to-r from-green-500 to-emerald-600'
                        }`}>
                          <stat.icon className="w-8 h-8 text-white" />
                        </div>
@@ -319,8 +346,10 @@ import AnimatedSection from '../components/AnimatedSection';
             stats={[
               { icon: Users, value: 15000, label: 'طالب مسجل', suffix: '+', color: 'bg-gradient-to-r from-emerald-500 to-teal-600' },
               { icon: BookOpen, value: 500, label: 'برنامج تعليمي', suffix: '+', color: 'bg-gradient-to-r from-amber-500 to-orange-600' },
-                           { icon: GraduationCap, value: 200, label: 'مؤسسة تعليمية', suffix: '+', color: 'bg-gradient-to-r from-rose-500 to-pink-600' },
-              { icon: BarChart3, value: 98, label: 'معدل الرضا', suffix: '%', color: 'bg-gradient-to-r from-violet-500 to-purple-600' }
+              { icon: GraduationCap, value: 200, label: 'مؤسسة تعليمية', suffix: '+', color: 'bg-gradient-to-r from-rose-500 to-pink-600' },
+              { icon: BarChart3, value: 98, label: 'معدل الرضا', suffix: '%', color: 'bg-gradient-to-r from-violet-500 to-purple-600' },
+              { icon: Clock, value: 24, label: 'ساعة دعم فني', suffix: '/7', color: 'bg-gradient-to-r from-blue-500 to-indigo-600' },
+              { icon: CheckCircle, value: 99, label: 'معدل التوفر', suffix: '%', color: 'bg-gradient-to-r from-green-500 to-emerald-600' }
             ]}
           />
         </AnimatedSection>

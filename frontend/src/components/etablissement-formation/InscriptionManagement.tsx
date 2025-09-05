@@ -202,7 +202,7 @@ const InscriptionManagement: React.FC = () => {
       'en_attente': { color: 'bg-yellow-100 text-yellow-800', icon: Clock },
       'acceptee': { color: 'bg-green-100 text-green-800', icon: CheckCircle },
       'refusee': { color: 'bg-red-100 text-red-800', icon: XCircle },
-      'annulee': { color: 'bg-gray-100 text-gray-800', icon: XCircle }
+      'annulee': { color: 'bg-muted text-foreground', icon: XCircle }
     };
 
     const config = statutConfig[statut as keyof typeof statutConfig] || statutConfig['en_attente'];
@@ -243,7 +243,7 @@ const InscriptionManagement: React.FC = () => {
               <Label htmlFor="stagiaire">Sélectionner un stagiaire</Label>
               <select
                 id="stagiaire"
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-border-medium rounded-md"
                 value={selectedStagiaire || ''}
                 onChange={(e) => setSelectedStagiaire(parseInt(e.target.value) || null)}
               >
@@ -260,7 +260,7 @@ const InscriptionManagement: React.FC = () => {
               <Label htmlFor="offre">Sélectionner une offre</Label>
               <select
                 id="offre"
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-border-medium rounded-md"
                 value={selectedOffre || ''}
                 onChange={(e) => setSelectedOffre(parseInt(e.target.value) || null)}
               >
@@ -312,7 +312,7 @@ const InscriptionManagement: React.FC = () => {
                   <Label htmlFor="mass-offre">Sélectionner une offre</Label>
                   <select
                     id="mass-offre"
-                    className="w-full p-2 border border-gray-300 rounded-md"
+                    className="w-full p-2 border border-border-medium rounded-md"
                     value={massOffre || ''}
                     onChange={(e) => setMassOffre(parseInt(e.target.value) || null)}
                   >
@@ -384,7 +384,7 @@ const InscriptionManagement: React.FC = () => {
             <div className="flex-1">
               <Label htmlFor="search">Rechercher</Label>
               <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="search"
                   placeholder="Rechercher par nom, prénom ou offre..."
@@ -399,7 +399,7 @@ const InscriptionManagement: React.FC = () => {
               <Label htmlFor="filter-statut">Filtrer par statut</Label>
               <select
                 id="filter-statut"
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-border-medium rounded-md"
                 value={filterStatut}
                 onChange={(e) => setFilterStatut(e.target.value)}
               >
@@ -414,53 +414,53 @@ const InscriptionManagement: React.FC = () => {
 
           {/* Tableau des inscriptions */}
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-gray-300">
+            <table className="w-full border-collapse border border-border-medium">
               <thead>
-                <tr className="bg-gray-50">
-                  <th className="border border-gray-300 px-4 py-2 text-left">Stagiaire</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Offre</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Date d'inscription</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Statut</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Actions</th>
+                <tr className="bg-background-secondary">
+                  <th className="border border-border-medium px-4 py-2 text-left">Stagiaire</th>
+                  <th className="border border-border-medium px-4 py-2 text-left">Offre</th>
+                  <th className="border border-border-medium px-4 py-2 text-left">Date d'inscription</th>
+                  <th className="border border-border-medium px-4 py-2 text-left">Statut</th>
+                  <th className="border border-border-medium px-4 py-2 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredInscriptions.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="border border-gray-300 px-4 py-2 text-center text-gray-500">
+                    <td colSpan={5} className="border border-border-medium px-4 py-2 text-center text-muted-foreground">
                       Aucune inscription trouvée
                     </td>
                   </tr>
                 ) : (
                   filteredInscriptions.map((inscription) => (
-                    <tr key={inscription.id_inscription} className="hover:bg-gray-50">
-                      <td className="border border-gray-300 px-4 py-2">
+                    <tr key={inscription.id_inscription} className="hover:bg-background-secondary">
+                      <td className="border border-border-medium px-4 py-2">
                         <div>
                           <div className="font-medium">
                             {inscription.stagiaire.nom_fr} {inscription.stagiaire.prenom_fr}
                           </div>
                           {inscription.stagiaire.email && (
-                            <div className="text-sm text-gray-500">{inscription.stagiaire.email}</div>
+                            <div className="text-sm text-muted-foreground">{inscription.stagiaire.email}</div>
                           )}
                         </div>
                       </td>
-                      <td className="border border-gray-300 px-4 py-2">
+                      <td className="border border-border-medium px-4 py-2">
                         <div>
                           <div className="font-medium">{inscription.offre.designation_fr}</div>
                           {inscription.offre.specialite && (
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-muted-foreground">
                               {inscription.offre.specialite.designation_fr}
                             </div>
                           )}
                         </div>
                       </td>
-                      <td className="border border-gray-300 px-4 py-2">
+                      <td className="border border-border-medium px-4 py-2">
                         {new Date(inscription.date_inscription).toLocaleDateString('fr-FR')}
                       </td>
-                      <td className="border border-gray-300 px-4 py-2">
+                      <td className="border border-border-medium px-4 py-2">
                         {getStatutBadge(inscription.statut)}
                       </td>
-                      <td className="border border-gray-300 px-4 py-2">
+                      <td className="border border-border-medium px-4 py-2">
                         <Button variant="ghost" size="sm">
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -474,29 +474,29 @@ const InscriptionManagement: React.FC = () => {
 
           {/* Statistiques */}
           <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-3 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">
+            <div className="theme-transition-colors text-center p-3 bg-background-secondary rounded-lg">
+              <div className="text-2xl font-bold text-primary">
                 {inscriptions.length}
               </div>
-              <div className="text-sm text-blue-600">Total inscriptions</div>
+              <div className="text-sm text-primary">Total inscriptions</div>
             </div>
             <div className="text-center p-3 bg-yellow-50 rounded-lg">
-              <div className="text-2xl font-bold text-yellow-600">
+              <div className="text-2xl font-bold text-warning">
                 {inscriptions.filter(i => i.statut === 'en_attente').length}
               </div>
-              <div className="text-sm text-yellow-600">En attente</div>
+              <div className="text-sm text-warning">En attente</div>
             </div>
             <div className="text-center p-3 bg-green-50 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-success">
                 {inscriptions.filter(i => i.statut === 'acceptee').length}
               </div>
-              <div className="text-sm text-green-600">Acceptées</div>
+              <div className="text-sm text-success">Acceptées</div>
             </div>
             <div className="text-center p-3 bg-red-50 rounded-lg">
-              <div className="text-2xl font-bold text-red-600">
+              <div className="text-2xl font-bold text-error">
                 {inscriptions.filter(i => i.statut === 'refusee').length}
               </div>
-              <div className="text-sm text-red-600">Refusées</div>
+              <div className="text-sm text-error">Refusées</div>
             </div>
           </div>
         </CardContent>

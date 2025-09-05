@@ -163,23 +163,23 @@ const NotificationCenter = () => {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'programme_approved':
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
+        return <CheckCircle className="w-5 h-5 text-success" />;
       case 'programme_rejected':
-        return <XCircle className="w-5 h-5 text-red-600" />;
+        return <XCircle className="w-5 h-5 text-error" />;
       case 'programme_submitted':
-        return <FileText className="w-5 h-5 text-blue-600" />;
+        return <FileText className="w-5 h-5 text-primary" />;
       case 'course_approved':
-        return <BookOpen className="w-5 h-5 text-green-600" />;
+        return <BookOpen className="w-5 h-5 text-success" />;
       case 'course_rejected':
-        return <XCircle className="w-5 h-5 text-red-600" />;
+        return <XCircle className="w-5 h-5 text-error" />;
       case 'infrastructure':
-        return <Building className="w-5 h-5 text-purple-600" />;
+        return <Building className="w-5 h-5 text-secondary" />;
       case 'system':
-        return <Settings className="w-5 h-5 text-gray-600" />;
+        return <Settings className="w-5 h-5 text-muted-foreground" />;
       case 'reminder':
         return <Clock className="w-5 h-5 text-orange-600" />;
       default:
-        return <Bell className="w-5 h-5 text-gray-600" />;
+        return <Bell className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -215,7 +215,7 @@ const NotificationCenter = () => {
       case 'low':
         return 'bg-green-100 text-green-800 border-green-200';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-muted text-foreground border-border';
     }
   };
 
@@ -259,7 +259,7 @@ const NotificationCenter = () => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400 font-arabic">جارٍ تحميل الإشعارات...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground font-arabic">جارٍ تحميل الإشعارات...</p>
       </div>
     );
   }
@@ -283,20 +283,20 @@ const NotificationCenter = () => {
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="text-center">
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-purple-600">{notifications.length}</div>
-            <p className="text-sm text-gray-600 font-arabic">إجمالي الإشعارات</p>
+            <div className="text-2xl font-bold text-secondary">{notifications.length}</div>
+            <p className="text-sm text-muted-foreground font-arabic">إجمالي الإشعارات</p>
           </CardContent>
         </Card>
         <Card className="text-center">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-orange-600">{unreadCount}</div>
-            <p className="text-sm text-gray-600 font-arabic">إشعارات غير مقروءة</p>
+            <p className="text-sm text-muted-foreground font-arabic">إشعارات غير مقروءة</p>
           </CardContent>
         </Card>
         <Card className="text-center">
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-green-600">{notifications.length - unreadCount}</div>
-            <p className="text-sm text-gray-600 font-arabic">إشعارات مقروءة</p>
+            <div className="text-2xl font-bold text-success">{notifications.length - unreadCount}</div>
+            <p className="text-sm text-muted-foreground font-arabic">إشعارات مقروءة</p>
           </CardContent>
         </Card>
       </div>
@@ -349,8 +349,8 @@ const NotificationCenter = () => {
         {filteredNotifications.length === 0 ? (
           <Card>
             <CardContent className="text-center py-12">
-              <Bell className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-              <p className="text-gray-600 dark:text-gray-400 font-arabic">
+              <Bell className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+              <p className="text-muted-foreground dark:text-muted-foreground font-arabic">
                 {filter === 'all' ? 'لا توجد إشعارات' : 
                  filter === 'unread' ? 'لا توجد إشعارات غير مقروءة' : 
                  'لا توجد إشعارات مقروءة'}
@@ -371,7 +371,7 @@ const NotificationCenter = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <h4 className="font-semibold text-gray-900 dark:text-white font-arabic">
+                        <h4 className="font-semibold text-foreground dark:text-white font-arabic">
                           {notification.title}
                         </h4>
                         <Badge variant="secondary" className="text-xs">
@@ -385,7 +385,7 @@ const NotificationCenter = () => {
                         </Badge>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-500 font-arabic">
+                        <span className="text-xs text-muted-foreground font-arabic">
                           {formatDate(notification.created_at)}
                         </span>
                         {!notification.read && (
@@ -394,7 +394,7 @@ const NotificationCenter = () => {
                       </div>
                     </div>
                     
-                    <p className="text-gray-600 dark:text-gray-400 mb-3 font-arabic">
+                    <p className="text-muted-foreground dark:text-muted-foreground mb-3 font-arabic">
                       {notification.message}
                     </p>
 
@@ -405,7 +405,7 @@ const NotificationCenter = () => {
                           size="sm"
                           variant="outline"
                           onClick={() => markAsRead(notification.id)}
-                          className="text-purple-600 border-purple-200 hover:bg-purple-50"
+                          className="text-secondary border-purple-200 hover:bg-purple-50"
                         >
                           <Eye className="w-4 h-4 ml-1" />
                           تحديد كمقروء
@@ -416,7 +416,7 @@ const NotificationCenter = () => {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                          className="text-primary border-blue-200 hover:bg-background-secondary"
                         >
                           <FileText className="w-4 h-4 ml-1" />
                           عرض التفاصيل
@@ -427,7 +427,7 @@ const NotificationCenter = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => deleteNotification(notification.id)}
-                        className="text-red-600 border-red-200 hover:bg-red-50"
+                        className="text-error border-red-200 hover:bg-red-50"
                       >
                         <Trash2 className="w-4 h-4 ml-1" />
                         حذف

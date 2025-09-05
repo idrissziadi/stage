@@ -165,7 +165,7 @@ export function DataGrid<T extends Record<string, any>>({
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 flex-1">
               <div className="relative flex-1 max-w-sm">
-                <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                 <Input
                   placeholder={searchPlaceholder}
                   value={searchTerm}
@@ -192,7 +192,7 @@ export function DataGrid<T extends Record<string, any>>({
                   variant="ghost"
                   size="sm"
                   onClick={clearAllFilters}
-                  className="text-gray-500"
+                  className="text-muted-foreground"
                 >
                   <X className="h-4 w-4 ml-1" />
                   مسح الكل
@@ -203,10 +203,10 @@ export function DataGrid<T extends Record<string, any>>({
 
           {/* Advanced Filters */}
           {showFilters && filters.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="theme-transition-colors grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-background-secondary dark:bg-gray-800 rounded-lg">
               {filters.map((filter) => (
                 <div key={filter.key} className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="text-sm font-medium text-foreground dark:text-gray-300">
                     {filter.label}
                   </label>
                   {filter.type === 'select' ? (
@@ -293,7 +293,7 @@ export function DataGrid<T extends Record<string, any>>({
                 {columns.map((column) => (
                   <TableHead 
                     key={String(column.key)} 
-                    className={`${column.width || ''} ${column.sortable ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800' : ''}`}
+                    className={`${column.width || ''} ${column.sortable ? 'cursor-pointer hover:bg-background-secondary dark:hover:bg-gray-800' : ''}`}
                     onClick={() => column.sortable && handleSort(String(column.key))}
                   >
                     <div className="flex items-center gap-2">
@@ -303,15 +303,15 @@ export function DataGrid<T extends Record<string, any>>({
                           <SortAsc 
                             className={`h-3 w-3 ${
                               sortConfig?.key === column.key && sortConfig.direction === 'asc' 
-                                ? 'text-blue-600' 
-                                : 'text-gray-400'
+                                ? 'text-primary' 
+                                : 'text-muted-foreground'
                             }`} 
                           />
                           <SortDesc 
                             className={`h-3 w-3 -mt-1 ${
                               sortConfig?.key === column.key && sortConfig.direction === 'desc' 
-                                ? 'text-blue-600' 
-                                : 'text-gray-400'
+                                ? 'text-primary' 
+                                : 'text-muted-foreground'
                             }`} 
                           />
                         </div>
@@ -336,13 +336,13 @@ export function DataGrid<T extends Record<string, any>>({
                 </TableRow>
               ) : processedData.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={columns.length + (actions.length > 0 ? 1 : 0)} className="text-center py-8 text-gray-500">
+                  <TableCell colSpan={columns.length + (actions.length > 0 ? 1 : 0)} className="text-center py-8 text-muted-foreground">
                     لا توجد بيانات للعرض
                   </TableCell>
                 </TableRow>
               ) : (
                 processedData.map((record, index) => (
-                  <TableRow key={index} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <TableRow key={index} className="hover:bg-background-secondary dark:hover:bg-gray-800">
                     {columns.map((column) => (
                       <TableCell key={String(column.key)}>
                         {column.render 
@@ -384,7 +384,7 @@ export function DataGrid<T extends Record<string, any>>({
         {/* Pagination */}
         {pagination && (
           <div className="flex items-center justify-between px-2 py-4">
-            <div className="text-sm text-gray-700 dark:text-gray-300">
+            <div className="text-sm text-foreground dark:text-gray-300">
               عرض {((pagination.current - 1) * pagination.pageSize) + 1} إلى{' '}
               {Math.min(pagination.current * pagination.pageSize, pagination.total)} من{' '}
               {pagination.total} نتيجة
@@ -409,7 +409,7 @@ export function DataGrid<T extends Record<string, any>>({
                   .map((page, index, array) => (
                     <React.Fragment key={page}>
                       {index > 0 && array[index - 1] !== page - 1 && (
-                        <span className="px-2 text-gray-400">...</span>
+                        <span className="px-2 text-muted-foreground">...</span>
                       )}
                       <Button
                         variant={page === pagination.current ? "default" : "outline"}

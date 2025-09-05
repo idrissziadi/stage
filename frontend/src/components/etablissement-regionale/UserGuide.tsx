@@ -85,31 +85,31 @@ const UserGuide = () => {
           <div className="grid gap-4 md:grid-cols-4">
             <Button 
               variant="outline" 
-              className="w-full bg-white hover:bg-gray-50 font-arabic h-auto py-4 flex flex-col gap-2"
+              className="w-full bg-card hover:bg-background-secondary font-arabic h-auto py-4 flex flex-col gap-2"
               onClick={() => document.getElementById('overview')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <BarChart3 className="w-6 h-6 text-blue-600" />
+              <BarChart3 className="w-6 h-6 text-primary" />
               <span>نظرة عامة</span>
             </Button>
             <Button 
               variant="outline" 
-              className="w-full bg-white hover:bg-gray-50 font-arabic h-auto py-4 flex flex-col gap-2"
+              className="w-full bg-card hover:bg-background-secondary font-arabic h-auto py-4 flex flex-col gap-2"
               onClick={() => document.getElementById('infrastructure')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <Building className="w-6 h-6 text-green-600" />
+              <Building className="w-6 h-6 text-success" />
               <span>البنية التحتية</span>
             </Button>
             <Button 
               variant="outline" 
-              className="w-full bg-white hover:bg-gray-50 font-arabic h-auto py-4 flex flex-col gap-2"
+              className="w-full bg-card hover:bg-background-secondary font-arabic h-auto py-4 flex flex-col gap-2"
               onClick={() => document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <BookOpen className="w-6 h-6 text-purple-600" />
+              <BookOpen className="w-6 h-6 text-secondary" />
               <span>إدارة الدروس</span>
             </Button>
             <Button 
               variant="outline" 
-              className="w-full bg-white hover:bg-gray-50 font-arabic h-auto py-4 flex flex-col gap-2"
+              className="w-full bg-card hover:bg-background-secondary font-arabic h-auto py-4 flex flex-col gap-2"
               onClick={() => document.getElementById('programs')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <GraduationCap className="w-6 h-6 text-orange-600" />
@@ -126,7 +126,7 @@ const UserGuide = () => {
           <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
             <CardTitle className="flex items-center gap-3 font-arabic">
               <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-                <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <BarChart3 className="w-5 h-5 text-primary dark:text-blue-400" />
               </div>
               نظرة عامة - الصفحة الرئيسية
             </CardTitle>
@@ -135,33 +135,33 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <CheckCircle className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">لوحة المعلومات</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">لوحة المعلومات</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     عرض سريع لإحصائيات البنية التحتية والفروع والتخصصات في منطقتك
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <Building className="w-4 h-4 text-blue-600" />
+                  <Building className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">معلومات المؤسسة</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">معلومات المؤسسة</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     عرض تفاصيل مؤسستك ومعلومات الاتصال والموقع الجغرافي
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-purple-100 dark:bg-purple-900/50 rounded">
-                  <Clock className="w-4 h-4 text-purple-600" />
+                  <Clock className="w-4 h-4 text-secondary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">الأنشطة الأخيرة</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">الأنشطة الأخيرة</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     تتبع آخر العمليات والإجراءات والإحصائيات في منطقتك
                   </p>
                 </div>
@@ -175,7 +175,7 @@ const UserGuide = () => {
           <CardHeader className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
             <CardTitle className="flex items-center gap-3 font-arabic">
               <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
-                <Building className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <Building className="w-5 h-5 text-success dark:text-green-400" />
               </div>
               البنية التحتية
             </CardTitle>
@@ -184,33 +184,33 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <Building className="w-4 h-4 text-blue-600" />
+                  <Building className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">استكشاف الفروع</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">استكشاف الفروع</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     تصفح الفروع والتخصصات والمواد في منطقتك مع إمكانية البحث والتصفية
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <Eye className="w-4 h-4 text-green-600" />
+                  <Eye className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">عرض التفاصيل</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">عرض التفاصيل</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     استعراض معلومات مفصلة عن كل فرع وتخصص مع الإحصائيات
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-purple-100 dark:bg-purple-900/50 rounded">
-                  <Target className="w-4 h-4 text-purple-600" />
+                  <Target className="w-4 h-4 text-secondary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">التنقل السهل</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">التنقل السهل</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     استخدام نظام التنقل بالخطوات للوصول السريع للمعلومات المطلوبة
                   </p>
                 </div>
@@ -224,7 +224,7 @@ const UserGuide = () => {
           <CardHeader className="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
             <CardTitle className="flex items-center gap-3 font-arabic">
               <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
-                <BookOpen className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <BookOpen className="w-5 h-5 text-secondary dark:text-purple-400" />
               </div>
               إدارة الدروس
             </CardTitle>
@@ -233,22 +233,22 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <BookOpen className="w-4 h-4 text-blue-600" />
+                  <BookOpen className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">عرض الدروس</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">عرض الدروس</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     استعراض جميع الدروس المتاحة في منطقتك مع إمكانية البحث والتصفية
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <CheckCircle className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">متابعة الحالة</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">متابعة الحالة</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     متابعة حالة الدروس والمعتمدة والمرفوضة مع التفاصيل الكاملة
                   </p>
                 </div>
@@ -258,8 +258,8 @@ const UserGuide = () => {
                   <Users className="w-4 h-4 text-orange-600" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">إدارة المتدربين</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">إدارة المتدربين</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     متابعة المتدربين المسجلين في منطقتك وإحصائياتهم
                   </p>
                 </div>
@@ -282,33 +282,33 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <FileText className="w-4 h-4 text-blue-600" />
+                  <FileText className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">إنشاء البرامج</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">إنشاء البرامج</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     إنشاء برامج تدريبية جديدة مع رفع ملفات PDF والتفاصيل الكاملة
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <CheckCircle className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">متابعة الاعتماد</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">متابعة الاعتماد</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     متابعة حالة اعتماد البرامج من الإدارة الوطنية مع التفاصيل
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-purple-100 dark:bg-purple-900/50 rounded">
-                  <Download className="w-4 h-4 text-purple-600" />
+                  <Download className="w-4 h-4 text-secondary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">رفع الملفات</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">رفع الملفات</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     رفع ملفات PDF للبرامج التدريبية مع إمكانية المعاينة والتحميل
                   </p>
                 </div>
@@ -322,7 +322,7 @@ const UserGuide = () => {
           <CardHeader className="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20">
             <CardTitle className="flex items-center gap-3 font-arabic">
               <div className="p-2 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg">
-                <Settings className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <Settings className="w-5 h-5 text-primary dark:text-indigo-400" />
               </div>
               إدارة الملف الشخصي
             </CardTitle>
@@ -331,33 +331,33 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <Settings className="w-4 h-4 text-blue-600" />
+                  <Settings className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">تعديل المعلومات</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">تعديل المعلومات</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     تحديث معلومات المؤسسة وبيانات الاتصال والعنوان
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <Bell className="w-4 h-4 text-green-600" />
+                  <Bell className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">إعدادات الإشعارات</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">إعدادات الإشعارات</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     تخصيص إعدادات الإشعارات حسب احتياجاتك
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-purple-100 dark:bg-purple-900/50 rounded">
-                  <Download className="w-4 h-4 text-purple-600" />
+                  <Download className="w-4 h-4 text-secondary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">تصدير البيانات</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">تصدير البيانات</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     تحميل بيانات المؤسسة والبرامج والإحصائيات
                   </p>
                 </div>
@@ -371,7 +371,7 @@ const UserGuide = () => {
           <CardHeader className="bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20">
             <CardTitle className="flex items-center gap-3 font-arabic">
               <div className="p-2 bg-red-100 dark:bg-red-900/50 rounded-lg">
-                <HelpCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                <HelpCircle className="w-5 h-5 text-error dark:text-red-400" />
               </div>
               المساعدة والدعم
             </CardTitle>
@@ -380,33 +380,33 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-red-100 dark:bg-red-900/50 rounded">
-                  <HelpCircle className="w-4 h-4 text-red-600" />
+                  <HelpCircle className="w-4 h-4 text-error" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">الدليل الشامل</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">الدليل الشامل</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     دليل مفصل لجميع الميزات والوظائف مع أمثلة عملية
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <Bell className="w-4 h-4 text-blue-600" />
+                  <Bell className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">مركز الإشعارات</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">مركز الإشعارات</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     عرض جميع الإشعارات والتنبيهات المهمة
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <Users className="w-4 h-4 text-green-600" />
+                  <Users className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white font-arabic">الدعم الفني</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                  <h4 className="font-medium text-foreground dark:text-white font-arabic">الدعم الفني</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                     التواصل مع فريق الدعم الفني للمساعدة
                   </p>
                 </div>
@@ -421,34 +421,34 @@ const UserGuide = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-3 font-arabic">
             <div className="p-2 bg-yellow-100 dark:bg-yellow-900/50 rounded-lg">
-              <Lightbulb className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+              <Lightbulb className="w-5 h-5 text-warning dark:text-yellow-400" />
             </div>
             نصائح سريعة
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg">
+            <div className="theme-transition-colors bg-card dark:bg-gray-700 p-4 rounded-lg">
               <h4 className="font-medium mb-2 font-arabic">💡 نصيحة البرامج</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                 تأكد من أن ملفات PDF لا تتجاوز 10 ميجابايت وأن المحتوى واضح ومقروء
               </p>
             </div>
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg">
+            <div className="theme-transition-colors bg-card dark:bg-gray-700 p-4 rounded-lg">
               <h4 className="font-medium mb-2 font-arabic">📝 نصيحة التنظيم</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                 نظم البرامج حسب التخصصات والفروع لتسهيل عملية البحث والتنظيم
               </p>
             </div>
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg">
+            <div className="theme-transition-colors bg-card dark:bg-gray-700 p-4 rounded-lg">
               <h4 className="font-medium mb-2 font-arabic">⏰ نصيحة المتابعة</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                 تابع حالة البرامج بانتظام وتواصل مع الإدارة الوطنية في حالة التأخير
               </p>
             </div>
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg">
+            <div className="theme-transition-colors bg-card dark:bg-gray-700 p-4 rounded-lg">
               <h4 className="font-medium mb-2 font-arabic">🔄 نصيحة التحديث</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                 يمكن إعادة رفع البرنامج في حالة الرفض مع مراعاة ملاحظات المراجع
               </p>
             </div>
@@ -467,22 +467,22 @@ const UserGuide = () => {
         <CardContent className="p-6">
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-4">
-              <h4 className="font-medium text-gray-900 dark:text-white font-arabic">الدعم التقني</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+              <h4 className="font-medium text-foreground dark:text-white font-arabic">الدعم التقني</h4>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                 للاستفسارات التقنية أو المشاكل في النظام، يرجى التواصل مع فريق الدعم التقني
               </p>
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-blue-600">
+                <div className="flex items-center gap-2 text-sm text-primary">
                   <Mail className="w-4 h-4" />
                   <span className="font-arabic">البريد الإلكتروني:</span>
                   <span>support@formation.gov.dz</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-green-600">
+                <div className="flex items-center gap-2 text-sm text-success">
                   <Phone className="w-4 h-4" />
                   <span className="font-arabic">الهاتف:</span>
                   <span>+213 21 71 23 45</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-purple-600">
+                <div className="flex items-center gap-2 text-sm text-secondary">
                   <MapPin className="w-4 h-4" />
                   <span className="font-arabic">العنوان:</span>
                   <span>وزارة التكوين والتعليم المهنيين</span>
@@ -490,20 +490,20 @@ const UserGuide = () => {
               </div>
             </div>
             <div className="space-y-4">
-              <h4 className="font-medium text-gray-900 dark:text-white font-arabic">الموارد الإضافية</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+              <h4 className="font-medium text-foreground dark:text-white font-arabic">الموارد الإضافية</h4>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                 يمكنك الوصول إلى موارد إضافية لمساعدتك في استخدام النظام
               </p>
               <div className="space-y-2">
-                <Button variant="link" className="p-0 h-auto text-blue-600 font-arabic flex items-center gap-2">
+                <Button variant="link" className="p-0 h-auto text-primary font-arabic flex items-center gap-2">
                   <BookOpenIcon className="w-4 h-4" />
                   دليل النظام الإلكتروني →
                 </Button>
-                <Button variant="link" className="p-0 h-auto text-green-600 font-arabic flex items-center gap-2">
+                <Button variant="link" className="p-0 h-auto text-success font-arabic flex items-center gap-2">
                   <Video className="w-4 h-4" />
                   فيديوهات تعليمية →
                 </Button>
-                <Button variant="link" className="p-0 h-auto text-purple-600 font-arabic flex items-center gap-2">
+                <Button variant="link" className="p-0 h-auto text-secondary font-arabic flex items-center gap-2">
                   <Headphones className="w-4 h-4" />
                   دعم صوتي →
                 </Button>
@@ -517,7 +517,7 @@ const UserGuide = () => {
       <Card className="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20">
         <CardContent className="p-6 text-center">
           <h3 className="text-lg font-semibold mb-4 font-arabic">هل تحتاج إلى مساعدة إضافية؟</h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-4 font-arabic">
+          <p className="text-muted-foreground dark:text-muted-foreground mb-4 font-arabic">
             لا تتردد في التواصل مع فريق الدعم التقني أو إدارة المؤسسة
           </p>
           <div className="flex gap-3 justify-center">

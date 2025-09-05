@@ -15,7 +15,7 @@ const Index = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="theme-transition-colors min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-muted-foreground">جارٍ التحميل...</p>
@@ -29,7 +29,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="theme-transition-colors min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-6">
         <div>
           <h1 className="text-4xl font-bold mb-4">نظام إدارة التدريب</h1>

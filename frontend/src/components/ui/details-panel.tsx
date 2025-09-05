@@ -25,12 +25,12 @@ const DetailsPanel: React.FC<DetailsPanelProps> = ({ selectedNode, className }) 
       <Card className={className}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 font-arabic">
-            <FileText className="w-5 h-5 text-gray-500" />
+            <FileText className="w-5 h-5 text-muted-foreground" />
             Aucun élément sélectionné
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-500 dark:text-gray-400 font-arabic text-center py-8">
+          <p className="text-muted-foreground dark:text-muted-foreground font-arabic text-center py-8">
             Sélectionnez un élément dans l'arborescence pour voir ses détails
           </p>
         </CardContent>
@@ -47,7 +47,7 @@ const DetailsPanel: React.FC<DetailsPanelProps> = ({ selectedNode, className }) 
       case 'module':
         return <BookOpen className="w-6 h-6 text-amber-600" />;
       default:
-        return <FileText className="w-6 h-6 text-gray-600" />;
+        return <FileText className="w-6 h-6 text-muted-foreground" />;
     }
   };
 
@@ -73,7 +73,7 @@ const DetailsPanel: React.FC<DetailsPanelProps> = ({ selectedNode, className }) 
       case 'module':
         return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300';
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300';
+        return 'bg-muted text-foreground dark:bg-gray-900/30 dark:text-gray-300';
     }
   };
 
@@ -103,18 +103,18 @@ const DetailsPanel: React.FC<DetailsPanelProps> = ({ selectedNode, className }) 
       <CardContent className="space-y-4">
         {/* Informations de base */}
         <div className="space-y-3">
-          <h4 className="font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2">
+          <h4 className="font-semibold text-foreground dark:text-white font-arabic border-b pb-2">
             المعلومات الأساسية
           </h4>
           
           <div className="grid gap-3">
             {selectedNode.labelFr && (
               <div className="flex items-center gap-2">
-                <FileText className="w-4 h-4 text-gray-500" />
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">
+                <FileText className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">
                   الاسم بالفرنسية:
                 </span>
-                <span className="text-sm text-gray-900 dark:text-white">
+                <span className="text-sm text-foreground dark:text-white">
                   {selectedNode.labelFr}
                 </span>
               </div>
@@ -122,22 +122,22 @@ const DetailsPanel: React.FC<DetailsPanelProps> = ({ selectedNode, className }) 
             
             {selectedNode.code && (
               <div className="flex items-center gap-2">
-                <Code className="w-4 h-4 text-gray-500" />
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">
+                <Code className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">
                   الكود:
                 </span>
-                <span className="text-sm text-gray-900 dark:text-white font-mono bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                <span className="text-sm text-foreground dark:text-white font-mono bg-muted dark:bg-gray-800 px-2 py-1 rounded">
                   {selectedNode.code}
                 </span>
               </div>
             )}
             
             <div className="flex items-center gap-2">
-              <Hash className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-400 font-arabic">
+              <Hash className="w-4 h-4 text-muted-foreground" />
+              <span className="text-sm font-medium text-muted-foreground dark:text-muted-foreground font-arabic">
                 المعرف:
               </span>
-              <span className="text-sm text-gray-900 dark:text-white font-mono bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+              <span className="text-sm text-foreground dark:text-white font-mono bg-muted dark:bg-gray-800 px-2 py-1 rounded">
                 {selectedNode.id}
               </span>
             </div>
@@ -147,16 +147,16 @@ const DetailsPanel: React.FC<DetailsPanelProps> = ({ selectedNode, className }) 
         {/* Statistiques */}
         {selectedNode.children && selectedNode.children.length > 0 && (
           <div className="space-y-3">
-            <h4 className="font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2">
+            <h4 className="font-semibold text-foreground dark:text-white font-arabic border-b pb-2">
               المحتويات
             </h4>
             
             <div className="grid gap-2">
               {selectedNode.children.map((child) => (
-                <div key={child.id} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                <div key={child.id} className="theme-transition-colors flex items-center justify-between p-2 bg-background-secondary dark:bg-gray-800 rounded">
                   <div className="flex items-center gap-2">
                     {getTypeIcon(child.type)}
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                    <span className="text-sm font-medium text-foreground dark:text-white">
                       {child.labelAr || child.label}
                     </span>
                   </div>
@@ -173,15 +173,15 @@ const DetailsPanel: React.FC<DetailsPanelProps> = ({ selectedNode, className }) 
 
         {/* Actions */}
         <div className="space-y-3">
-          <h4 className="font-semibold text-gray-900 dark:text-white font-arabic border-b pb-2">
+          <h4 className="font-semibold text-foreground dark:text-white font-arabic border-b pb-2">
             الإجراءات
           </h4>
           
           <div className="flex gap-2">
-            <button className="px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors font-arabic">
+            <button className="theme-transition-colors px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors font-arabic">
               عرض التفاصيل
             </button>
-            <button className="px-3 py-2 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors font-arabic">
+            <button className="theme-transition-colors px-3 py-2 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors font-arabic">
               تعديل
             </button>
           </div>

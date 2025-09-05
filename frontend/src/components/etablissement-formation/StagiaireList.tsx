@@ -106,7 +106,7 @@ const StagiaireList: React.FC = () => {
       );
     } else {
       return (
-        <Badge className="bg-gray-100 text-gray-600">
+        <Badge className="bg-muted text-muted-foreground">
           <Key className="h-3 w-3 mr-1" />
           Pas de compte
         </Badge>
@@ -210,7 +210,7 @@ const StagiaireList: React.FC = () => {
           <div className="flex-1">
             <Label htmlFor="search">Rechercher</Label>
             <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 id="search"
                 placeholder="Rechercher par nom, prénom, email ou téléphone..."
@@ -225,7 +225,7 @@ const StagiaireList: React.FC = () => {
             <Label htmlFor="filter-account">Filtrer par compte</Label>
             <select
               id="filter-account"
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="w-full p-2 border border-border-medium rounded-md"
               value={filterHasAccount}
               onChange={(e) => setFilterHasAccount(e.target.value)}
             >
@@ -239,7 +239,7 @@ const StagiaireList: React.FC = () => {
             <Label htmlFor="sort-by">Trier par</Label>
             <select
               id="sort-by"
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="w-full p-2 border border-border-medium rounded-md"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
             >
@@ -254,7 +254,7 @@ const StagiaireList: React.FC = () => {
             <Label htmlFor="sort-order">Ordre</Label>
             <select
               id="sort-order"
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="w-full p-2 border border-border-medium rounded-md"
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
             >
@@ -273,40 +273,40 @@ const StagiaireList: React.FC = () => {
 
         {/* Tableau des stagiaires */}
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300">
+          <table className="w-full border-collapse border border-border-medium">
             <thead>
-              <tr className="bg-gray-50">
-                <th className="border border-gray-300 px-4 py-2 text-left">Informations</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Contact</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Compte</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Actions</th>
+              <tr className="bg-background-secondary">
+                <th className="border border-border-medium px-4 py-2 text-left">Informations</th>
+                <th className="border border-border-medium px-4 py-2 text-left">Contact</th>
+                <th className="border border-border-medium px-4 py-2 text-left">Compte</th>
+                <th className="border border-border-medium px-4 py-2 text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredAndSortedStagiaires.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="border border-gray-300 px-4 py-2 text-center text-gray-500">
+                  <td colSpan={4} className="border border-border-medium px-4 py-2 text-center text-muted-foreground">
                     {loading ? 'Chargement...' : 'Aucun stagiaire trouvé'}
                   </td>
                 </tr>
               ) : (
                 filteredAndSortedStagiaires.map((stagiaire) => (
-                  <tr key={stagiaire.id_stagiaire} className="hover:bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-2">
+                  <tr key={stagiaire.id_stagiaire} className="hover:bg-background-secondary">
+                    <td className="border border-border-medium px-4 py-2">
                       <div className="space-y-1">
                         <div className="font-medium text-lg">
                           {stagiaire.nom_fr} {stagiaire.prenom_fr}
                         </div>
                         {(stagiaire.nom_ar || stagiaire.prenom_ar) && (
-                          <div className="text-sm text-gray-600" dir="rtl">
+                          <div className="text-sm text-muted-foreground" dir="rtl">
                             {stagiaire.nom_ar} {stagiaire.prenom_ar}
                           </div>
                         )}
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-muted-foreground">
                           ID: {stagiaire.id_stagiaire}
                         </div>
                         {stagiaire.date_naissance && (
-                          <div className="flex items-center text-xs text-gray-500">
+                          <div className="flex items-center text-xs text-muted-foreground">
                             <Calendar className="h-3 w-3 mr-1" />
                             {formatDate(stagiaire.date_naissance)}
                           </div>
@@ -314,33 +314,33 @@ const StagiaireList: React.FC = () => {
                       </div>
                     </td>
                     
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-border-medium px-4 py-2">
                       <div className="space-y-2">
                         {stagiaire.email && (
                           <div className="flex items-center text-sm">
-                            <Mail className="h-3 w-3 mr-2 text-gray-400" />
+                            <Mail className="h-3 w-3 mr-2 text-muted-foreground" />
                             {stagiaire.email}
                           </div>
                         )}
                         {stagiaire.telephone && (
                           <div className="flex items-center text-sm">
-                            <Phone className="h-3 w-3 mr-2 text-gray-400" />
+                            <Phone className="h-3 w-3 mr-2 text-muted-foreground" />
                             {stagiaire.telephone}
                           </div>
                         )}
                         {!stagiaire.email && !stagiaire.telephone && (
-                          <div className="text-xs text-gray-400">
+                          <div className="text-xs text-muted-foreground">
                             Aucun contact
                           </div>
                         )}
                       </div>
                     </td>
                     
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-border-medium px-4 py-2">
                       <div className="space-y-2">
                         {getAccountStatus(stagiaire)}
                         {stagiaire.Compte && (
-                          <div className="text-xs text-gray-600">
+                          <div className="text-xs text-muted-foreground">
                             <div>Username: {stagiaire.Compte.username}</div>
                             <div>Créé le: {formatDate(stagiaire.Compte.createdAt)}</div>
                           </div>
@@ -348,7 +348,7 @@ const StagiaireList: React.FC = () => {
                       </div>
                     </td>
                     
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-border-medium px-4 py-2">
                       <div className="flex space-x-1">
                         <Button variant="ghost" size="sm" title="Voir les détails">
                           <Eye className="h-4 w-4" />
@@ -360,7 +360,7 @@ const StagiaireList: React.FC = () => {
                             size="sm"
                             onClick={() => handleCreateAccount(stagiaire.id_stagiaire)}
                             title="Créer un compte"
-                            className="text-blue-600 hover:text-blue-800"
+                            className="text-primary hover:text-blue-800"
                           >
                             <Key className="h-4 w-4" />
                           </Button>
@@ -380,29 +380,29 @@ const StagiaireList: React.FC = () => {
 
         {/* Statistiques */}
         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center p-3 bg-blue-50 rounded-lg">
-            <div className="text-2xl font-bold text-blue-600">
+          <div className="theme-transition-colors text-center p-3 bg-background-secondary rounded-lg">
+            <div className="text-2xl font-bold text-primary">
               {stagiaires.length}
             </div>
-            <div className="text-sm text-blue-600">Total stagiaires</div>
+            <div className="text-sm text-primary">Total stagiaires</div>
           </div>
           <div className="text-center p-3 bg-green-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {stagiaires.filter(s => s.Compte).length}
             </div>
-            <div className="text-sm text-green-600">Avec compte</div>
+            <div className="text-sm text-success">Avec compte</div>
           </div>
           <div className="text-center p-3 bg-yellow-50 rounded-lg">
-            <div className="text-2xl font-bold text-yellow-600">
+            <div className="text-2xl font-bold text-warning">
               {stagiaires.filter(s => !s.Compte).length}
             </div>
-            <div className="text-sm text-yellow-600">Sans compte</div>
+            <div className="text-sm text-warning">Sans compte</div>
           </div>
           <div className="text-center p-3 bg-purple-50 rounded-lg">
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-2xl font-bold text-secondary">
               {stagiaires.filter(s => s.email).length}
             </div>
-            <div className="text-sm text-purple-600">Avec email</div>
+            <div className="text-sm text-secondary">Avec email</div>
           </div>
         </div>
       </CardContent>

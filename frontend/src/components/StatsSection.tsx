@@ -32,8 +32,9 @@ const StatsSection: React.FC<StatsSectionProps> = ({ stats }) => {
            </p>
         </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {stats.map((stat, index) => (
+        {/* Première ligne - 3 statistiques */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          {stats.slice(0, 3).map((stat, index) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 30 }}
@@ -85,6 +86,72 @@ const StatsSection: React.FC<StatsSectionProps> = ({ stats }) => {
                       value={stat.value} 
                       suffix={stat.suffix}
                       duration={2000 + index * 500}
+                    />
+                  </div>
+                  <div className="text-gray-600 text-lg font-medium">{stat.label}</div>
+                </div>
+                
+                {/* Hover Effect Glow */}
+                <div className={`absolute inset-0 ${stat.color} rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        
+        {/* Deuxième ligne - 3 statistiques */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {stats.slice(3, 6).map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: (index + 3) * 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ 
+                y: -10,
+                transition: { duration: 0.3 }
+              }}
+              className="relative group"
+            >
+              {/* Floating Background Elements */}
+              <motion.div
+                animate={{
+                  y: [0, -10, 0],
+                  rotate: [0, 5, 0]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  delay: (index + 3) * 0.5
+                }}
+                className={`absolute -top-4 -right-4 w-8 h-8 ${stat.color} rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300`}
+              />
+              
+              <motion.div
+                animate={{
+                  y: [0, 10, 0],
+                  rotate: [0, -5, 0]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  delay: (index + 3) * 0.5 + 2
+                }}
+                className={`absolute -bottom-4 -left-4 w-6 h-6 ${stat.color} rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300`}
+              />
+              
+              {/* Main Card */}
+              <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300">
+                <div className={`w-20 h-20 ${stat.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <stat.icon className="w-10 h-10 text-white" />
+                </div>
+                
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-gray-900 mb-2">
+                    <AnimatedCounter 
+                      value={stat.value} 
+                      suffix={stat.suffix}
+                      duration={2000 + (index + 3) * 500}
                     />
                   </div>
                   <div className="text-gray-600 text-lg font-medium">{stat.label}</div>

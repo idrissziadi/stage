@@ -176,22 +176,22 @@ const NotificationCenter = () => {
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'course_approved':
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
+        return <CheckCircle className="w-5 h-5 text-success" />;
       case 'course_rejected':
-        return <XCircle className="w-5 h-5 text-red-600" />;
+        return <XCircle className="w-5 h-5 text-error" />;
       case 'memoire_submitted':
-        return <FileText className="w-5 h-5 text-blue-600" />;
+        return <FileText className="w-5 h-5 text-primary" />;
       case 'system':
-        return <Settings className="w-5 h-5 text-purple-600" />;
+        return <Settings className="w-5 h-5 text-secondary" />;
       case 'reminder':
         return <Clock className="w-5 h-5 text-orange-600" />;
       default:
-        return <Bell className="w-5 h-5 text-gray-600" />;
+        return <Bell className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
   const getNotificationColor = (type: string, read: boolean) => {
-    const baseColor = read ? 'border-gray-200 bg-gray-50' : 'border-blue-200 bg-blue-50';
+    const baseColor = read ? 'border-border bg-background-secondary' : 'border-blue-200 bg-background-secondary';
     
     switch (type) {
       case 'course_approved':
@@ -199,7 +199,7 @@ const NotificationCenter = () => {
       case 'course_rejected':
         return read ? 'border-red-200 bg-red-50' : 'border-red-300 bg-red-100';
       case 'memoire_submitted':
-        return read ? 'border-blue-200 bg-blue-50' : 'border-blue-300 bg-blue-100';
+        return read ? 'border-blue-200 bg-background-secondary' : 'border-blue-300 bg-blue-100';
       default:
         return baseColor;
     }
@@ -222,7 +222,7 @@ const NotificationCenter = () => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">جارٍ تحميل الإشعارات...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground">جارٍ تحميل الإشعارات...</p>
       </div>
     );
   }
@@ -234,10 +234,10 @@ const NotificationCenter = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Bell className="w-6 h-6 text-blue-600" />
+              <Bell className="w-6 h-6 text-primary" />
               <div>
                 <CardTitle>مركز الإشعارات</CardTitle>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   {unreadCount > 0 ? `لديك ${unreadCount} إشعار غير مقروء` : 'جميع الإشعارات مقروءة'}
                 </p>
               </div>
@@ -293,9 +293,9 @@ const NotificationCenter = () => {
         <CardContent className="p-0">
           {filteredNotifications.length === 0 ? (
             <div className="text-center py-12">
-              <Bell className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">لا توجد إشعارات</h3>
-              <p className="text-gray-600">
+              <Bell className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2">لا توجد إشعارات</h3>
+              <p className="text-muted-foreground">
                 {filter === 'unread' ? 'جميع الإشعارات مقروءة' : 'لا توجد إشعارات حالياً'}
               </p>
             </div>
@@ -304,7 +304,7 @@ const NotificationCenter = () => {
               {filteredNotifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`p-4 transition-colors hover:bg-gray-50 ${getNotificationColor(notification.type, notification.read)}`}
+                  className={`p-4 transition-colors hover:bg-background-secondary ${getNotificationColor(notification.type, notification.read)}`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3 flex-1">
@@ -314,7 +314,7 @@ const NotificationCenter = () => {
                       
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h4 className={`font-medium ${notification.read ? 'text-gray-700' : 'text-gray-900'}`}>
+                          <h4 className={`font-medium ${notification.read ? 'text-foreground' : 'text-foreground'}`}>
                             {notification.title}
                           </h4>
                           {!notification.read && (
@@ -322,13 +322,13 @@ const NotificationCenter = () => {
                           )}
                         </div>
                         
-                        <p className={`text-sm ${notification.read ? 'text-gray-500' : 'text-gray-700'}`}>
+                        <p className={`text-sm ${notification.read ? 'text-muted-foreground' : 'text-foreground'}`}>
                           {notification.message}
                         </p>
                         
                         <div className="flex items-center gap-2 mt-2">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          <span className="text-xs text-gray-500">
+                          <Calendar className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground">
                             {formatDate(notification.created_at)}
                           </span>
                         </div>
@@ -377,7 +377,7 @@ const NotificationCenter = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">إشعارات اعتماد الدروس</p>
-                <p className="text-sm text-gray-600">تلقي إشعار عند اعتماد أو رفض دروسك</p>
+                <p className="text-sm text-muted-foreground">تلقي إشعار عند اعتماد أو رفض دروسك</p>
               </div>
               <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
                 مفعل
@@ -387,7 +387,7 @@ const NotificationCenter = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">إشعارات المذكرات الجديدة</p>
-                <p className="text-sm text-gray-600">تلقي إشعار عند تقديم مذكرات جديدة للمراجعة</p>
+                <p className="text-sm text-muted-foreground">تلقي إشعار عند تقديم مذكرات جديدة للمراجعة</p>
               </div>
               <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
                 مفعل
@@ -397,7 +397,7 @@ const NotificationCenter = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">إشعارات التذكير</p>
-                <p className="text-sm text-gray-600">تلقي تذكيرات حول المواعيد النهائية والمهام</p>
+                <p className="text-sm text-muted-foreground">تلقي تذكيرات حول المواعيد النهائية والمهام</p>
               </div>
               <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
                 مفعل

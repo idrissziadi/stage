@@ -47,20 +47,20 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
     switch (node.type) {
       case 'branch':
         return isExpanded ? (
-          <FolderOpen className="w-5 h-5 text-blue-600" />
+          <FolderOpen className="w-5 h-5 text-primary" />
         ) : (
-          <Folder className="w-5 h-5 text-blue-600" />
+          <Folder className="w-5 h-5 text-primary" />
         );
       case 'speciality':
         return isExpanded ? (
-          <FolderOpen className="w-5 h-5 text-green-600" />
+          <FolderOpen className="w-5 h-5 text-success" />
         ) : (
-          <Folder className="w-5 h-5 text-green-600" />
+          <Folder className="w-5 h-5 text-success" />
         );
       case 'module':
         return <FileText className="w-5 h-5 text-orange-600" />;
       default:
-        return <Folder className="w-5 h-5 text-gray-600" />;
+        return <Folder className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -78,7 +78,7 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
       case 'branch': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'speciality': return 'bg-green-100 text-green-800 border-green-200';
       case 'module': return 'bg-orange-100 text-orange-800 border-orange-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      default: return 'bg-muted text-foreground border-border';
     }
   };
 
@@ -93,7 +93,7 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
           className={cn(
             'group relative p-3 rounded-lg border transition-all duration-200',
             'hover:shadow-md cursor-pointer',
-            selected ? 'ring-2 ring-blue-500 bg-blue-50' : 'bg-white hover:bg-gray-50',
+            selected ? 'ring-2 ring-blue-500 bg-background-secondary' : 'bg-card hover:bg-background-secondary',
             level > 0 && 'ml-6'
           )}
           onClick={() => {
@@ -113,12 +113,12 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
                     e.stopPropagation();
                     toggleNode(node.id);
                   }}
-                  className="p-1 hover:bg-gray-200 rounded transition-colors"
+                  className="p-1 hover:bg-muted-secondary rounded transition-colors"
                 >
                   {expanded ? (
-                    <ChevronDown className="w-4 h-4 text-gray-600" />
+                    <ChevronDown className="w-4 h-4 text-muted-foreground" />
                   ) : (
-                    <ChevronRight className="w-4 h-4 text-gray-600" />
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   )}
                 </button>
               ) : (
@@ -130,7 +130,7 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
             {/* Informations principales */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <h4 className="font-semibold text-gray-900 truncate">
+                <h4 className="font-semibold text-foreground truncate">
                   {node.labelAr || node.label}
                 </h4>
                 <Badge variant="secondary" className={cn('text-xs', getTypeColor(node.type))}>
@@ -139,13 +139,13 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
               </div>
               
               {node.labelFr && (
-                <p className="text-sm text-gray-600 truncate">
+                <p className="text-sm text-muted-foreground truncate">
                   {node.labelFr}
                 </p>
               )}
               
               {node.code && (
-                <p className="text-xs text-gray-500 font-mono">
+                <p className="text-xs text-muted-foreground font-mono">
                   الكود: {node.code}
                 </p>
               )}
@@ -180,7 +180,7 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
           {/* Description ou informations supplémentaires */}
           {node.type === 'branch' && (
             <div className="mt-2 pt-2 border-t border-gray-100">
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {hasChildren ? `${node.children?.length} تخصص متاح` : 'لا توجد تخصصات'}
               </p>
             </div>
@@ -188,7 +188,7 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
           
           {node.type === 'speciality' && (
             <div className="mt-2 pt-2 border-t border-gray-100">
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {hasChildren ? `${node.children?.length} مادة متاحة` : 'لا توجد مواد'}
               </p>
             </div>
@@ -208,7 +208,7 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
   return (
     <div className={cn('w-full space-y-3', className)}>
       {data.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-muted-foreground">
           <Folder className="w-12 h-12 mx-auto mb-3 text-gray-300" />
           <p className="font-arabic">لا توجد بيانات متاحة</p>
         </div>

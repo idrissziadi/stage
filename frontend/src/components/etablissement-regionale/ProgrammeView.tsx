@@ -150,7 +150,7 @@ const ProgrammeView = () => {
       case 'في_الانتظار':
         return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+        return 'bg-muted text-foreground dark:bg-gray-900 dark:text-gray-200';
     }
   };
 
@@ -228,7 +228,7 @@ const ProgrammeView = () => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">جارٍ تحميل البرامج...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground">جارٍ تحميل البرامج...</p>
       </div>
     );
   }
@@ -242,11 +242,11 @@ const ProgrammeView = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
             <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
-              <GraduationCap className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              <GraduationCap className="w-6 h-6 text-secondary dark:text-purple-400" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white font-arabic">البرامج التعليمية</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+              <h2 className="text-xl font-bold text-foreground dark:text-white font-arabic">البرامج التعليمية</h2>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                 استعرض وإدارة البرامج التعليمية في مؤسستك الإقليمية
               </p>
             </div>
@@ -257,28 +257,28 @@ const ProgrammeView = () => {
             <div className="flex items-center gap-3">
               <GraduationCap className="w-8 h-8 text-purple-500" />
               <div>
-                <p className="text-sm font-medium text-gray-600 font-arabic">إجمالي البرامج</p>
+                <p className="text-sm font-medium text-muted-foreground font-arabic">إجمالي البرامج</p>
                 <p className="text-2xl font-bold text-purple-700">{stats.totalProgrammes}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <CheckCircle className="w-8 h-8 text-green-500" />
               <div>
-                <p className="text-sm font-medium text-gray-600 font-arabic">البرامج المقبولة</p>
+                <p className="text-sm font-medium text-muted-foreground font-arabic">البرامج المقبولة</p>
                 <p className="text-2xl font-bold text-green-700">{stats.acceptedProgrammes}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Clock className="w-8 h-8 text-yellow-500" />
               <div>
-                <p className="text-sm font-medium text-gray-600 font-arabic">في الانتظار</p>
+                <p className="text-sm font-medium text-muted-foreground font-arabic">في الانتظار</p>
                 <p className="text-2xl font-bold text-yellow-700">{stats.pendingProgrammes}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <BookOpen className="w-8 h-8 text-blue-500" />
               <div>
-                <p className="text-sm font-medium text-gray-600 font-arabic">المواد</p>
+                <p className="text-sm font-medium text-muted-foreground font-arabic">المواد</p>
                 <p className="text-2xl font-bold text-blue-700">{stats.uniqueModules}</p>
               </div>
             </div>
@@ -291,7 +291,7 @@ const ProgrammeView = () => {
         <CardContent className="p-4">
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
             <div className="relative flex-1">
-              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
               <Input
                 placeholder="ابحث في البرامج..."
                 value={searchTerm}
@@ -377,9 +377,9 @@ const ProgrammeView = () => {
         <CardContent>
           {filteredProgrammes.length === 0 ? (
             <div className="text-center py-12">
-              <GraduationCap className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">لا توجد برامج</h3>
-              <p className="text-gray-600">
+              <GraduationCap className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2">لا توجد برامج</h3>
+              <p className="text-muted-foreground">
                 {searchTerm || statusFilter !== 'all' || moduleFilter !== 'all' || specialiteFilter !== 'all' || brancheFilter !== 'all'
                   ? 'لا توجد برامج تطابق معايير البحث'
                   : 'لم يتم إنشاء أي برامج بعد'
@@ -391,11 +391,11 @@ const ProgrammeView = () => {
               {filteredProgrammes.map((programme) => {
                 const programmeInfo = getModuleSpecialiteBranche(programme);
                 return (
-                  <div key={programme.id_programme} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div key={programme.id_programme} className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-semibold text-gray-900">
+                          <h3 className="font-semibold text-foreground">
                             {programme.titre_ar || programme.titre_fr || 'بدون عنوان'}
                           </h3>
                           <Badge className={getStatusColor(programme.status)}>
@@ -404,7 +404,7 @@ const ProgrammeView = () => {
                           </Badge>
                         </div>
                         
-                        <div className="space-y-1 text-sm text-gray-600">
+                        <div className="space-y-1 text-sm text-muted-foreground">
                           <p><span className="font-medium">كود البرنامج:</span> {programme.code_programme}</p>
                           
                           {programmeInfo && (
@@ -425,7 +425,7 @@ const ProgrammeView = () => {
                         </div>
                         
                         {programme.description && (
-                          <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-400">
+                          <div className="theme-transition-colors mt-3 p-3 bg-background-secondary dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-400">
                             <p className="text-sm text-blue-800 dark:text-blue-200 font-arabic leading-relaxed">
                               {programme.description}
                             </p>
@@ -438,7 +438,7 @@ const ProgrammeView = () => {
                           size="sm" 
                           variant="outline"
                           title="عرض التفاصيل"
-                          className="text-blue-600 hover:text-blue-700"
+                          className="text-primary hover:text-blue-700"
                         >
                           <Eye className="w-4 h-4" />
                         </Button>
@@ -447,7 +447,7 @@ const ProgrammeView = () => {
                           size="sm" 
                           variant="outline"
                           title="تحميل"
-                          className="text-green-600 hover:text-green-700"
+                          className="text-success hover:text-green-700"
                         >
                           <Download className="w-4 h-4" />
                         </Button>

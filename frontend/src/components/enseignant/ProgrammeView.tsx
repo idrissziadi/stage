@@ -344,7 +344,7 @@ const ProgrammeView = () => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">جارٍ تحميل البرامج...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground">جارٍ تحميل البرامج...</p>
       </div>
     );
   }
@@ -356,11 +356,11 @@ const ProgrammeView = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
             <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-              <BookOpen className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <BookOpen className="w-6 h-6 text-primary dark:text-blue-400" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white font-arabic">برامج المواد</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+              <h2 className="text-xl font-bold text-foreground dark:text-white font-arabic">برامج المواد</h2>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                 استعرض البرامج التعليمية المعتمدة من المؤسسات الجهوية
               </p>
             </div>
@@ -371,21 +371,21 @@ const ProgrammeView = () => {
             <div className="flex items-center gap-3">
               <BookOpen className="w-8 h-8 text-blue-500" />
               <div>
-                <p className="text-sm font-medium text-gray-600 font-arabic">المواد المشتركة</p>
+                <p className="text-sm font-medium text-muted-foreground font-arabic">المواد المشتركة</p>
                 <p className="text-2xl font-bold text-blue-700">{modules.length}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <FileText className="w-8 h-8 text-green-500" />
               <div>
-                <p className="text-sm font-medium text-gray-600 font-arabic">البرامج المتاحة</p>
+                <p className="text-sm font-medium text-muted-foreground font-arabic">البرامج المتاحة</p>
                 <p className="text-2xl font-bold text-green-700">{programmes.length}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Building className="w-8 h-8 text-purple-500" />
               <div>
-                <p className="text-sm font-medium text-gray-600 font-arabic">المؤسسات المشاركة</p>
+                <p className="text-sm font-medium text-muted-foreground font-arabic">المؤسسات المشاركة</p>
                 <p className="text-2xl font-bold text-purple-700">
                   {[...new Set(programmes.map(programme => 
                     programme.etablissementRegionale?.nom_fr || 'غير محدد'
@@ -405,17 +405,17 @@ const ProgrammeView = () => {
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {specialiteStats.map((stat) => (
-              <div key={stat.specialite.id_specialite} className="border border-gray-200 rounded-lg p-4">
+              <div key={stat.specialite.id_specialite} className="border border-border rounded-lg p-4">
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 font-arabic">
+                    <h3 className="font-semibold text-foreground font-arabic">
                       {stat.specialite.designation_ar || stat.specialite.designation_fr}
                     </h3>
-                    <p className="text-sm text-gray-600">({stat.specialite.code_specialite})</p>
+                    <p className="text-sm text-muted-foreground">({stat.specialite.code_specialite})</p>
                   </div>
                   <Badge variant="secondary">{stat.programmeCount} برامج</Badge>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Building className="w-4 h-4" />
                   <span className="font-arabic">{stat.etablissements} مؤسسة مشاركة</span>
                 </div>
@@ -430,18 +430,18 @@ const ProgrammeView = () => {
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
             <div className="relative flex-1">
-              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
               <Input
                 placeholder="ابحث في البرامج التعليمية... 🔍"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pr-12 pl-4 py-3 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-right font-arabic focus:border-green-400 dark:focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition-all"
+                className="pr-12 pl-4 py-3 bg-card dark:bg-gray-700 border-2 border-border dark:border-gray-600 rounded-xl text-right font-arabic focus:border-green-400 dark:focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition-all"
                 dir="rtl"
               />
             </div>
             
             <Select value={moduleFilter} onValueChange={setModuleFilter}>
-              <SelectTrigger className="w-[200px] bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl">
+              <SelectTrigger className="w-[200px] bg-card dark:bg-gray-700 border-2 border-border dark:border-gray-600 rounded-xl">
                 <Filter className="w-4 h-4 mr-2" />
                 <SelectValue placeholder="تصفية حسب المادة" />
               </SelectTrigger>
@@ -456,7 +456,7 @@ const ProgrammeView = () => {
             </Select>
             
             <Select value={specialiteFilter} onValueChange={setSpecialiteFilter}>
-              <SelectTrigger className="w-[200px] bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl">
+              <SelectTrigger className="w-[200px] bg-card dark:bg-gray-700 border-2 border-border dark:border-gray-600 rounded-xl">
                 <Filter className="w-4 h-4 mr-2" />
                 <SelectValue placeholder="تصفية حسب التخصص" />
               </SelectTrigger>
@@ -470,7 +470,7 @@ const ProgrammeView = () => {
               </SelectContent>
             </Select>
             
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
               <Filter className="w-4 h-4" />
               <span className="font-arabic">البحث في العناوين، التخصصات، والمؤسسات</span>
             </div>
@@ -481,7 +481,7 @@ const ProgrammeView = () => {
       {/* Social Media Style Feed */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white font-arabic">
+          <h2 className="text-xl font-bold text-foreground dark:text-white font-arabic">
             البرامج التعليمية ({filteredProgrammes.length})
           </h2>
         </div>
@@ -489,9 +489,9 @@ const ProgrammeView = () => {
         {filteredProgrammes.length === 0 ? (
           <Card className="text-center py-12">
             <CardContent>
-              <BookOpen className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2 font-arabic">لا توجد برامج متاحة</h3>
-              <p className="text-gray-600 font-arabic">
+              <BookOpen className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2 font-arabic">لا توجد برامج متاحة</h3>
+              <p className="text-muted-foreground font-arabic">
                 {searchTerm || specialiteFilter !== 'all' 
                   ? 'لا توجد برامج تطابق معايير البحث'
                   : 'لا توجد برامج معتمدة متاحة في التخصصات التي تدرسها حالياً'
@@ -502,7 +502,7 @@ const ProgrammeView = () => {
         ) : (
           <div className="space-y-6">
             {filteredProgrammes.map((programme) => (
-              <Card key={programme.id_programme} className="bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700">
+              <Card key={programme.id_programme} className="bg-card dark:bg-gray-800 shadow-md hover:shadow-lg transition-all duration-300 border border-border dark:border-gray-700">
                 <CardContent className="p-0">
                   {/* Post Header - Facebook Style - EXACTEMENT comme les cours */}
                   <div className="p-4 border-b border-gray-100 dark:border-gray-700">
@@ -521,7 +521,7 @@ const ProgrammeView = () => {
                         {/* Programme Info - Style identique aux cours */}
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-gray-900 dark:text-white text-base">
+                            <h3 className="font-semibold text-foreground dark:text-white text-base">
                               {programme.enseignant ? 
                                 `${programme.enseignant.prenom_fr} ${programme.enseignant.nom_fr}` :
                                 (programme.etablissementRegionale?.nom_ar || programme.etablissementRegionale?.nom_fr || 'مؤسسة تعليمية')
@@ -531,7 +531,7 @@ const ProgrammeView = () => {
                               {programme.enseignant ? 'زميل' : 'مؤسسة تعليمية'}
                             </Badge>
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
                             <Clock className="w-4 h-4" />
                             <span className="font-arabic">{getTimeAgoSafe(programme.created_at)}</span>
                             <span className="mx-1">•</span>
@@ -544,7 +544,7 @@ const ProgrammeView = () => {
                       </div>
                       
                       {/* Post Options - Style identique aux cours */}
-                      <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">
+                      <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-muted-foreground">
                         <MoreHorizontal className="w-5 h-5" />
                       </Button>
                     </div>
@@ -554,13 +554,13 @@ const ProgrammeView = () => {
                   <div className="p-4">
                     {/* Programme Title - Style identique aux cours */}
                     <div className="mb-4">
-                      <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2 font-arabic leading-relaxed">
+                      <h2 className="text-lg font-bold text-foreground dark:text-white mb-2 font-arabic leading-relaxed">
                         {programme.titre_ar || programme.titre_fr || 'بدون عنوان'}
                       </h2>
                       
                       {/* French Title if different - Style identique aux cours */}
                       {programme.titre_fr && programme.titre_ar && programme.titre_fr !== programme.titre_ar && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 italic">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground italic">
                           {programme.titre_fr}
                         </p>
                       )}
@@ -568,8 +568,8 @@ const ProgrammeView = () => {
                     
                     {/* Programme Description/Observation - Style identique aux cours */}
                     {programme.observation && (
-                      <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-l-4 border-green-400">
-                        <p className="text-sm text-gray-700 dark:text-gray-300 font-arabic leading-relaxed">
+                      <div className="theme-transition-colors mb-4 p-3 bg-background-secondary dark:bg-gray-700 rounded-lg border-l-4 border-green-400">
+                        <p className="text-sm text-foreground dark:text-gray-300 font-arabic leading-relaxed">
                           {programme.observation}
                         </p>
                       </div>
@@ -579,11 +579,11 @@ const ProgrammeView = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 p-3 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg">
                       <div className="flex items-center gap-2 text-sm">
                         <div className="p-1 bg-blue-100 dark:bg-blue-800 rounded-full">
-                          <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                          <FileText className="w-4 h-4 text-primary dark:text-blue-400" />
                         </div>
                         <div>
-                          <span className="font-medium text-gray-600 dark:text-gray-400 font-arabic">كود البرنامج:</span>
-                          <p className="text-gray-900 dark:text-white font-medium">
+                          <span className="font-medium text-muted-foreground dark:text-muted-foreground font-arabic">كود البرنامج:</span>
+                          <p className="text-foreground dark:text-white font-medium">
                             {programme.code_programme}
                           </p>
                         </div>
@@ -592,11 +592,11 @@ const ProgrammeView = () => {
                       {programme.module && (
                         <div className="flex items-center gap-2 text-sm">
                           <div className="p-1 bg-purple-100 dark:bg-purple-800 rounded-full">
-                            <BookOpen className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                            <BookOpen className="w-4 h-4 text-secondary dark:text-purple-400" />
                           </div>
                           <div>
-                            <span className="font-medium text-gray-600 dark:text-gray-400 font-arabic">المادة:</span>
-                            <p className="text-gray-900 dark:text-white font-medium font-arabic">
+                            <span className="font-medium text-muted-foreground dark:text-muted-foreground font-arabic">المادة:</span>
+                            <p className="text-foreground dark:text-white font-medium font-arabic">
                               {programme.module.designation_ar || programme.module.designation_fr} ({programme.module.code_module})
                             </p>
                           </div>
@@ -606,11 +606,11 @@ const ProgrammeView = () => {
                       {programme.module?.specialite && (
                         <div className="flex items-center gap-2 text-sm">
                           <div className="p-1 bg-indigo-100 dark:bg-indigo-800 rounded-full">
-                            <GraduationCap className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                            <GraduationCap className="w-4 h-4 text-primary dark:text-indigo-400" />
                           </div>
                           <div>
-                            <span className="font-medium text-gray-600 dark:text-gray-400 font-arabic">التخصص:</span>
-                            <p className="text-gray-900 dark:text-white font-medium font-arabic">
+                            <span className="font-medium text-muted-foreground dark:text-muted-foreground font-arabic">التخصص:</span>
+                            <p className="text-foreground dark:text-white font-medium font-arabic">
                               {programme.module.specialite.designation_ar || programme.module.specialite.designation_fr} ({programme.module.specialite.code_specialite})
                             </p>
                           </div>
@@ -623,8 +623,8 @@ const ProgrammeView = () => {
                             <Building className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                           </div>
                           <div>
-                            <span className="font-medium text-gray-600 dark:text-gray-400 font-arabic">المؤسسة:</span>
-                            <p className="text-gray-900 dark:text-white font-medium font-arabic">
+                            <span className="font-medium text-muted-foreground dark:text-muted-foreground font-arabic">المؤسسة:</span>
+                            <p className="text-foreground dark:text-white font-medium font-arabic">
                               {programme.etablissementRegionale.nom_ar || programme.etablissementRegionale.nom_fr}
                             </p>
                           </div>
@@ -634,11 +634,11 @@ const ProgrammeView = () => {
                       {programme.enseignant && (
                         <div className="flex items-center gap-2 text-sm">
                           <div className="p-1 bg-blue-100 dark:bg-blue-800 rounded-full">
-                            <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                            <User className="w-4 h-4 text-primary dark:text-blue-400" />
                           </div>
                           <div>
-                            <span className="font-medium text-gray-600 dark:text-gray-400 font-arabic">الأستاذ المسؤول:</span>
-                            <p className="text-gray-900 dark:text-white font-medium font-arabic">
+                            <span className="font-medium text-muted-foreground dark:text-muted-foreground font-arabic">الأستاذ المسؤول:</span>
+                            <p className="text-foreground dark:text-white font-medium font-arabic">
                               {programme.enseignant.prenom_ar || programme.enseignant.prenom_fr} {programme.enseignant.nom_ar || programme.enseignant.nom_fr}
                             </p>
                           </div>
@@ -648,11 +648,11 @@ const ProgrammeView = () => {
                       {programme.duree && (
                         <div className="flex items-center gap-2 text-sm">
                           <div className="p-1 bg-green-100 dark:bg-green-800 rounded-full">
-                            <Calendar className="w-4 h-4 text-green-600 dark:text-green-400" />
+                            <Calendar className="w-4 h-4 text-success dark:text-green-400" />
                           </div>
                           <div>
-                            <span className="font-medium text-gray-600 dark:text-gray-400 font-arabic">المدة:</span>
-                            <p className="text-gray-900 dark:text-white font-medium font-arabic">
+                            <span className="font-medium text-muted-foreground dark:text-muted-foreground font-arabic">المدة:</span>
+                            <p className="text-foreground dark:text-white font-medium font-arabic">
                               {programme.duree}
                             </p>
                           </div>
@@ -661,11 +661,11 @@ const ProgrammeView = () => {
                       
                       <div className="flex items-center gap-2 text-sm">
                         <div className="p-1 bg-green-100 dark:bg-green-800 rounded-full">
-                          <Calendar className="w-4 h-4 text-green-600 dark:text-green-400" />
+                          <Calendar className="w-4 h-4 text-success dark:text-green-400" />
                         </div>
                         <div>
-                          <span className="font-medium text-gray-600 dark:text-gray-400 font-arabic">تاريخ الاعتماد:</span>
-                          <p className="text-gray-900 dark:text-white font-medium font-arabic">
+                          <span className="font-medium text-muted-foreground dark:text-muted-foreground font-arabic">تاريخ الاعتماد:</span>
+                          <p className="text-foreground dark:text-white font-medium font-arabic">
                             {formatApprovalDateSafe(programme)}
                           </p>
                         </div>
@@ -684,7 +684,7 @@ const ProgrammeView = () => {
                               variant="ghost" 
                               size="sm"
                               onClick={() => handleViewPDF(programme)}
-                              className="flex items-center gap-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-4 py-2 rounded-lg transition-colors"
+                              className="flex items-center gap-2 text-primary hover:bg-background-secondary dark:hover:bg-blue-900/20 px-4 py-2 rounded-lg transition-colors"
                             >
                               <Eye className="w-4 h-4" />
                               <span className="font-arabic text-sm">عرض</span>
@@ -694,7 +694,7 @@ const ProgrammeView = () => {
                               variant="ghost" 
                               size="sm"
                               onClick={() => handleDownloadPDF(programme)}
-                              className="flex items-center gap-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 px-4 py-2 rounded-lg transition-colors"
+                              className="flex items-center gap-2 text-success hover:bg-green-50 dark:hover:bg-green-900/20 px-4 py-2 rounded-lg transition-colors"
                             >
                               <Download className="w-4 h-4" />
                               <span className="font-arabic text-sm">تحميل</span>
@@ -705,7 +705,7 @@ const ProgrammeView = () => {
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          className="flex items-center gap-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 px-4 py-2 rounded-lg transition-colors"
+                          className="flex items-center gap-2 text-secondary hover:bg-purple-50 dark:hover:bg-purple-900/20 px-4 py-2 rounded-lg transition-colors"
                         >
                           <Share2 className="w-4 h-4" />
                           <span className="font-arabic text-sm">مشاركة</span>
@@ -713,7 +713,7 @@ const ProgrammeView = () => {
                       </div>
                       
                       {/* Reading Status - Style identique aux cours */}
-                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 px-3 py-1 rounded-full">
+                      <div className="theme-transition-colors flex items-center gap-2 text-xs text-muted-foreground dark:text-muted-foreground bg-background-secondary dark:bg-gray-700 px-3 py-1 rounded-full">
                         <BookOpen className="w-3 h-3" />
                         <span className="font-arabic">متاح للتعلم</span>
                       </div>
@@ -730,7 +730,7 @@ const ProgrammeView = () => {
       <Card className="bg-green-50 border-green-200">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <GraduationCap className="w-5 h-5 text-green-600 mt-0.5" />
+            <GraduationCap className="w-5 h-5 text-success mt-0.5" />
             <div className="flex-1">
               <h4 className="font-medium text-green-900 mb-1 font-arabic">ملاحظة تعليمية</h4>
               <p className="text-sm text-green-800 font-arabic">

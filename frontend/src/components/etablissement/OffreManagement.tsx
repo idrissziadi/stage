@@ -407,7 +407,7 @@ const OffreManagement = () => {
             placeholder="بحث..."
             value={searchTerm}
             onChange={handleSearch}
-            className="border p-2 rounded text-right"
+            className="theme-transition-colors border p-2 rounded text-right"
             dir="rtl"
           />
         </div>
@@ -775,7 +775,7 @@ const OffreManagement = () => {
                           setSelectedOffre(offre);
                           setIsDeleteOffreOpen(true);
                         }}
-                        className="text-red-600 hover:text-red-700"
+                        className="text-error hover:text-red-700"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

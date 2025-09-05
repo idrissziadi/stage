@@ -69,7 +69,7 @@ const MagicTransition: React.FC<MagicTransitionProps> = ({
         {Array.from({ length: 20 }).map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-white rounded-full opacity-60"
+            className="absolute w-2 h-2 bg-card rounded-full opacity-60"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`

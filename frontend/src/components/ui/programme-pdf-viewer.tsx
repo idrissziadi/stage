@@ -169,13 +169,13 @@ const ProgrammePDFViewer: React.FC<ProgrammePDFViewerProps> = ({
 
         {/* Programme Details */}
         <div className="space-y-3 text-right font-arabic mb-4">
-          <div className="bg-gray-50 p-4 rounded-lg">
+          <div className="theme-transition-colors bg-background-secondary p-4 rounded-lg">
             <h3 className="font-semibold text-lg mb-3">
               {programme.titre_ar || programme.titre_fr || 'بدون عنوان'}
             </h3>
             
             {programme.titre_fr && programme.titre_ar && programme.titre_fr !== programme.titre_ar && (
-              <p className="text-sm text-gray-600 mb-3 italic">
+              <p className="text-sm text-muted-foreground mb-3 italic">
                 {programme.titre_fr}
               </p>
             )}
@@ -183,14 +183,14 @@ const ProgrammePDFViewer: React.FC<ProgrammePDFViewerProps> = ({
             <div className="grid gap-2 text-sm">
               {programme.code_programme && (
                 <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-blue-600" />
+                  <FileText className="w-4 h-4 text-primary" />
                   <span className="font-medium">الكود:</span> {programme.code_programme}
                 </div>
               )}
               
               {programme.specialite && (
                 <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-green-600" />
+                  <BookOpen className="w-4 h-4 text-success" />
                   <span className="font-medium">التخصص:</span> 
                   {programme.specialite.designation_ar || programme.specialite.designation_fr} ({programme.specialite.code_specialite})
                 </div>
@@ -198,11 +198,11 @@ const ProgrammePDFViewer: React.FC<ProgrammePDFViewerProps> = ({
               
               {programme.etablissement && (
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-purple-600" />
+                  <MapPin className="w-4 h-4 text-secondary" />
                   <span className="font-medium">المؤسسة:</span> 
                   {programme.etablissement.nom_ar || programme.etablissement.nom_fr}
                   {programme.etablissement.ville && (
-                    <span className="text-gray-600"> - {programme.etablissement.ville}</span>
+                    <span className="text-muted-foreground"> - {programme.etablissement.ville}</span>
                   )}
                 </div>
               )}
@@ -234,7 +234,7 @@ const ProgrammePDFViewer: React.FC<ProgrammePDFViewerProps> = ({
             </div>
 
             {programme.observation && (
-              <div className="mt-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+              <div className="theme-transition-colors mt-3 p-3 bg-background-secondary rounded-lg border-l-4 border-blue-400">
                 <p className="text-sm text-blue-800">
                   <span className="font-medium">ملاحظات:</span> {programme.observation}
                 </p>
@@ -282,7 +282,7 @@ const ProgrammePDFViewer: React.FC<ProgrammePDFViewerProps> = ({
               {/* Aperçu PDF intégré */}
               {pdfUrl && (
                 <div className="border rounded-lg overflow-hidden">
-                  <div className="bg-gray-50 p-3 border-b">
+                  <div className="theme-transition-colors bg-background-secondary p-3 border-b">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-arabic">معاينة المستند</span>
                       <div className="flex items-center gap-2">
@@ -298,7 +298,7 @@ const ProgrammePDFViewer: React.FC<ProgrammePDFViewerProps> = ({
                     </div>
                   </div>
                   
-                  <div className="h-96 bg-gray-100 flex items-center justify-center">
+                  <div className="theme-transition-colors h-96 bg-muted flex items-center justify-center">
                     <iframe
                       src={`${pdfUrl}?token=${encodeURIComponent(localStorage.getItem('auth_token') || '')}#toolbar=1&navpanes=1&scrollbar=1`}
                       className="w-full h-full border-0"

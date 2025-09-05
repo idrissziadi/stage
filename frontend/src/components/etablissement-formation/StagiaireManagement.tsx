@@ -25,7 +25,7 @@ const StagiaireManagement: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Interface complète pour la gestion des stagiaires, incluant la création, 
             l'inscription aux offres de formation et la gestion des comptes utilisateurs.
           </p>
@@ -74,25 +74,25 @@ const StagiaireManagement: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="text-center p-4 bg-blue-50 rounded-lg border">
-                  <div className="text-3xl font-bold text-blue-600">📊</div>
-                  <div className="text-sm text-blue-600 mt-2">Vue d'ensemble</div>
+                <div className="theme-transition-colors text-center p-4 bg-background-secondary rounded-lg border">
+                  <div className="text-3xl font-bold text-primary">📊</div>
+                  <div className="text-sm text-primary mt-2">Vue d'ensemble</div>
                   <div className="text-xs text-blue-500 mt-1">
                     Statistiques complètes
                   </div>
                 </div>
                 
                 <div className="text-center p-4 bg-green-50 rounded-lg border">
-                  <div className="text-3xl font-bold text-green-600">✅</div>
-                  <div className="text-sm text-green-600 mt-2">Gestion efficace</div>
+                  <div className="text-3xl font-bold text-success">✅</div>
+                  <div className="text-sm text-success mt-2">Gestion efficace</div>
                   <div className="text-xs text-green-500 mt-1">
                     Interface intuitive
                   </div>
                 </div>
                 
                 <div className="text-center p-4 bg-purple-50 rounded-lg border">
-                  <div className="text-3xl font-bold text-purple-600">🔒</div>
-                  <div className="text-sm text-purple-600 mt-2">Sécurité</div>
+                  <div className="text-3xl font-bold text-secondary">🔒</div>
+                  <div className="text-sm text-secondary mt-2">Sécurité</div>
                   <div className="text-xs text-purple-500 mt-1">
                     Authentification
                   </div>
@@ -107,9 +107,9 @@ const StagiaireManagement: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <h3 className="font-semibold text-gray-800 mb-2">Fonctionnalités disponibles :</h3>
-                <ul className="text-sm text-gray-600 space-y-1">
+              <div className="theme-transition-colors mt-6 p-4 bg-background-secondary rounded-lg">
+                <h3 className="font-semibold text-foreground mb-2">Fonctionnalités disponibles :</h3>
+                <ul className="text-sm text-muted-foreground space-y-1">
                   <li>✅ Création de stagiaires (simple, avec compte, avec inscription)</li>
                   <li>✅ Gestion des comptes utilisateurs</li>
                   <li>✅ Inscription aux offres de formation</li>

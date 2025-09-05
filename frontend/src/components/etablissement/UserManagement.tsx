@@ -895,8 +895,8 @@ const UserManagement = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white font-arabic">إدارة المستخدمين</h2>
-          <p className="text-gray-600 dark:text-gray-400 font-arabic">
+          <h2 className="text-2xl font-bold text-foreground dark:text-white font-arabic">إدارة المستخدمين</h2>
+          <p className="text-muted-foreground dark:text-muted-foreground font-arabic">
             عرض المستخدمين الموجودين وإنشاء الحسابات لهم
           </p>
         </div>
@@ -915,7 +915,7 @@ const UserManagement = () => {
       <Card>
         <CardContent className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="البحث بالاسم أو البريد الإلكتروني..."
               value={searchTerm}
@@ -951,13 +951,13 @@ const UserManagement = () => {
               {loading ? (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                  <p className="mt-4 text-gray-600">جاري التحميل...</p>
+                  <p className="mt-4 text-muted-foreground">جاري التحميل...</p>
                 </div>
               ) : filteredUsers.length === 0 ? (
                 <div className="text-center py-8">
-                  <Users className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2 font-arabic">لا يوجد مستخدمين</h3>
-                  <p className="text-gray-600 font-arabic">لم يتم العثور على أي مستخدمين</p>
+                  <Users className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-medium text-foreground mb-2 font-arabic">لا يوجد مستخدمين</h3>
+                  <p className="text-muted-foreground font-arabic">لم يتم العثور على أي مستخدمين</p>
                 </div>
               ) : (
                 <Table>
@@ -1008,7 +1008,7 @@ const UserManagement = () => {
                             <TableCell>
                               <div>
                                 <p className="font-semibold">{(user.prenom_fr || '') + ' ' + (user.nom_fr || '')}</p>
-                                <p className="text-sm text-gray-600 font-arabic">{(user.prenom_ar || '') + ' ' + (user.nom_ar || '')}</p>
+                                <p className="text-sm text-muted-foreground font-arabic">{(user.prenom_ar || '') + ' ' + (user.nom_ar || '')}</p>
                               </div>
                             </TableCell>
                             
@@ -1076,16 +1076,16 @@ const UserManagement = () => {
                           {/* Expanded row for trainee inscriptions */}
                           {activeTab === 'stagiaires' && expandedRows.has(user.id_stagiaire) && user.inscriptions && user.inscriptions.length > 0 && (
                             <TableRow>
-                              <TableCell colSpan={7} className="bg-gray-50 dark:bg-gray-800 p-0">
+                              <TableCell colSpan={7} className="bg-background-secondary dark:bg-gray-800 p-0">
                                 <div className="p-4">
                                   <div className="text-center mb-6" dir="rtl">
                                     <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
-                                      <FileText className="w-8 h-8 text-blue-600" />
+                                      <FileText className="w-8 h-8 text-primary" />
                                     </div>
-                                    <h4 className="text-xl font-bold font-arabic text-gray-900 mb-2">
+                                    <h4 className="text-xl font-bold font-arabic text-foreground mb-2">
                                       تسجيلات المتدرب: {user.prenom_ar} {user.nom_ar}
                                     </h4>
-                                    <p className="text-gray-600 font-arabic">
+                                    <p className="text-muted-foreground font-arabic">
                                       إجمالي التسجيلات: {user.inscriptions?.length || 0} تسجيل
                                     </p>
                                   </div>
@@ -1094,19 +1094,19 @@ const UserManagement = () => {
                                   
                                   <div className="space-y-3">
                                     {user.inscriptions.map((inscription: any, idx: number) => (
-                                      <div key={inscription.id_inscription || idx} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm">
+                                      <div key={inscription.id_inscription || idx} className="theme-transition-colors bg-card dark:bg-gray-800 rounded-lg border border-border dark:border-gray-600 shadow-sm">
                                         {/* Header */}
-                                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-800 px-4 py-3 rounded-t-lg border-b border-gray-200 dark:border-gray-600" dir="rtl">
+                                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-800 px-4 py-3 rounded-t-lg border-b border-border dark:border-gray-600" dir="rtl">
                                           <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-3">
                                               <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                                                <span className="text-blue-600 dark:text-blue-400 text-sm font-bold">#{inscription.id_inscription}</span>
+                                                <span className="text-primary dark:text-blue-400 text-sm font-bold">#{inscription.id_inscription}</span>
                                               </div>
                                               <div className="text-right">
-                                                <h5 className="font-semibold text-gray-900 dark:text-gray-100 font-arabic">
+                                                <h5 className="font-semibold text-foreground dark:text-gray-100 font-arabic">
                                                   تسجيل في عرض رقم {inscription.id_offre}
                                                 </h5>
-                                                <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                                                <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                                                   {formatDate(inscription.createdAt)}
                                                 </p>
                                               </div>
@@ -1117,7 +1117,7 @@ const UserManagement = () => {
                                                   ✅ مقبول
                                                 </Badge>
                                               ) : inscription.statut === 'en_attente' ? (
-                                                <Badge variant="outline" className="font-arabic text-yellow-600 border-yellow-400">
+                                                <Badge variant="outline" className="font-arabic text-warning border-yellow-400">
                                                   ⏳ في الانتظار
                                                 </Badge>
                                               ) : inscription.statut === 'refusee' ? (
@@ -1142,19 +1142,19 @@ const UserManagement = () => {
                                           {inscription.offre && (
                                             <div className="space-y-4">
                                               {/* معلومات العرض */}
-                                              <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+                                              <div className="theme-transition-colors bg-background-secondary dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
                                                 <div className="flex items-center gap-2 mb-2">
-                                                  <BookOpen className="w-4 h-4 text-blue-600" />
-                                                  <span className="font-semibold text-gray-700 dark:text-gray-300 font-arabic">معلومات العرض</span>
+                                                  <BookOpen className="w-4 h-4 text-primary" />
+                                                  <span className="font-semibold text-foreground dark:text-gray-300 font-arabic">معلومات العرض</span>
                                                 </div>
                                                 <div className="space-y-2 text-right">
                                                   {inscription.offre.specialite && (
-                                                    <div className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                                                    <div className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                                                       <span className="font-medium">التخصص:</span> {inscription.offre.specialite.designation_ar || inscription.offre.specialite.designation_fr}
                                                     </div>
                                                   )}
                                                   {inscription.offre.diplome && (
-                                                    <div className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                                                    <div className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                                                       <span className="font-medium">الدبلوم:</span> {inscription.offre.diplome.designation_ar || inscription.offre.diplome.designation_fr}
                                                     </div>
                                                   )}
@@ -1164,17 +1164,17 @@ const UserManagement = () => {
                                               {/* التفاصيل */}
                                               <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border border-green-200 dark:border-green-800">
                                                 <div className="flex items-center gap-2 mb-2">
-                                                  <Calendar className="w-4 h-4 text-green-600" />
-                                                  <span className="font-semibold text-gray-700 dark:text-gray-300 font-arabic">التفاصيل</span>
+                                                  <Calendar className="w-4 h-4 text-success" />
+                                                  <span className="font-semibold text-foreground dark:text-gray-300 font-arabic">التفاصيل</span>
                                                 </div>
                                                 <div className="space-y-2 text-right">
                                                   {inscription.offre.etablissementFormation && (
-                                                    <div className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                                                    <div className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                                                       <span className="font-medium">المؤسسة:</span> {inscription.offre.etablissementFormation.nom_ar || inscription.offre.etablissementFormation.nom_fr}
                                                     </div>
                                                   )}
                                                   {inscription.offre.date_debut && inscription.offre.date_fin && (
-                                                    <div className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+                                                    <div className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                                                       <span className="font-medium">الفترة:</span> {inscription.offre.date_debut} - {inscription.offre.date_fin}
                                                     </div>
                                                   )}
@@ -1273,7 +1273,7 @@ const UserManagement = () => {
                 className={`font-arabic transition-all duration-300 rounded-lg ${
                   dialogActiveTab === 'create' 
                     ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg scale-105' 
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-100'
+                    : 'text-muted-foreground hover:text-primary hover:bg-blue-100'
                 }`}
               >
                 <UserPlus className="w-4 h-4 ml-2" />
@@ -1284,7 +1284,7 @@ const UserManagement = () => {
                 className={`font-arabic transition-all duration-300 rounded-lg ${
                   dialogActiveTab === 'existing' 
                     ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg scale-105' 
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-100'
+                    : 'text-muted-foreground hover:text-primary hover:bg-blue-100'
                 }`}
               >
                 <Search className="w-4 h-4 ml-2" />
@@ -1295,10 +1295,10 @@ const UserManagement = () => {
             <TabsContent value="create" className="space-y-6" dir="rtl">
               <div className="text-center mb-8">
                 <div className="w-20 h-20 bg-gradient-to-br from-green-100 via-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <UserPlus className="w-10 h-10 text-green-600" />
+                  <UserPlus className="w-10 h-10 text-success" />
                 </div>
-                <h3 className="text-2xl font-bold font-arabic text-gray-900 mb-3">إنشاء متدرب جديد</h3>
-                <p className="text-gray-600 font-arabic text-lg leading-relaxed max-w-2xl mx-auto">
+                <h3 className="text-2xl font-bold font-arabic text-foreground mb-3">إنشاء متدرب جديد</h3>
+                <p className="text-muted-foreground font-arabic text-lg leading-relaxed max-w-2xl mx-auto">
                   أدخل معلومات المتدرب وإنشاء حساب له (اختياري) وتسجيله في عرض (اختياري)
                 </p>
               </div>
@@ -1310,12 +1310,12 @@ const UserManagement = () => {
                     <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
                       <span className="text-white font-bold text-lg">1</span>
                     </div>
-                    <h4 className="text-xl font-bold font-arabic text-gray-900 text-right">المعلومات الأساسية</h4>
+                    <h4 className="text-xl font-bold font-arabic text-foreground text-right">المعلومات الأساسية</h4>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label className="font-arabic text-gray-600">رقم المتدرب (اختياري)</Label>
+                      <Label className="font-arabic text-muted-foreground">رقم المتدرب (اختياري)</Label>
                       <Input
                         type="number"
                         min="1"
@@ -1334,7 +1334,7 @@ const UserManagement = () => {
                       />
                     </div>
                     <div>
-                      <Label className="font-arabic text-gray-700">اللقب بالفرنسية *</Label>
+                      <Label className="font-arabic text-foreground">اللقب بالفرنسية *</Label>
                       <Input
                         value={stagiaireForm.nom_fr}
                         onChange={(e) => setStagiaireForm(prev => ({ ...prev, nom_fr: e.target.value }))}
@@ -1344,7 +1344,7 @@ const UserManagement = () => {
                       />
                     </div>
                     <div>
-                      <Label className="font-arabic text-gray-700">الاسم بالفرنسية *</Label>
+                      <Label className="font-arabic text-foreground">الاسم بالفرنسية *</Label>
                       <Input
                         value={stagiaireForm.prenom_fr}
                         onChange={(e) => setStagiaireForm(prev => ({ ...prev, prenom_fr: e.target.value }))}
@@ -1354,7 +1354,7 @@ const UserManagement = () => {
                       />
                     </div>
                     <div>
-                      <Label className="font-arabic text-gray-600">اللقب بالعربية</Label>
+                      <Label className="font-arabic text-muted-foreground">اللقب بالعربية</Label>
                       <Input
                         value={stagiaireForm.nom_ar}
                         onChange={(e) => setStagiaireForm(prev => ({ ...prev, nom_ar: e.target.value }))}
@@ -1364,7 +1364,7 @@ const UserManagement = () => {
                       />
                     </div>
                     <div>
-                      <Label className="font-arabic text-gray-600">الاسم بالعربية</Label>
+                      <Label className="font-arabic text-muted-foreground">الاسم بالعربية</Label>
                       <Input
                         value={stagiaireForm.prenom_ar}
                         onChange={(e) => setStagiaireForm(prev => ({ ...prev, prenom_ar: e.target.value }))}
@@ -1382,12 +1382,12 @@ const UserManagement = () => {
                     <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-md">
                       <span className="text-white font-bold text-lg">2</span>
                     </div>
-                    <h4 className="text-xl font-bold font-arabic text-gray-900 text-right">معلومات الاتصال</h4>
+                    <h4 className="text-xl font-bold font-arabic text-foreground text-right">معلومات الاتصال</h4>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label className="font-arabic text-gray-700">البريد الإلكتروني</Label>
+                      <Label className="font-arabic text-foreground">البريد الإلكتروني</Label>
                       <Input
                         type="email"
                         value={stagiaireForm.email}
@@ -1398,7 +1398,7 @@ const UserManagement = () => {
                       />
                     </div>
                     <div>
-                      <Label className="font-arabic text-gray-700">رقم الهاتف</Label>
+                      <Label className="font-arabic text-foreground">رقم الهاتف</Label>
                       <Input
                         value={stagiaireForm.telephone}
                         onChange={(e) => setStagiaireForm(prev => ({ ...prev, telephone: e.target.value }))}
@@ -1408,7 +1408,7 @@ const UserManagement = () => {
                       />
                     </div>
                     <div>
-                      <Label className="font-arabic text-gray-600">تاريخ الميلاد</Label>
+                      <Label className="font-arabic text-muted-foreground">تاريخ الميلاد</Label>
                       <Input
                         type="date"
                         value={stagiaireForm.date_naissance}
@@ -1427,28 +1427,28 @@ const UserManagement = () => {
                     <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl flex items-center justify-center shadow-md">
                       <span className="text-white font-bold text-lg">3</span>
                     </div>
-                    <h4 className="text-xl font-bold font-arabic text-gray-900 text-right">الخيارات المتقدمة</h4>
+                    <h4 className="text-xl font-bold font-arabic text-foreground text-right">الخيارات المتقدمة</h4>
                   </div>
                   
                   <div className="space-y-4">
-                    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <div className="theme-transition-colors flex items-center space-x-3 p-3 bg-background-secondary rounded-lg">
                       <input
                         type="checkbox"
                         id="create-account"
                         checked={createAccountForStagiaire}
                         onChange={(e) => setCreateAccountForStagiaire(e.target.checked)}
-                        className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        className="w-5 h-5 rounded border-border-medium text-primary focus:ring-blue-500"
                       />
-                      <Label htmlFor="create-account" className="font-arabic text-gray-700 cursor-pointer">
+                      <Label htmlFor="create-account" className="font-arabic text-foreground cursor-pointer">
                         إنشاء حساب مستخدم للمتدرب
                       </Label>
                     </div>
 
                     {createAccountForStagiaire && (
-                      <div className="pl-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <div className="theme-transition-colors pl-6 p-4 bg-background-secondary rounded-lg border border-blue-200">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <Label className="font-arabic text-gray-700">اسم المستخدم *</Label>
+                            <Label className="font-arabic text-foreground">اسم المستخدم *</Label>
                             <Input
                               value={stagiaireForm.username}
                               onChange={(e) => setStagiaireForm(prev => ({ ...prev, username: e.target.value }))}
@@ -1458,7 +1458,7 @@ const UserManagement = () => {
                             />
                           </div>
                           <div>
-                            <Label className="font-arabic text-gray-700">كلمة المرور *</Label>
+                            <Label className="font-arabic text-foreground">كلمة المرور *</Label>
                             <Input
                               type="password"
                               value={stagiaireForm.password}
@@ -1472,22 +1472,22 @@ const UserManagement = () => {
                       </div>
                     )}
 
-                    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <div className="theme-transition-colors flex items-center space-x-3 p-3 bg-background-secondary rounded-lg">
                       <input
                         type="checkbox"
                         id="auto-inscription"
                         checked={autoInscription}
                         onChange={(e) => setAutoInscription(e.target.checked)}
-                        className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        className="w-5 h-5 rounded border-border-medium text-primary focus:ring-blue-500"
                       />
-                      <Label htmlFor="auto-inscription" className="font-arabic text-gray-700 cursor-pointer">
+                      <Label htmlFor="auto-inscription" className="font-arabic text-foreground cursor-pointer">
                         التسجيل التلقائي في عرض
                       </Label>
                     </div>
 
                     {autoInscription && (
                       <div className="pl-6 p-4 bg-green-50 rounded-lg border border-green-200">
-                        <Label className="font-arabic text-gray-700">اختيار العرض</Label>
+                        <Label className="font-arabic text-foreground">اختيار العرض</Label>
                         <Select
                           value={stagiaireForm.id_offre}
                           onValueChange={(value) => setStagiaireForm(prev => ({ ...prev, id_offre: value }))}
@@ -1501,12 +1501,12 @@ const UserManagement = () => {
                                 <div className="flex flex-col">
                                   <span className="font-medium">{offre.designation_fr}</span>
                                   {offre.specialite && (
-                                    <span className="text-sm text-gray-500">
+                                    <span className="text-sm text-muted-foreground">
                                       {offre.specialite.designation_fr}
                                     </span>
                                   )}
                                   {offre.diplome && (
-                                    <span className="text-xs text-gray-400">
+                                    <span className="text-xs text-muted-foreground">
                                       {offre.diplome.designation_fr}
                                     </span>
                                   )}
@@ -1546,10 +1546,10 @@ const UserManagement = () => {
               {/* Formulaire de recherche */}
               <div className="text-center mb-8">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <Search className="w-10 h-10 text-blue-600" />
+                  <Search className="w-10 h-10 text-primary" />
                 </div>
-                <h3 className="text-2xl font-bold font-arabic text-gray-900 mb-3">البحث عن متدرب موجود</h3>
-                <p className="text-gray-600 font-arabic text-lg leading-relaxed max-w-2xl mx-auto">
+                <h3 className="text-2xl font-bold font-arabic text-foreground mb-3">البحث عن متدرب موجود</h3>
+                <p className="text-muted-foreground font-arabic text-lg leading-relaxed max-w-2xl mx-auto">
                   ابحث عن متدرب موجود بواسطة معايير مختلفة وقم بتسجيله في عرض
                 </p>
               </div>
@@ -1627,8 +1627,8 @@ const UserManagement = () => {
                         key={stagiaire.id_stagiaire}
                         className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                           selectedExistingStagiaire?.id_stagiaire === stagiaire.id_stagiaire
-                            ? 'border-blue-500 bg-blue-50'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-blue-500 bg-background-secondary'
+                            : 'border-border hover:border-border-medium'
                         }`}
                         onClick={() => setSelectedExistingStagiaire(stagiaire)}
                       >
@@ -1638,25 +1638,25 @@ const UserManagement = () => {
                               {stagiaire.prenom_fr} {stagiaire.nom_fr}
                             </h5>
                             {stagiaire.nom_ar && stagiaire.prenom_ar && (
-                              <p className="text-sm text-gray-600 font-arabic mb-1">
+                              <p className="text-sm text-muted-foreground font-arabic mb-1">
                                 {stagiaire.prenom_ar} {stagiaire.nom_ar}
                               </p>
                             )}
                             <div className="space-y-1">
                               {stagiaire.email && (
-                                <p className="text-sm text-gray-500 flex items-center gap-2">
+                                <p className="text-sm text-muted-foreground flex items-center gap-2">
                                   <Mail className="w-4 h-4" />
                                   {stagiaire.email}
                                 </p>
                               )}
                               {stagiaire.telephone && (
-                                <p className="text-sm text-gray-500 flex items-center gap-2">
+                                <p className="text-sm text-muted-foreground flex items-center gap-2">
                                   <Phone className="w-4 h-4" />
                                   {stagiaire.telephone}
                                 </p>
                               )}
                               {stagiaire.Compte && (
-                                <p className="text-sm text-blue-600 flex items-center gap-2">
+                                <p className="text-sm text-primary flex items-center gap-2">
                                   <User className="w-4 h-4" />
                                   حساب: {stagiaire.Compte.username}
                                 </p>
@@ -1672,8 +1672,8 @@ const UserManagement = () => {
 
                         {/* عرض التسجيلات الموجودة */}
                         {stagiaire.inscriptions && stagiaire.inscriptions.length > 0 && (
-                          <div className="mt-3 pt-3 border-t border-gray-200">
-                            <h6 className="text-sm font-medium text-gray-700 mb-3 font-arabic">
+                          <div className="mt-3 pt-3 border-t border-border">
+                            <h6 className="text-sm font-medium text-foreground mb-3 font-arabic">
                               التسجيلات الموجودة:
                             </h6>
                             <div className="space-y-3">
@@ -1681,15 +1681,15 @@ const UserManagement = () => {
                                 const isCurrentEstablishment = inscription.offre?.id_etab_formation === userProfile?.id_etab_formation;
                                 return (
                                 <div key={inscription.id_inscription} className={`p-3 rounded-lg border ${
-                                  isCurrentEstablishment ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'
+                                  isCurrentEstablishment ? 'bg-background-secondary border-blue-200' : 'bg-background-secondary border-border'
                                 }`}>
                                   {/* Header with inscription number and status */}
                                   <div className="flex justify-between items-start mb-2">
                                     <div className="flex items-center gap-2">
-                                      <span className="text-sm font-medium text-blue-600">
+                                      <span className="text-sm font-medium text-primary">
                                         #{inscription.id_inscription}
                                       </span>
-                                      <span className="text-xs text-gray-500 font-arabic">
+                                      <span className="text-xs text-muted-foreground font-arabic">
                                         تسجيل في عرض رقم {inscription.offre?.id_offre}
                                       </span>
                                       {isCurrentEstablishment && (
@@ -1710,7 +1710,7 @@ const UserManagement = () => {
                                   </div>
 
                                   {/* Date */}
-                                  <div className="text-xs text-gray-600 mb-2">
+                                  <div className="text-xs text-muted-foreground mb-2">
                                     <span className="font-arabic">تاريخ التسجيل:</span>
                                     <span className="mr-2">
                                       {new Date(inscription.date_inscription || inscription.createdAt).toLocaleDateString('ar-DZ')}
@@ -1720,8 +1720,8 @@ const UserManagement = () => {
                                   {/* Offer details */}
                                   <div className="space-y-1">
                                     <div className="flex justify-between items-center">
-                                      <span className="text-xs font-medium text-gray-700 font-arabic">التخصص:</span>
-                                      <span className="text-xs text-gray-600">
+                                      <span className="text-xs font-medium text-foreground font-arabic">التخصص:</span>
+                                      <span className="text-xs text-muted-foreground">
                                         {inscription.offre?.specialite?.designation_ar || 
                                          inscription.offre?.specialite?.designation_fr || 'غير محدد'}
                                       </span>
@@ -1729,8 +1729,8 @@ const UserManagement = () => {
                                     
                                     {inscription.offre?.diplome && (
                                       <div className="flex justify-between items-center">
-                                        <span className="text-xs font-medium text-gray-700 font-arabic">الدبلوم:</span>
-                                        <span className="text-xs text-gray-600">
+                                        <span className="text-xs font-medium text-foreground font-arabic">الدبلوم:</span>
+                                        <span className="text-xs text-muted-foreground">
                                           {inscription.offre.diplome.designation_ar || 
                                            inscription.offre.diplome.designation_fr}
                                         </span>
@@ -1738,8 +1738,8 @@ const UserManagement = () => {
                                     )}
 
                                     <div className="flex justify-between items-center">
-                                      <span className="text-xs font-medium text-gray-700 font-arabic">المؤسسة:</span>
-                                      <span className="text-xs text-blue-600 font-medium">
+                                      <span className="text-xs font-medium text-foreground font-arabic">المؤسسة:</span>
+                                      <span className="text-xs text-primary font-medium">
                                         {inscription.offre?.etablissementFormation?.nom_ar || 
                                          inscription.offre?.etablissementFormation?.nom_fr || 'غير محدد'}
                                       </span>
@@ -1747,8 +1747,8 @@ const UserManagement = () => {
 
                                     {(inscription.offre?.date_debut || inscription.offre?.date_fin) && (
                                       <div className="flex justify-between items-center">
-                                        <span className="text-xs font-medium text-gray-700 font-arabic">الفترة:</span>
-                                        <span className="text-xs text-gray-600">
+                                        <span className="text-xs font-medium text-foreground font-arabic">الفترة:</span>
+                                        <span className="text-xs text-muted-foreground">
                                           {inscription.offre?.date_debut && inscription.offre?.date_fin 
                                             ? `${inscription.offre.date_debut} - ${inscription.offre.date_fin}`
                                             : inscription.offre?.date_debut || inscription.offre?.date_fin || 'غير محدد'}
@@ -1768,7 +1768,7 @@ const UserManagement = () => {
 
                   {/* Sélection de l'offre pour l'inscription */}
                   {selectedExistingStagiaire && (
-                    <div className="p-4 border rounded-lg bg-gray-50">
+                    <div className="theme-transition-colors p-4 border rounded-lg bg-background-secondary">
                       <h5 className="font-semibold font-arabic mb-3">
                         تسجيل {selectedExistingStagiaire.prenom_fr} {selectedExistingStagiaire.nom_fr} في عرض
                       </h5>
@@ -1840,7 +1840,7 @@ const UserManagement = () => {
           
           <div className="grid gap-6 py-4">
             {/* Formulaire d'assignation */}
-            <div className="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
+            <div className="theme-transition-colors border rounded-lg p-4 bg-background-secondary dark:bg-gray-800">
               <h3 className="font-semibold mb-4 font-arabic text-right">تعيين وحدات جديدة</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1913,14 +1913,14 @@ const UserManagement = () => {
                       />
                       <Label htmlFor={`module-${module.id_module}`} className="text-sm cursor-pointer text-right">
                         <div className="font-medium">{module.code_module}</div>
-                        <div className="text-gray-600">{module.designation_fr}</div>
-                        <div className="text-xs text-gray-500">{module.specialite?.designation_fr}</div>
+                        <div className="text-muted-foreground">{module.designation_fr}</div>
+                        <div className="text-xs text-muted-foreground">{module.specialite?.designation_fr}</div>
                       </Label>
                     </div>
                   ))}
                 </div>
                 {availableModules.length === 0 && (
-                  <p className="text-gray-500 text-center py-4 font-arabic">
+                  <p className="text-muted-foreground text-center py-4 font-arabic">
                     لا توجد وحدات متاحة لهذا الاستاذ
                   </p>
                 )}
@@ -1932,7 +1932,7 @@ const UserManagement = () => {
               <h3 className="font-semibold mb-4 font-arabic text-right">الوحدات المخصصة حالياً</h3>
               
               {Object.keys(assignedModules).length === 0 ? (
-                <p className="text-gray-500 text-center py-4 font-arabic">
+                <p className="text-muted-foreground text-center py-4 font-arabic">
                   لا توجد وحدات مخصصة لهذا الاستاذ
                 </p>
               ) : (
@@ -1944,11 +1944,11 @@ const UserManagement = () => {
                       </h4>
                       <div className="grid gap-2">
                         {modules.map((module: any) => (
-                          <div key={`${module.id_module}-${annee}`} className="flex items-center justify-between bg-white dark:bg-gray-700 p-3 rounded border">
+                          <div key={`${module.id_module}-${annee}`} className="theme-transition-colors flex items-center justify-between bg-card dark:bg-gray-700 p-3 rounded border">
                             <div className="flex-1 text-right">
                               <div className="font-medium">{module.code_module}</div>
-                              <div className="text-sm text-gray-600">{module.designation_fr}</div>
-                              <div className="text-xs text-gray-500">
+                              <div className="text-sm text-muted-foreground">{module.designation_fr}</div>
+                              <div className="text-xs text-muted-foreground">
                                 {module.specialite?.designation_fr} - {module.semestre || 'غير محدد'}
                               </div>
                             </div>
@@ -1957,7 +1957,7 @@ const UserManagement = () => {
                               size="sm"
                               onClick={() => removeModuleAssignment(module.id_module, annee)}
                               disabled={loading}
-                              className="font-arabic text-red-600 hover:text-red-700"
+                              className="font-arabic text-error hover:text-red-700"
                             >
                               <Trash2 className="w-4 h-4 ml-1" />
                               إزالة

@@ -22,46 +22,46 @@ export interface KPICardProps {
 
 const colorVariants = {
   blue: {
-    bg: 'bg-blue-50 dark:bg-blue-950',
+    bg: 'bg-background-secondary dark:bg-blue-950',
     border: 'border-blue-200 dark:border-blue-800',
-    icon: 'text-blue-600 dark:text-blue-400',
+    icon: 'text-primary dark:text-blue-400',
     text: 'text-blue-900 dark:text-blue-100',
     accent: 'bg-blue-100 dark:bg-blue-900'
   },
   green: {
     bg: 'bg-green-50 dark:bg-green-950',
     border: 'border-green-200 dark:border-green-800',
-    icon: 'text-green-600 dark:text-green-400',
+    icon: 'text-success dark:text-green-400',
     text: 'text-green-900 dark:text-green-100',
     accent: 'bg-green-100 dark:bg-green-900'
   },
   yellow: {
     bg: 'bg-yellow-50 dark:bg-yellow-950',
     border: 'border-yellow-200 dark:border-yellow-800',
-    icon: 'text-yellow-600 dark:text-yellow-400',
+    icon: 'text-warning dark:text-yellow-400',
     text: 'text-yellow-900 dark:text-yellow-100',
     accent: 'bg-yellow-100 dark:bg-yellow-900'
   },
   red: {
     bg: 'bg-red-50 dark:bg-red-950',
     border: 'border-red-200 dark:border-red-800',
-    icon: 'text-red-600 dark:text-red-400',
+    icon: 'text-error dark:text-red-400',
     text: 'text-red-900 dark:text-red-100',
     accent: 'bg-red-100 dark:bg-red-900'
   },
   purple: {
     bg: 'bg-purple-50 dark:bg-purple-950',
     border: 'border-purple-200 dark:border-purple-800',
-    icon: 'text-purple-600 dark:text-purple-400',
+    icon: 'text-secondary dark:text-purple-400',
     text: 'text-purple-900 dark:text-purple-100',
     accent: 'bg-purple-100 dark:bg-purple-900'
   },
   gray: {
-    bg: 'bg-gray-50 dark:bg-gray-950',
-    border: 'border-gray-200 dark:border-gray-800',
-    icon: 'text-gray-600 dark:text-gray-400',
-    text: 'text-gray-900 dark:text-gray-100',
-    accent: 'bg-gray-100 dark:bg-gray-900'
+    bg: 'bg-background-secondary dark:bg-gray-950',
+    border: 'border-border dark:border-gray-800',
+    icon: 'text-muted-foreground dark:text-muted-foreground',
+    text: 'text-foreground dark:text-gray-100',
+    accent: 'bg-muted dark:bg-gray-900'
   }
 };
 
@@ -107,11 +107,11 @@ export function KPICard({
     if (!trend) return null;
     
     if (trend.value > 0) {
-      return <TrendingUp className="h-4 w-4 text-green-600" />;
+      return <TrendingUp className="h-4 w-4 text-success" />;
     } else if (trend.value < 0) {
-      return <TrendingDown className="h-4 w-4 text-red-600" />;
+      return <TrendingDown className="h-4 w-4 text-error" />;
     } else {
-      return <Minus className="h-4 w-4 text-gray-400" />;
+      return <Minus className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -119,11 +119,11 @@ export function KPICard({
     if (!trend) return '';
     
     if (trend.value > 0) {
-      return 'text-green-600 bg-green-50 dark:bg-green-950 dark:text-green-400';
+      return 'text-success bg-green-50 dark:bg-green-950 dark:text-green-400';
     } else if (trend.value < 0) {
-      return 'text-red-600 bg-red-50 dark:bg-red-950 dark:text-red-400';
+      return 'text-error bg-red-50 dark:bg-red-950 dark:text-red-400';
     } else {
-      return 'text-gray-600 bg-gray-50 dark:bg-gray-950 dark:text-gray-400';
+      return 'text-muted-foreground bg-background-secondary dark:bg-gray-950 dark:text-muted-foreground';
     }
   };
 
@@ -169,7 +169,7 @@ export function KPICard({
                 </h3>
                 {subtitle && (
                   <p className={cn(
-                    'text-gray-600 dark:text-gray-400',
+                    'text-muted-foreground dark:text-muted-foreground',
                     sizeClasses.subtitle
                   )}>
                     {subtitle}
@@ -202,7 +202,7 @@ export function KPICard({
                     </span>
                   </Badge>
                   {trend.label && (
-                    <span className="text-xs text-gray-600 dark:text-gray-400">
+                    <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                       {trend.label}
                       {trend.period && ` (${trend.period})`}
                     </span>

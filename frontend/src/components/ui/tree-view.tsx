@@ -58,7 +58,7 @@ const TreeView: React.FC<TreeViewProps> = ({
       case 'module':
         return <FileText className="w-4 h-4 text-amber-600" />;
       default:
-        return <Folder className="w-4 h-4 text-gray-600" />;
+        return <Folder className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -71,7 +71,7 @@ const TreeView: React.FC<TreeViewProps> = ({
       case 'module':
         return 'hover:bg-amber-50 dark:hover:bg-amber-900/20';
       default:
-        return 'hover:bg-gray-50 dark:hover:bg-gray-800';
+        return 'hover:bg-background-secondary dark:hover:bg-gray-800';
     }
   };
 
@@ -84,7 +84,7 @@ const TreeView: React.FC<TreeViewProps> = ({
       case 'module':
         return 'bg-amber-100 dark:bg-amber-900/30 border-amber-200 dark:border-amber-700';
       default:
-        return 'bg-gray-100 dark:bg-gray-800';
+        return 'bg-muted dark:bg-gray-800';
     }
   };
 
@@ -115,9 +115,9 @@ const TreeView: React.FC<TreeViewProps> = ({
           {hasChildren ? (
             <div className="w-4 h-4 flex items-center justify-center">
               {expanded ? (
-                <ChevronDown className="w-4 h-4 text-gray-500" />
+                <ChevronDown className="w-4 h-4 text-muted-foreground" />
               ) : (
-                <ChevronRight className="w-4 h-4 text-gray-500" />
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
               )}
             </div>
           ) : (
@@ -130,22 +130,22 @@ const TreeView: React.FC<TreeViewProps> = ({
           {/* Contenu du nœud */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="font-medium text-gray-900 dark:text-white truncate">
+              <span className="font-medium text-foreground dark:text-white truncate">
                 {node.labelAr || node.label}
               </span>
               {node.labelFr && (
-                <span className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                <span className="text-sm text-muted-foreground dark:text-muted-foreground truncate">
                   ({node.labelFr})
                 </span>
               )}
             </div>
             {node.code && (
-              <div className="text-xs text-gray-400 dark:text-gray-500">
+              <div className="text-xs text-muted-foreground dark:text-muted-foreground">
                 {node.code}
               </div>
             )}
             {node.count !== undefined && (
-              <div className="text-xs text-gray-400 dark:text-gray-500">
+              <div className="text-xs text-muted-foreground dark:text-muted-foreground">
                 {node.count} élément{node.count > 1 ? 's' : ''}
               </div>
             )}

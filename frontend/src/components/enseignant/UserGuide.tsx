@@ -35,7 +35,7 @@ const UserGuide = () => {
           <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
             <CardTitle className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-                <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <User className="w-5 h-5 text-primary dark:text-blue-400" />
               </div>
               نظرة عامة - الصفحة الرئيسية
             </CardTitle>
@@ -44,33 +44,33 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <CheckCircle className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">الإحصائيات السريعة</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-medium text-foreground dark:text-white">الإحصائيات السريعة</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     عرض سريع لعدد الدروس المرفوعة والمعتمدة والمودیولات
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <FileText className="w-4 h-4 text-blue-600" />
+                  <FileText className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">معلومات الملف الشخصي</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-medium text-foreground dark:text-white">معلومات الملف الشخصي</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     عرض تفاصيل حسابك ومعلوماتك الشخصية
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-purple-100 dark:bg-purple-900/50 rounded">
-                  <Clock className="w-4 h-4 text-purple-600" />
+                  <Clock className="w-4 h-4 text-secondary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">الأنشطة الأخيرة</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-medium text-foreground dark:text-white">الأنشطة الأخيرة</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     تتبع آخر العمليات والإجراءات التي قمت بها
                   </p>
                 </div>
@@ -84,7 +84,7 @@ const UserGuide = () => {
           <CardHeader className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
             <CardTitle className="flex items-center gap-3">
               <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
-                <Upload className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <Upload className="w-5 h-5 text-success dark:text-green-400" />
               </div>
               إدارة الدروس
             </CardTitle>
@@ -93,21 +93,21 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <Upload className="w-4 h-4 text-blue-600" />
+                  <Upload className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">رفع الدروس</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-medium text-foreground dark:text-white">رفع الدروس</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     رفع ملفات PDF للدروس مع تحديد المودیول والعنوان
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-yellow-100 dark:bg-yellow-900/50 rounded">
-                  <Clock className="w-4 h-4 text-yellow-600" />
+                  <Clock className="w-4 h-4 text-warning" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">حالات الدروس</h4>
+                  <h4 className="font-medium text-foreground dark:text-white">حالات الدروس</h4>
                   <div className="flex gap-2 mt-1">
                     <Badge className="bg-yellow-100 text-yellow-800 text-xs">في الانتظار</Badge>
                     <Badge className="bg-green-100 text-green-800 text-xs">معتمد</Badge>
@@ -116,11 +116,11 @@ const UserGuide = () => {
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <Eye className="w-4 h-4 text-green-600" />
+                  <Eye className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">عرض وتحميل الدروس</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-medium text-foreground dark:text-white">عرض وتحميل الدروس</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     معاينة وتحميل الدروس المرفوعة والمعتمدة
                   </p>
                 </div>
@@ -134,7 +134,7 @@ const UserGuide = () => {
           <CardHeader className="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
             <CardTitle className="flex items-center gap-3">
               <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
-                <BookOpen className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <BookOpen className="w-5 h-5 text-secondary dark:text-purple-400" />
               </div>
               إدارة المودیولات
             </CardTitle>
@@ -143,22 +143,22 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <BookOpen className="w-4 h-4 text-blue-600" />
+                  <BookOpen className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">عرض المودیولات</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-medium text-foreground dark:text-white">عرض المودیولات</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     استعراض جميع المودیولات المُكلف بتدريسها
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <FileText className="w-4 h-4 text-green-600" />
+                  <FileText className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">الدروس المرتبطة</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-medium text-foreground dark:text-white">الدروس المرتبطة</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     عرض جميع الدروس المرتبطة بكل مودیول
                   </p>
                 </div>
@@ -168,8 +168,8 @@ const UserGuide = () => {
                   <CheckCircle className="w-4 h-4 text-orange-600" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">إحصائيات المودیول</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-medium text-foreground dark:text-white">إحصائيات المودیول</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     عدد الدروس المعتمدة والمعلقة لكل مودیول
                   </p>
                 </div>
@@ -192,33 +192,33 @@ const UserGuide = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-blue-100 dark:bg-blue-900/50 rounded">
-                  <User className="w-4 h-4 text-blue-600" />
+                  <User className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">القائمة الشخصية</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-medium text-foreground dark:text-white">القائمة الشخصية</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     الوصول إلى الملف الشخصي والإعدادات من أيقونة المستخدم
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-red-100 dark:bg-red-900/50 rounded">
-                  <Bell className="w-4 h-4 text-red-600" />
+                  <Bell className="w-4 h-4 text-error" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">الإشعارات</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-medium text-foreground dark:text-white">الإشعارات</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     تلقي إشعارات عند اعتماد أو رفض الدروس
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-green-100 dark:bg-green-900/50 rounded">
-                  <HelpCircle className="w-4 h-4 text-green-600" />
+                  <HelpCircle className="w-4 h-4 text-success" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">المساعدة والدعم</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-medium text-foreground dark:text-white">المساعدة والدعم</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     الوصول إلى دليل الاستخدام والحصول على المساعدة
                   </p>
                 </div>
@@ -233,34 +233,34 @@ const UserGuide = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
             <div className="p-2 bg-yellow-100 dark:bg-yellow-900/50 rounded-lg">
-              <HelpCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+              <HelpCircle className="w-5 h-5 text-warning dark:text-yellow-400" />
             </div>
             نصائح سريعة
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg">
+            <div className="theme-transition-colors bg-card dark:bg-gray-700 p-4 rounded-lg">
               <h4 className="font-medium mb-2">💡 نصيحة الرفع</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 تأكد من أن ملف PDF لا يتجاوز 10 ميجابايت وأن المحتوى واضح ومقروء
               </p>
             </div>
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg">
+            <div className="theme-transition-colors bg-card dark:bg-gray-700 p-4 rounded-lg">
               <h4 className="font-medium mb-2">📝 نصيحة التسمية</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 اختر عناوين واضحة ومفهومة للدروس لتسهيل عملية البحث والتنظيم
               </p>
             </div>
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg">
+            <div className="theme-transition-colors bg-card dark:bg-gray-700 p-4 rounded-lg">
               <h4 className="font-medium mb-2">⏰ نصيحة المتابعة</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 تابع حالة دروسك بانتظام وتواصل مع الإدارة في حالة التأخير
               </p>
             </div>
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg">
+            <div className="theme-transition-colors bg-card dark:bg-gray-700 p-4 rounded-lg">
               <h4 className="font-medium mb-2">🔄 نصيحة التحديث</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 يمكن إعادة رفع الدرس في حالة الرفض مع مراعاة ملاحظات المراجع
               </p>
             </div>
@@ -272,7 +272,7 @@ const UserGuide = () => {
       <Card className="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20">
         <CardContent className="p-6 text-center">
           <h3 className="text-lg font-semibold mb-4">هل تحتاج إلى مساعدة إضافية؟</h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
+          <p className="text-muted-foreground dark:text-muted-foreground mb-4">
             لا تتردد في التواصل مع فريق الدعم التقني أو إدارة المؤسسة
           </p>
           <div className="flex gap-3 justify-center">

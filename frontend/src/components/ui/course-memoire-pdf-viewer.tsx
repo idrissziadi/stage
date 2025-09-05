@@ -177,13 +177,13 @@ const CourseMemoirePDFViewer: React.FC<CourseMemoirePDFViewerProps> = ({
 
         {/* Item Details */}
         <div className="space-y-3 text-right font-arabic mb-4">
-          <div className="bg-gray-50 p-4 rounded-lg">
+          <div className="theme-transition-colors bg-background-secondary p-4 rounded-lg">
             <h3 className="font-semibold text-lg mb-3">
               {item.titre_ar || item.titre_fr || 'بدون عنوان'}
             </h3>
             
             {item.titre_fr && item.titre_ar && item.titre_fr !== item.titre_ar && (
-              <p className="text-sm text-gray-600 mb-3 italic">
+              <p className="text-sm text-muted-foreground mb-3 italic">
                 {item.titre_fr}
               </p>
             )}
@@ -191,14 +191,14 @@ const CourseMemoirePDFViewer: React.FC<CourseMemoirePDFViewerProps> = ({
             <div className="grid gap-2 text-sm">
               {item.code_cours && (
                 <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-blue-600" />
+                  <FileText className="w-4 h-4 text-primary" />
                   <span className="font-medium">الكود:</span> {item.code_cours}
                 </div>
               )}
               
               {item.module && (
                 <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-green-600" />
+                  <BookOpen className="w-4 h-4 text-success" />
                   <span className="font-medium">المادة:</span> 
                   {item.module.designation_ar || item.module.designation_fr} ({item.module.code_module})
                 </div>
@@ -206,7 +206,7 @@ const CourseMemoirePDFViewer: React.FC<CourseMemoirePDFViewerProps> = ({
               
               {item.enseignant && (
                 <div className="flex items-center gap-2">
-                  <GraduationCap className="w-4 h-4 text-purple-600" />
+                  <GraduationCap className="w-4 h-4 text-secondary" />
                   <span className="font-medium">الأستاذ:</span> 
                   {item.enseignant.prenom_fr} {item.enseignant.nom_fr}
                 </div>
@@ -229,7 +229,7 @@ const CourseMemoirePDFViewer: React.FC<CourseMemoirePDFViewerProps> = ({
             </div>
 
             {item.observation && (
-              <div className="mt-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+              <div className="theme-transition-colors mt-3 p-3 bg-background-secondary rounded-lg border-l-4 border-blue-400">
                 <p className="text-sm text-blue-800">
                   <span className="font-medium">ملاحظات:</span> {item.observation}
                 </p>
@@ -277,7 +277,7 @@ const CourseMemoirePDFViewer: React.FC<CourseMemoirePDFViewerProps> = ({
               {/* Aperçu PDF intégré */}
               {pdfUrl && (
                 <div className="border rounded-lg overflow-hidden">
-                  <div className="bg-gray-50 p-3 border-b">
+                  <div className="theme-transition-colors bg-background-secondary p-3 border-b">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-arabic">معاينة المستند</span>
                       <div className="flex items-center gap-2">
@@ -293,7 +293,7 @@ const CourseMemoirePDFViewer: React.FC<CourseMemoirePDFViewerProps> = ({
                     </div>
                   </div>
                   
-                  <div className="h-96 bg-gray-100 flex items-center justify-center">
+                  <div className="theme-transition-colors h-96 bg-muted flex items-center justify-center">
                     <iframe
                       src={`${pdfUrl}?token=${encodeURIComponent(localStorage.getItem('auth_token') || '')}#toolbar=1&navpanes=1&scrollbar=1`}
                       className="w-full h-full border-0"

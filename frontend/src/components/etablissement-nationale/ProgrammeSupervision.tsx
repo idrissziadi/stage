@@ -239,12 +239,12 @@ const ProgrammeSupervision: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="text-right">
-                <p className="text-sm font-medium text-blue-600 dark:text-blue-400 font-arabic">إجمالي البرامج</p>
+                <p className="text-sm font-medium text-primary dark:text-blue-400 font-arabic">إجمالي البرامج</p>
                 <p className="text-3xl font-bold text-blue-700 dark:text-blue-300 font-arabic">{stats?.total || 0}</p>
                 <p className="text-xs text-blue-500 font-arabic">تم إنشاؤها</p>
               </div>
               <div className="p-3 bg-blue-200 dark:bg-blue-800/50 rounded-full">
-                <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <FileText className="w-6 h-6 text-primary dark:text-blue-400" />
               </div>
             </div>
           </CardContent>
@@ -254,12 +254,12 @@ const ProgrammeSupervision: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="text-right">
-                <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400 font-arabic">في الانتظار</p>
+                <p className="text-sm font-medium text-warning dark:text-yellow-400 font-arabic">في الانتظار</p>
                 <p className="text-3xl font-bold text-yellow-700 dark:text-yellow-300 font-arabic">{stats?.parStatut?.['في_الانتظار'] || 0}</p>
                 <p className="text-xs text-yellow-500 font-arabic">بانتظار المراجعة</p>
               </div>
               <div className="p-3 bg-yellow-200 dark:bg-yellow-800/50 rounded-full">
-                <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+                <Clock className="w-6 h-6 text-warning dark:text-yellow-400" />
               </div>
             </div>
           </CardContent>
@@ -269,12 +269,12 @@ const ProgrammeSupervision: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="text-right">
-                <p className="text-sm font-medium text-green-600 dark:text-green-400 font-arabic">معتمدة</p>
+                <p className="text-sm font-medium text-success dark:text-green-400 font-arabic">معتمدة</p>
                 <p className="text-3xl font-bold text-green-700 dark:text-green-300 font-arabic">{stats?.parStatut?.['مقبول'] || 0}</p>
                 <p className="text-xs text-green-500 font-arabic">تم اعتمادها</p>
               </div>
               <div className="p-3 bg-green-200 dark:bg-green-800/50 rounded-full">
-                <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+                <CheckCircle className="w-6 h-6 text-success dark:text-green-400" />
               </div>
             </div>
           </CardContent>
@@ -284,12 +284,12 @@ const ProgrammeSupervision: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="text-right">
-                <p className="text-sm font-medium text-red-600 dark:text-red-400 font-arabic">مرفوضة</p>
+                <p className="text-sm font-medium text-error dark:text-red-400 font-arabic">مرفوضة</p>
                 <p className="text-3xl font-bold text-red-700 dark:text-red-300 font-arabic">{stats?.parStatut?.['مرفوض'] || 0}</p>
                 <p className="text-xs text-red-500 font-arabic">تم رفضها</p>
               </div>
               <div className="p-3 bg-red-200 dark:bg-red-800/50 rounded-full">
-                <XCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                <XCircle className="w-6 h-6 text-error dark:text-red-400" />
               </div>
             </div>
           </CardContent>
@@ -340,16 +340,16 @@ const ProgrammeSupervision: React.FC = () => {
 
       {/* الألسنة */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
-          <TabsTrigger value="pending" className="flex items-center gap-2 font-arabic data-[state=active]:bg-white data-[state=active]:text-yellow-600 data-[state=active]:shadow-sm">
+        <TabsList className="grid w-full grid-cols-3 bg-muted dark:bg-gray-800 p-1 rounded-lg">
+          <TabsTrigger value="pending" className="flex items-center gap-2 font-arabic data-[state=active]:bg-card data-[state=active]:text-warning data-[state=active]:shadow-sm">
             <Clock className="h-4 w-4" />
             في الانتظار ({pendingProgrammes.length})
           </TabsTrigger>
-          <TabsTrigger value="validated" className="flex items-center gap-2 font-arabic data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow-sm">
+          <TabsTrigger value="validated" className="flex items-center gap-2 font-arabic data-[state=active]:bg-card data-[state=active]:text-success data-[state=active]:shadow-sm">
             <CheckCircle className="h-4 w-4" />
             مقبولة ({validatedProgrammes.length})
           </TabsTrigger>
-          <TabsTrigger value="rejected" className="flex items-center gap-2 font-arabic data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:shadow-sm">
+          <TabsTrigger value="rejected" className="flex items-center gap-2 font-arabic data-[state=active]:bg-card data-[state=active]:text-error data-[state=active]:shadow-sm">
             <XCircle className="h-4 w-4" />
             مرفوضة ({rejectedProgrammes.length})
           </TabsTrigger>

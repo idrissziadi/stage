@@ -329,7 +329,7 @@ const ProgrammeCreationFormWithUpload = () => {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">جارٍ تحميل البيانات...</p>
+        <p className="mt-4 text-muted-foreground dark:text-muted-foreground">جارٍ تحميل البيانات...</p>
       </div>
     );
   }
@@ -339,11 +339,11 @@ const ProgrammeCreationFormWithUpload = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-3">
           <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-            <Plus className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <Plus className="w-6 h-6 text-primary dark:text-blue-400" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white font-arabic">إنشاء برنامج جديد</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-arabic">
+            <h2 className="text-xl font-bold text-foreground dark:text-white font-arabic">إنشاء برنامج جديد</h2>
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
               قم بإنشاء برنامج تعليمي جديد مع رفع ملف PDF
             </p>
           </div>
@@ -353,27 +353,27 @@ const ProgrammeCreationFormWithUpload = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* File Upload Section */}
           <div className="space-y-4">
-            <Label className="text-base font-semibold text-gray-900 dark:text-white font-arabic">
+            <Label className="text-base font-semibold text-foreground dark:text-white font-arabic">
               ملف البرنامج PDF *
             </Label>
             
-            <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+            <div className="border-2 border-dashed border-border-medium dark:border-gray-600 rounded-lg p-6 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
               <input
                 ref={fileInputRef}
                 type="file"
                 accept=".pdf"
                 onChange={handleFileSelect}
-                className="hidden"
+                className="theme-transition-colors hidden"
               />
               
               {!selectedFile ? (
                 <div className="space-y-4">
-                  <Upload className="w-12 h-12 mx-auto text-gray-400" />
+                  <Upload className="w-12 h-12 mx-auto text-muted-foreground" />
                   <div>
-                    <p className="text-lg font-medium text-gray-900 dark:text-white font-arabic">
+                    <p className="text-lg font-medium text-foreground dark:text-white font-arabic">
                       انقر لاختيار ملف PDF أو اسحبه هنا
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 font-arabic">
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground font-arabic">
                       الحد الأقصى: 50 ميجابايت
                     </p>
                   </div>
@@ -381,7 +381,7 @@ const ProgrammeCreationFormWithUpload = () => {
                     type="button"
                     variant="outline"
                     onClick={() => fileInputRef.current?.click()}
-                    className="bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700"
+                    className="bg-background-secondary hover:bg-blue-100 border-blue-200 text-blue-700"
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     اختيار ملف PDF
@@ -392,8 +392,8 @@ const ProgrammeCreationFormWithUpload = () => {
                   <div className="flex items-center justify-center gap-3">
                     <FileText className="w-8 h-8 text-green-500" />
                     <div className="text-left">
-                      <p className="font-medium text-gray-900 dark:text-white">{selectedFile.name}</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="font-medium text-foreground dark:text-white">{selectedFile.name}</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                         {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
                       </p>
                     </div>
@@ -404,7 +404,7 @@ const ProgrammeCreationFormWithUpload = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => fileInputRef.current?.click()}
-                      className="bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700"
+                      className="bg-background-secondary hover:bg-blue-100 border-blue-200 text-blue-700"
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       تغيير الملف

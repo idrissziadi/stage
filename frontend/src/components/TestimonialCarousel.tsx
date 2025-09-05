@@ -56,7 +56,7 @@ const TestimonialCarousel: React.FC<TestimonialCarouselProps> = ({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="bg-white p-8 md:p-12 rounded-2xl shadow-xl"
+            className="bg-card p-8 md:p-12 rounded-2xl shadow-xl"
           >
             <div className="text-center">
               {/* Stars */}
@@ -67,16 +67,16 @@ const TestimonialCarousel: React.FC<TestimonialCarouselProps> = ({
               </div>
               
               {/* Content */}
-              <blockquote className="text-xl md:text-2xl text-gray-700 mb-8 leading-relaxed">
+              <blockquote className="text-xl md:text-2xl text-foreground mb-8 leading-relaxed">
                 "{testimonials[currentIndex].content}"
               </blockquote>
               
               {/* Author */}
               <div className="mb-4">
-                <div className="text-lg font-semibold text-gray-900">
+                <div className="text-lg font-semibold text-foreground">
                   {testimonials[currentIndex].name}
                 </div>
-                <div className="text-gray-600">
+                <div className="text-muted-foreground">
                   {testimonials[currentIndex].role}
                 </div>
               </div>
@@ -88,16 +88,16 @@ const TestimonialCarousel: React.FC<TestimonialCarouselProps> = ({
       {/* Navigation Arrows */}
       <button
         onClick={goToPrevious}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-all hover:scale-110"
+        className="theme-transition-colors absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-card/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-card transition-all hover:scale-110"
       >
-        <ChevronLeft className="w-6 h-6 text-gray-700" />
+        <ChevronLeft className="w-6 h-6 text-foreground" />
       </button>
       
       <button
         onClick={goToNext}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-all hover:scale-110"
+        className="theme-transition-colors absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-card/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-card transition-all hover:scale-110"
       >
-        <ChevronRight className="w-6 h-6 text-gray-700" />
+        <ChevronRight className="w-6 h-6 text-foreground" />
       </button>
 
       {/* Dots Indicator */}
