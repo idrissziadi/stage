@@ -485,25 +485,25 @@ const EtablissementRegionaleDashboardPage = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-                                           <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="overview" className="flex items-center space-x-2 space-x-reverse">
-                <BarChart3 className="w-4 h-4" />
-                <span>نظرة عامة</span>
-              </TabsTrigger>
-              <TabsTrigger value="cours" className="flex items-center space-x-2 space-x-reverse">
-                <BookOpen className="w-4 h-4" />
-                <span>الدروس</span>
-              </TabsTrigger>
-              <TabsTrigger value="programmes" className="flex items-center space-x-2 space-x-reverse">
-                <GraduationCap className="w-4 h-4" />
-                <span>البرامج</span>
-              </TabsTrigger>
-              <TabsTrigger value="infrastructure" className="flex items-center space-x-2 space-x-reverse">
-                <Building className="w-4 h-4" />
-                <span>البنية التحتية</span>
-              </TabsTrigger>
-            </TabsList>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" dir="rtl">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview" className="flex items-center gap-2 font-arabic">
+              <BarChart3 className="w-4 h-4" />
+              <span>نظرة عامة</span>
+            </TabsTrigger>
+            <TabsTrigger value="cours" className="flex items-center gap-2 font-arabic">
+              <BookOpen className="w-4 h-4" />
+              <span>الدروس</span>
+            </TabsTrigger>
+            <TabsTrigger value="programmes" className="flex items-center gap-2 font-arabic">
+              <GraduationCap className="w-4 h-4" />
+              <span>البرامج</span>
+            </TabsTrigger>
+            <TabsTrigger value="infrastructure" className="flex items-center gap-2 font-arabic">
+              <Building className="w-4 h-4" />
+              <span>البنية التحتية</span>
+            </TabsTrigger>
+          </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
             {loading ? (
@@ -728,7 +728,7 @@ const EtablissementRegionaleDashboardPage = () => {
                 />
 
                 {/* Interface principale améliorée */}
-                <div className="grid gap-6 lg:grid-cols-3">
+                <div className="grid gap-6 lg:grid-cols-3" dir="rtl">
                   {/* Navigation arborescente simplifiée */}
                   <div className="lg:col-span-1">
                     <Card className="shadow-lg border-0">

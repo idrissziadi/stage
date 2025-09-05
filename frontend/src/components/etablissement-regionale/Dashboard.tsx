@@ -79,7 +79,7 @@ const Dashboard = () => {
       </Card>
 
       {/* Navigation par Onglets */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full" dir="rtl">
         <TabsList className="grid w-full grid-cols-3 bg-card dark:bg-gray-800 border border-border dark:border-gray-700">
           <TabsTrigger 
             value="overview" 
@@ -95,7 +95,7 @@ const Dashboard = () => {
           >
             <BookOpen className="w-4 h-4" />
             <span className="font-arabic">الدروس</span>
-            <Badge variant="secondary" className="ml-1">{stats.totalCours}</Badge>
+            <Badge variant="secondary" className="mr-1">{stats.totalCours}</Badge>
           </TabsTrigger>
           
           <TabsTrigger 
@@ -104,7 +104,7 @@ const Dashboard = () => {
           >
             <GraduationCap className="w-4 h-4" />
             <span className="font-arabic">البرامج</span>
-            <Badge variant="secondary" className="ml-1">{stats.totalProgrammes}</Badge>
+            <Badge variant="secondary" className="mr-1">{stats.totalProgrammes}</Badge>
           </TabsTrigger>
         </TabsList>
 

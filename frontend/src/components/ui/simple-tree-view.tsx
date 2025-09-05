@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, ChevronDown, Folder, FolderOpen, FileText, Eye } from 'lucide-react';
+import { ChevronLeft, ChevronDown, Folder, FolderOpen, FileText, Eye } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -94,7 +94,7 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
             'group relative p-3 rounded-lg border transition-all duration-200',
             'hover:shadow-md cursor-pointer',
             selected ? 'ring-2 ring-blue-500 bg-background-secondary' : 'bg-card hover:bg-background-secondary',
-            level > 0 && 'ml-6'
+            level > 0 && 'mr-6'
           )}
           onClick={() => {
             if (hasChildren) {
@@ -118,7 +118,7 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
                   {expanded ? (
                     <ChevronDown className="w-4 h-4 text-muted-foreground" />
                   ) : (
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                    <ChevronLeft className="w-4 h-4 text-muted-foreground" />
                   )}
                 </button>
               ) : (
@@ -206,7 +206,7 @@ const SimpleTreeView: React.FC<SimpleTreeViewProps> = ({
   };
 
   return (
-    <div className={cn('w-full space-y-3', className)}>
+    <div className={cn('w-full space-y-3', className)} dir="rtl">
       {data.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
           <Folder className="w-12 h-12 mx-auto mb-3 text-gray-300" />

@@ -32,23 +32,23 @@ const StagiaireManagement: React.FC = () => {
         </CardContent>
       </Card>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full" dir="rtl">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="creation" className="flex items-center gap-2">
+          <TabsTrigger value="creation" className="flex items-center gap-2 font-arabic">
             <UserPlus className="h-4 w-4" />
-            Création
+            إنشاء
           </TabsTrigger>
-          <TabsTrigger value="liste" className="flex items-center gap-2">
+          <TabsTrigger value="liste" className="flex items-center gap-2 font-arabic">
             <Users className="h-4 w-4" />
-            Liste
+            القائمة
           </TabsTrigger>
-          <TabsTrigger value="inscriptions" className="flex items-center gap-2">
+          <TabsTrigger value="inscriptions" className="flex items-center gap-2 font-arabic">
             <BookOpen className="h-4 w-4" />
-            Inscriptions
+            التسجيلات
           </TabsTrigger>
-          <TabsTrigger value="statistiques" className="flex items-center gap-2">
+          <TabsTrigger value="statistiques" className="flex items-center gap-2 font-arabic">
             <BarChart3 className="h-4 w-4" />
-            Statistiques
+            الإحصائيات
           </TabsTrigger>
         </TabsList>
 

@@ -25,7 +25,7 @@ interface SimpleDetailsPanelProps {
 const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, className }) => {
   if (!selectedNode) {
     return (
-      <Card className={className}>
+      <Card className={className} dir="rtl">
         <CardHeader className="text-center">
           <div className="theme-transition-colors mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
             <FileText className="w-8 h-8 text-muted-foreground" />
@@ -82,7 +82,7 @@ const SimpleDetailsPanel: React.FC<SimpleDetailsPanelProps> = ({ selectedNode, c
   };
 
   return (
-    <Card className={className}>
+    <Card className={className} dir="rtl">
       <CardHeader className="pb-4">
         {/* Header avec icône et informations principales */}
         <div className="flex items-start gap-4">

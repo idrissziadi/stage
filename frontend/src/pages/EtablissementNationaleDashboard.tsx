@@ -467,7 +467,7 @@ const EtablissementNationaleDashboard: React.FC = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" dir="rtl">
           <TabsList className="grid w-full grid-cols-2 bg-muted dark:bg-gray-800 p-1 rounded-lg">
             <TabsTrigger value="overview" className="flex items-center gap-2 font-arabic data-[state=active]:bg-card data-[state=active]:text-secondary data-[state=active]:shadow-sm">
               <BarChart3 className="h-4 w-4" />
@@ -610,10 +610,10 @@ const EtablissementNationaleDashboard: React.FC = () => {
               <CardHeader className="bg-gradient-to-l from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700">
                 <CardTitle className="flex items-center justify-end">
                   <div className="flex items-center gap-3">
+                    <span className="font-arabic">معلومات المؤسسة الوطنية</span>
                     <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
                       <Building className="w-5 h-5 text-secondary dark:text-purple-400" />
                     </div>
-                    <span className="font-arabic">معلومات المؤسسة الوطنية</span>
                   </div>
                 </CardTitle>
               </CardHeader>

@@ -353,23 +353,23 @@ const EtablissementFormationDashboard = () => {
 
       {/* Main Content */}
       <div className="container mx-auto px-6 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" dir="rtl">
           {/* Navigation Tabs - Following conciseness memory */}
           <TabsList className="grid w-full grid-cols-4 bg-card dark:bg-gray-800 border border-border dark:border-gray-700">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-700 font-arabic">
-              <BarChart3 className="w-4 h-4 ml-2" />
+            <TabsTrigger value="overview" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-700 font-arabic flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
               نظرة عامة
             </TabsTrigger>
-            <TabsTrigger value="users" className="data-[state=active]:bg-blue-100 data-[state=active]:text-blue-700 font-arabic">
-              <Users className="w-4 h-4 ml-2" />
+            <TabsTrigger value="users" className="data-[state=active]:bg-blue-100 data-[state=active]:text-blue-700 font-arabic flex items-center gap-2">
+              <Users className="w-4 h-4" />
               إدارة المستخدمين
             </TabsTrigger>
-            <TabsTrigger value="memoires" className="data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700 font-arabic">
-              <FileText className="w-4 h-4 ml-2" />
+            <TabsTrigger value="memoires" className="data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700 font-arabic flex items-center gap-2">
+              <FileText className="w-4 h-4" />
               إدارة المذكرات
             </TabsTrigger>
-            <TabsTrigger value="offres" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 font-arabic">
-              <Target className="w-4 h-4 ml-2" />
+            <TabsTrigger value="offres" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 font-arabic flex items-center gap-2">
+              <Target className="w-4 h-4" />
               إدارة العروض
             </TabsTrigger>
           </TabsList>

@@ -339,7 +339,7 @@ const ProgrammeSupervision: React.FC = () => {
       </Card>
 
       {/* الألسنة */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4" dir="rtl">
         <TabsList className="grid w-full grid-cols-3 bg-muted dark:bg-gray-800 p-1 rounded-lg">
           <TabsTrigger value="pending" className="flex items-center gap-2 font-arabic data-[state=active]:bg-card data-[state=active]:text-warning data-[state=active]:shadow-sm">
             <Clock className="h-4 w-4" />
